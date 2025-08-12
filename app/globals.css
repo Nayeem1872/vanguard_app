@@ -1,26 +1,75 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #1a1a1a;
+  --foreground: #ffffff;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.font-helvetica-now {
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, sans-serif;
+}
+
+.bg-dashboard {
+  background-image: url("/images/bg-image.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.backdrop-blur-custom {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.dropdown-arrow::after {
+  content: "▼";
+  font-size: 12px;
+  margin-left: 8px;
+  color: #9ca3af;
+}
+
+.generate-button {
+  display: flex;
+  height: 56px;
+  padding: 20px 40px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+  border-radius: 60px;
+  border: 2px solid rgba(255, 255, 255, 0);
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #60a5fa 100%);
+  background-size: 200% 200%;
+  transition: all 0.3s ease;
+}
+
+.generate-button:hover {
+  background-position: right center;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+}
+
+.card-low-risk {
+  border-radius: 20px;
+  background: rgba(17, 56, 45, 0.4);
+}
+
+.card-medium-risk {
+  border-radius: 20px;
+  background: rgba(107, 70, 31, 0.2);
+}
+
+.card-high-risk {
+  border-radius: 20px;
+  background: rgba(107, 31, 32, 0.2);
 }
