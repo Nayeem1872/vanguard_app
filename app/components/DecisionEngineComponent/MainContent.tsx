@@ -38,6 +38,7 @@ const MainContent = ({
   showRecommendations,
   handleGenerateRecommendations,
 }: MainContentProps) => {
+  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const regions = ["North America", "Europe", "Asia Pacific", "Latin America"];
   const functions = ["Operations", "Marketing", "Finance", "HR", "IT"];
   const periods = [
@@ -56,6 +57,8 @@ const MainContent = ({
       period: "/qtr",
       title: "Reconfigure material routing at Site B",
       confidence: "87%",
+      description:
+        "By optimizing the material flow paths and reducing bottlenecks, this change can significantly improve operational efficiency while maintaining quality standards.",
       confidenceColor: "text-emerald-500",
       sources: "ERP, HRIS",
     },
@@ -66,6 +69,8 @@ const MainContent = ({
       amount: "+$89,230",
       period: "/qtr",
       title: "Optimize shift scheduling patterns",
+      description:
+        "Implementing data-driven shift scheduling can reduce overtime costs and improve employee satisfaction while maintaining productivity levels.",
       confidence: "76%",
       confidenceColor: "text-yellow-500",
       sources: "HRIS,CRM",
@@ -78,6 +83,8 @@ const MainContent = ({
       period: "/qtr",
       title: "Consolidate vendor contracts",
       confidence: "64%",
+      description:
+        "Consolidating multiple vendor relationships can lead to better negotiating power and cost savings, though it requires careful transition management.",
       confidenceColor: "text-red-400",
       sources: "HRIS,CRM",
     },
@@ -230,7 +237,15 @@ const MainContent = ({
               {recommendations.map((rec, index) => (
                 <div
                   key={index}
-                  className={`w-64 p-4 ${rec.cardBg} inline-flex flex-col justify-start items-start gap-4 overflow-hidden`}
+                  className={`w-64 min-h-[320px] p-4 ${
+                    rec.cardBg
+                  } inline-flex flex-col justify-start items-start gap-4 overflow-hidden transition-all duration-300 cursor-pointer ${
+                    hoveredCard === index
+                      ? "transform scale-105 border-2 border-white"
+                      : "border-2 border-transparent"
+                  }`}
+                  onMouseEnter={() => setHoveredCard(index)}
+                  onMouseLeave={() => setHoveredCard(null)}
                 >
                   <div
                     className={`h-7 px-5 py-2.5 ${rec.riskColor} rounded-[60px] inline-flex justify-center items-center gap-2.5`}
@@ -252,7 +267,13 @@ const MainContent = ({
                       {rec.title}
                     </div>
                   </div>
+
                   <div className="self-stretch pb-4 border-b border-neutral-600 flex flex-col justify-start items-start gap-4">
+                    {hoveredCard === index && (
+                      <div className="self-stretch text-left text-gray-400 text-xs font-medium leading-relaxed line-clamp-2">
+                        {rec.description}
+                      </div>
+                    )}
                     <div className="self-stretch text-left">
                       <span className="text-gray-400 text-xs font-normal font-helvetica-now leading-none">
                         Confidence:
