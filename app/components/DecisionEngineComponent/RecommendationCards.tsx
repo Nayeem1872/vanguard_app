@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import RecommendationDrawer from "./RecommendationDrawer";
+import ComparisonDialog from "./ComparisonDialog";
 
 interface Recommendation {
   risk: string;
@@ -23,18 +23,8 @@ const RecommendationCards = ({
   showRecommendations,
 }: RecommendationCardsProps) => {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
-  const [selectedCard, setSelectedCard] = useState<number | null>(null);
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
-  const handleCardClick = (index: number) => {
-    setSelectedCard(index);
-    setIsDrawerOpen(true);
-  };
-
-  const handleCloseDrawer = () => {
-    setIsDrawerOpen(false);
-    setSelectedCard(null);
-  };
+  const [selectedCards, setSelectedCards] = useState<number[]>([]);
+  const [showComparisonDialog, setShowComparisonDialog] = useState(false);
 
   const recommendations: Recommendation[] = [
     {
@@ -78,100 +68,177 @@ const RecommendationCards = ({
     },
   ];
 
+  const handleCompareClick = (index: number) => {
+    setSelectedCards((prev) => {
+      if (prev.includes(index)) {
+        return prev.filter((i) => i !== index);
+      } else {
+        return [...prev, index];
+      }
+    });
+  };
+
+  const handleCompareButtonClick = () => {
+    setShowComparisonDialog(true);
+  };
+
+  const selectedRecommendations = selectedCards.map(
+    (index) => recommendations[index]
+  );
+
   if (!showRecommendations) return null;
 
   return (
-    <div className="mt-16 max-w-6xl mx-auto mb-16">
+    <div className="mt-16 max-w-7xl mx-auto mb-16">
       <div className="flex justify-center gap-6">
-        {recommendations.map((rec, index) => (
-          <div
-            key={index}
-            className={`w-64 p-4 ${
-              rec.cardBg
-            } inline-flex flex-col justify-start items-start gap-4 overflow-hidden transition-all duration-300 cursor-pointer ${
-              hoveredCard === index
-                ? "transform scale-105 border-2 border-white opacity-100"
-                : hoveredCard !== null
-                ? "border-2 border-transparent opacity-50 transform scale-y-90"
-                : "border-2 border-transparent opacity-100"
-            }`}
-            onMouseEnter={() => setHoveredCard(index)}
-            onMouseLeave={() => setHoveredCard(null)}
-            onClick={() => handleCardClick(index)}
-          >
-            <div
-              className={`h-7 px-5 py-2.5 ${rec.riskColor} rounded-[60px] inline-flex justify-center items-center gap-2.5`}
-            >
-              <div className="justify-start text-white text-xs font-bold font-helvetica-now uppercase leading-none">
-                {rec.risk}
-              </div>
-            </div>
-            <div className="self-stretch pb-4 border-b border-neutral-600 flex flex-col justify-start items-start gap-2.5">
-              <div className="self-stretch text-left">
-                <span className="text-white text-3xl font-medium font-helvetica-now leading-loose">
-                  {rec.amount}
-                </span>
-                <span className="text-white text-base font-normal font-helvetica-now leading-tight">
-                  {rec.period}
-                </span>
-              </div>
-              <div className="self-stretch text-left text-white text-base font-normal font-helvetica-now leading-tight">
-                {rec.title}
-              </div>
-            </div>
+        {recommendations.map((rec, index) => {
+          const isSelected = selectedCards.includes(index);
+          const isHovered = hoveredCard === index;
+          const isAnyCardActive =
+            hoveredCard !== null || selectedCards.length > 0;
 
-            <div className="self-stretch pb-4 border-b border-neutral-600 flex flex-col justify-start items-start gap-4">
-              {hoveredCard === index && (
-                <div className="self-stretch text-left text-gray-400 text-xs font-medium leading-relaxed line-clamp-2">
-                  {rec.description}
-                </div>
-              )}
-              <div className="self-stretch text-left">
-                <span className="text-gray-400 text-xs font-normal font-helvetica-now leading-none">
-                  Confidence:
-                </span>
-                <span className="text-white text-xs font-normal font-helvetica-now leading-none">
-                  {" "}
-                </span>
-                <span
-                  className={`text-xs font-bold font-helvetica-now leading-none ${rec.confidenceColor}`}
+          const cardDynamicStyles =
+            isHovered || isSelected
+              ? "transform scale-105 border-2 border-white opacity-100"
+              : isAnyCardActive
+              ? "border-2 border-transparent opacity-50 transform scale-y-90"
+              : "border-2 border-transparent opacity-100";
+
+          return (
+            <div
+              key={index}
+              className={`w-64 p-4 ${rec.cardBg} inline-flex flex-col justify-start items-start gap-4 overflow-hidden transition-all duration-300 cursor-pointer ${cardDynamicStyles}`}
+              onMouseEnter={() => setHoveredCard(index)}
+              onMouseLeave={() => setHoveredCard(null)}
+            >
+              <div className="flex flex-col justify-start items-start gap-4 flex-grow">
+                <div
+                  className={`h-7 px-5 py-2.5 ${rec.riskColor} rounded-[60px] inline-flex justify-center items-center gap-2.5`}
                 >
-                  {rec.confidence}
-                </span>
-                <span className="text-white text-xs font-bold font-helvetica-now leading-none">
-                  {"  "}
-                </span>
-                <span className="text-gray-400 text-xs font-normal font-helvetica-now leading-none">
-                  |
-                </span>
-                <span className="text-white text-xs font-normal font-helvetica-now leading-none">
-                  {"  "}
-                </span>
-                <span className="text-gray-400 text-xs font-normal font-helvetica-now leading-none">
-                  Sources:
-                </span>
-                <span className="text-white text-xs font-normal font-helvetica-now leading-none">
-                  {" "}
-                </span>
-                <span className="text-white text-xs font-bold font-helvetica-now leading-none">
-                  {rec.sources}
-                </span>
+                  <div className="justify-start text-white text-xs font-bold font-helvetica-now uppercase leading-none">
+                    {rec.risk}
+                  </div>
+                </div>
+                <div className="self-stretch pb-4 border-b border-neutral-600 flex flex-col justify-start items-start gap-2.5">
+                  <div className="self-stretch text-left">
+                    <span className="text-white text-3xl font-medium font-helvetica-now leading-loose">
+                      {rec.amount}
+                    </span>
+                    <span className="text-white text-base font-normal font-helvetica-now leading-tight">
+                      {rec.period}
+                    </span>
+                  </div>
+                  <div className="self-stretch text-left text-white text-base font-normal font-helvetica-now leading-tight">
+                    {rec.title}
+                  </div>
+                </div>
+
+                <div className="self-stretch pb-4 border-b border-neutral-600 flex flex-col justify-start items-start gap-4">
+                  {(isHovered || isSelected) && (
+                    <div className="self-stretch text-left text-gray-400 text-xs font-medium leading-relaxed line-clamp-3">
+                      {rec.description}
+                    </div>
+                  )}
+                  <div className="self-stretch text-left">
+                    <span className="text-gray-400 text-xs font-normal font-helvetica-now leading-none">
+                      Confidence:
+                    </span>
+                    <span className="text-white text-xs font-normal font-helvetica-now leading-none">
+                      {" "}
+                    </span>
+                    <span
+                      className={`text-xs font-bold font-helvetica-now leading-none ${rec.confidenceColor}`}
+                    >
+                      {rec.confidence}
+                    </span>
+                    <span className="text-white text-xs font-bold font-helvetica-now leading-none">
+                      {"  "}
+                    </span>
+                    <span className="text-gray-400 text-xs font-normal font-helvetica-now leading-none">
+                      |
+                    </span>
+                    <span className="text-white text-xs font-normal font-helvetica-now leading-none">
+                      {"  "}
+                    </span>
+                    <span className="text-gray-400 text-xs font-normal font-helvetica-now leading-none">
+                      Sources:
+                    </span>
+                    <span className="text-white text-xs font-normal font-helvetica-now leading-none">
+                      {" "}
+                    </span>
+                    <span className="text-white text-xs font-bold font-helvetica-now leading-none">
+                      {rec.sources}
+                    </span>
+                    <span className="text-white text-xs font-normal font-helvetica-now leading-none">
+                      {" "}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="w-full mt-auto">
+                <div className="self-stretch text-left text-blue-300 text-xs font-bold font-helvetica-now leading-none mb-4">
+                  Why this recommendation?
+                </div>
+
+                <div
+                  className="flex items-center gap-2 cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleCompareClick(index);
+                  }}
+                >
+                  <div
+                    className={`w-5 h-5 rounded-[5px] border-2 border-[#1A4EFF] flex-shrink-0 flex items-center justify-center transition-colors duration-200 ${
+                      selectedCards.includes(index)
+                        ? "bg-[#1A4EFF]"
+                        : "bg-transparent"
+                    }`}
+                  >
+                    {selectedCards.includes(index) && (
+                      <svg
+                        width="12"
+                        height="9"
+                        viewBox="0 0 12 9"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M1 4.5L4.5 8L11 1.5"
+                          stroke="white"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    )}
+                  </div>
+                  <span className="text-white text-xs font-normal font-helvetica-now leading-[120%]">
+                    Add to Compare
+                  </span>
+                </div>
               </div>
             </div>
-            <div className="self-stretch text-left text-blue-300 text-xs font-bold font-helvetica-now leading-none">
-              Why this recommendation?
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
-      {/* Drawer */}
-      <RecommendationDrawer
-        isOpen={isDrawerOpen}
-        onClose={handleCloseDrawer}
-        recommendation={
-          selectedCard !== null ? recommendations[selectedCard] : null
-        }
+      {selectedCards.length > 0 && (
+        <div className="flex justify-center mt-8">
+          <button
+            onClick={handleCompareButtonClick}
+            className="px-8 py-3 bg-transparent border-2 border-white rounded-full flex items-center gap-3 text-white transition-all duration-300 cursor-pointer group hover:bg-white hover:text-black"
+          >
+            <img src="/icons/repeat-circle.svg" />
+            <span className="font-medium">Compare</span>
+          </button>
+        </div>
+      )}
+
+      <ComparisonDialog
+        isOpen={showComparisonDialog}
+        onClose={() => setShowComparisonDialog(false)}
+        selectedRecommendations={selectedRecommendations}
       />
     </div>
   );
