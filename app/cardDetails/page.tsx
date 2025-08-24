@@ -46,67 +46,51 @@ const CardDetailsPage = () => {
         </div>
       </div> */}
       <Header />
-
+      <div className="flex justify-between bg-zinc-900 max-w-[1440px] py-4 mx-auto items-center ">
+        <div className="flex items-center space-x-2 ">
+          <div className="flex cursor-pointer ">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="mr-2"
+            >
+              <path
+                d="M15 19L8 12L15 5"
+                stroke="white"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            <span>Return to Results</span>
+          </div>
+        </div>
+        <div className="flex items-center space-x-2">
+          <div className="flex items-center cursor-pointer ">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="mr-2"
+            >
+              <path
+                d="M12 16V12M12 8H12.01M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
+                stroke="white"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            <span>About this page</span>
+          </div>
+        </div>
+      </div>
       <div className="relative z-10 max-w-7xl mx-auto px-4 py-8">
-        {/* Header with logo */}
-        <div className="flex justify-between items-center mb-8">
-          <div className="h-10 w-40 relative">
-            <Image
-              src="/next.svg"
-              alt="Vanguard Logo"
-              width={160}
-              height={40}
-              className="object-contain"
-            />
-          </div>
-        </div>
-
-        {/* Navigation buttons */}
-        <div className="flex justify-between items-center mb-8">
-          <div className="flex items-center space-x-2">
-            <div className="flex items-center bg-[#1E1E1E] rounded-lg px-4 py-2 cursor-pointer hover:bg-[#2C2C2C] transition-colors">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="mr-2"
-              >
-                <path
-                  d="M15 19L8 12L15 5"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              <span>Return to Results</span>
-            </div>
-          </div>
-          <div className="flex items-center space-x-2">
-            <div className="flex items-center bg-[#1E1E1E] rounded-lg px-4 py-2 cursor-pointer hover:bg-[#2C2C2C] transition-colors">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="mr-2"
-              >
-                <path
-                  d="M12 16V12M12 8H12.01M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              <span>About this page</span>
-            </div>
-          </div>
-        </div>
-
         {/* Tabs */}
         <div className="flex mb-8 overflow-x-auto">
           {tabs.map((tab, index) => (
