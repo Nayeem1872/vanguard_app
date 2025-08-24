@@ -35,16 +35,6 @@ const CardDetailsPage = () => {
   return (
     <div className="min-h-screen bg-[#121212] text-white">
       {/* Background image with overlay */}
-      {/* <div className="absolute inset-0 z-0">
-        <div className="relative w-full h-full">
-          <Image 
-            src="/images/BG.jpg" 
-            alt="Background" 
-            fill 
-            className="object-cover opacity-15"
-          />
-        </div>
-      </div> */}
       <Header />
       <div className="flex justify-between bg-zinc-900 max-w-[1440px] py-4 mx-auto items-center ">
         <div className="flex items-center space-x-2 ">

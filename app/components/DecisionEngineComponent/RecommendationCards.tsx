@@ -224,13 +224,15 @@ const RecommendationCards = ({
       </div>
 
       {selectedCards.length > 0 && (
-        <div className="flex justify-center mt-8">
+        <div className="flex justify-center mt-12 mb-4">
           <button
             onClick={handleCompareButtonClick}
-            className="px-8 py-3 bg-transparent border-2 border-white rounded-full flex items-center gap-3 text-white transition-all duration-300 cursor-pointer group hover:bg-white hover:text-black"
+            className="w-full max-w-xs px-10 py-5 bg-transparent border-2 border-white rounded-full flex items-center justify-center gap-3 text-white transition-all duration-300 cursor-pointer group"
           >
-            <img src="/icons/repeat-circle.svg" />
-            <span className="font-medium">Compare</span>
+            <img src="/icons/repeat-circle.svg" className="w-5 h-5" />
+            <div className="justify-start text-white text-base font-bold  leading-normal">
+              Compare
+            </div>
           </button>
         </div>
       )}
