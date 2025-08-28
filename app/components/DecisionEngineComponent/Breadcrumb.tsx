@@ -2,7 +2,7 @@ import Image from "next/image";
 
 const Breadcrumb = () => {
   return (
-    <div className="relative z-10 bg-black/20 backdrop-blur-custom border-b border-gray-700">
+    <div className="relative z-10 bg-black/20 backdrop-blur-custom ">
       <div className="flex justify-between px-24 py-4">
         <div className="flex items-center gap-3 text-sm">
           <Image
