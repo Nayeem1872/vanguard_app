@@ -133,8 +133,7 @@ const ActionPlan = () => {
           <div className="inline-flex justify-start items-start gap-5">
             <div className="w-60 inline-flex flex-col justify-center items-start gap-4">
               <div className="w-10 h-10 relative bg-neutral-800 rounded-[60px] overflow-hidden">
-                <div className="w-5 h-5 left-[10px] top-[10px] absolute bg-zinc-300" />
-                <div className="w-4 h-3.5 left-[12.07px] top-[12.92px] absolute bg-white" />
+                <img src="/icons/p3.svg" />
               </div>
               <div className="self-stretch justify-start text-white text-sm font-normal font-helvetica-now">
                 Implement targeted training programs based on individual needs
@@ -142,8 +141,7 @@ const ActionPlan = () => {
             </div>
             <div className="w-60 inline-flex flex-col justify-center items-start gap-4">
               <div className="w-10 h-10 relative bg-neutral-800 rounded-[60px] overflow-hidden">
-                <div className="w-5 h-5 left-[10px] top-[10px] absolute bg-zinc-300" />
-                <div className="w-4 h-4 left-[12.08px] top-[12.08px] absolute bg-white" />
+                <img src="/icons/p6.svg" />
               </div>
               <div className="self-stretch justify-start text-white text-sm font-normal font-helvetica-now">
                 Deploy peer mentoring system with high-performing employees
@@ -151,8 +149,7 @@ const ActionPlan = () => {
             </div>
             <div className="w-60 inline-flex flex-col justify-center items-start gap-4">
               <div className="w-10 h-10 relative bg-neutral-800 rounded-[60px] overflow-hidden">
-                <div className="w-5 h-5 left-[10px] top-[10px] absolute bg-zinc-300" />
-                <div className="w-3.5 h-3 left-[12.52px] top-[13.76px] absolute bg-white" />
+                <img src="/icons/p5.svg" />
               </div>
               <div className="self-stretch justify-start text-white text-sm font-normal font-helvetica-now">
                 Establish daily performance feedback loops
@@ -160,8 +157,7 @@ const ActionPlan = () => {
             </div>
             <div className="w-60 inline-flex flex-col justify-center items-start gap-4">
               <div className="w-10 h-10 relative bg-neutral-800 rounded-[60px] overflow-hidden">
-                <div className="w-5 h-5 left-[10px] top-[10px] absolute bg-zinc-300" />
-                <div className="w-4 h-3 left-[12.08px] top-[13.75px] absolute bg-white" />
+                <img src="/icons/p4.svg" />
               </div>
               <div className="self-stretch justify-start text-white text-sm font-normal font-helvetica-now">
                 Create recognition and incentive programs
