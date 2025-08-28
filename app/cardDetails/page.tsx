@@ -33,7 +33,10 @@ const CardDetailsPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#121212] text-white">
+    <div
+      className="min-h-screen bg-cover bg-center bg-no-repeat text-white"
+      style={{ backgroundImage: "url('/images/BG.jpg')" }}
+    >
       {/* Background image with overlay */}
       <Header />
       <div className="flex justify-between bg-zinc-900 max-w-[1440px] py-4 mx-auto items-center ">
@@ -82,20 +85,30 @@ const CardDetailsPage = () => {
       </div>
       <div className="relative z-10 max-w-7xl mx-auto px-4 py-8">
         {/* Tabs */}
-        <div className="flex mb-8 overflow-x-auto">
-          {tabs.map((tab, index) => (
-            <div
-              key={index}
-              onClick={() => setActiveTab(tab.name)}
-              className={`px-6 py-3 border-b-2 cursor-pointer whitespace-nowrap ${
-                activeTab === tab.name
-                  ? "border-white text-white font-medium"
-                  : "border-gray-600 text-gray-400 hover:text-gray-300 hover:border-gray-500"
-              }`}
-            >
-              {tab.name}
-            </div>
-          ))}
+        <div className="flex justify-center mb-8">
+          <div className="inline-flex justify-start items-center">
+            {tabs.map((tab, index) => (
+              <div
+                key={index}
+                onClick={() => setActiveTab(tab.name)}
+                className={`px-10 py-5 cursor-pointer flex justify-center items-center gap-2.5 ${
+                  activeTab === tab.name
+                    ? "border-b-2 border-blue-700"
+                    : "border-b border-gray-400"
+                }`}
+              >
+                <div
+                  className={`justify-center text-base font-bold font-helvetica-now leading-normal ${
+                    activeTab === tab.name
+                      ? "text-white uppercase"
+                      : "text-gray-400"
+                  }`}
+                >
+                  {tab.name}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Main content */}

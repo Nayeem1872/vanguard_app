@@ -403,11 +403,7 @@ const ComparisonDialog = ({
                 Drill deeper into this recommendation
               </div>
             </div>
-            <div className="self-stretch h-12 px-10 py-5 rounded-[60px] shadow-[0px_40px_120px_0px_rgba(1,68,199,0.30)] outline outline-2 outline-white/0 inline-flex justify-center items-center gap-2">
-              <div className="justify-start text-white text-base font-bold font-helvetica-now leading-normal">
-                Select for Action Plan
-              </div>
-            </div>
+            <img src="/images/selectButton.png" />
           </div>
         </div>
         <div className="w-[405px] h-[1590px] left-[150px] top-[110px] absolute bg-neutral-900 rounded-[20px] overflow-hidden">
@@ -722,11 +718,7 @@ const ComparisonDialog = ({
                 Drill deeper into this recommendation
               </div>
             </div>
-            <div className="self-stretch h-12 px-10 py-5 rounded-[60px] shadow-[0px_40px_120px_0px_rgba(1,68,199,0.30)] outline outline-2 outline-white/0 inline-flex justify-center items-center gap-2">
-              <div className="justify-start text-white text-base font-bold font-helvetica-now leading-normal">
-                Select for Action Plan
-              </div>
-            </div>
+            <img src="/images/selectButton.png" />
           </div>
         </div>
         <img
