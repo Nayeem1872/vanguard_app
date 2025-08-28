@@ -11,34 +11,112 @@ const ActionPlan = () => {
     phase4: false,
     rootCause: false,
   });
-
   const togglePhase = (phase: string) => {
     setExpandedPhases((prev) => ({
       ...prev,
       [phase]: !prev[phase],
     }));
   };
-
   return (
-    <div className="space-y-6">
-      {/* 5 Whys Root Cause Analysis */}
-      <div className="bg-[#1E1E1E] rounded-xl p-6">
-        <div
-          className="flex justify-between items-center cursor-pointer"
+    <div className="w-[1040px] inline-flex flex-col justify-start items-start gap-5">
+      {/* Timeline Header */}
+
+      <div className="w-full flex justify-between items-center rounded-xl p-6">
+        <h2 className="text-white text-lg font-medium">
+          5 Whys Root Cause Analysis
+        </h2>
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className={`transform transition-transform cursor-pointer ${
+            expandedPhases.rootCause ? "rotate-180" : ""
+          }`}
           onClick={() => togglePhase("rootCause")}
         >
-          <h2 className="text-white text-lg font-medium">
-            5 Whys Root Cause Analysis
-          </h2>
+          <path
+            d="M7 10L12 15L17 10"
+            stroke="white"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </div>
+
+      <div className="self-stretch  flex flex-col justify-start items-start">
+        <div className="self-stretch justify-start text-gray-400 text-base font-bold font-helvetica-now uppercase leading-normal tracking-widest">
+          Phased Implementation Timeline
+        </div>
+      </div>
+
+      {/* Phase 1 */}
+      <div className="self-stretch p-5 bg-zinc-950 rounded-2xl inline-flex justify-start items-center gap-3">
+        <div className="flex-1 inline-flex flex-col justify-start items-start gap-3">
+          <div className="self-stretch flex flex-col justify-start items-start gap-2">
+            <div className="self-stretch justify-start text-white text-base font-bold font-helvetica-now leading-tight">
+              Phase 1: Assessment & Baseline
+            </div>
+            <div className="self-stretch justify-start text-gray-400 text-sm font-normal font-helvetica-now">
+              0-30 days
+            </div>
+          </div>
+          <div className="inline-flex justify-start items-center gap-2">
+            <div className="h-7 px-5 py-2.5 bg-teal-800 rounded-[60px] flex justify-center items-center gap-1.5">
+              <div className="justify-start text-white text-[10px] font-bold font-helvetica-now uppercase leading-3">
+                Ready
+              </div>
+            </div>
+          </div>
+        </div>
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className="transform transition-transform cursor-pointer"
+        >
+          <path
+            d="M7 10L12 15L17 10"
+            stroke="white"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </div>
+
+      {/* Phase 2 - Expanded */}
+      <div className="self-stretch p-5 bg-zinc-950 rounded-2xl flex flex-col justify-center items-start gap-5">
+        {/* Phase 2 Header */}
+        <div className="self-stretch pb-5 border-b-[0.50px] border-neutral-600 inline-flex justify-between items-center">
+          <div className="flex-1 inline-flex flex-col justify-start items-start gap-3">
+            <div className="self-stretch flex flex-col justify-start items-start gap-2">
+              <div className="self-stretch justify-start text-white text-base font-bold font-helvetica-now leading-tight">
+                Phase 2: Training & Quick Wins
+              </div>
+              <div className="self-stretch justify-start text-gray-400 text-sm font-normal font-helvetica-now">
+                30-90 days
+              </div>
+            </div>
+            <div className="inline-flex justify-start items-center gap-2">
+              <div className="h-7 px-5 py-2.5 bg-yellow-900 rounded-[60px] flex justify-center items-center gap-2.5">
+                <div className="justify-start text-white text-xs font-bold font-helvetica-now uppercase leading-none">
+                  Planned
+                </div>
+              </div>
+            </div>
+          </div>
           <svg
             width="24"
             height="24"
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className={`transform transition-transform ${
-              expandedPhases.rootCause ? "rotate-180" : ""
-            }`}
+            className="transform transition-transform cursor-pointer"
           >
             <path
               d="M7 10L12 15L17 10"
@@ -50,146 +128,156 @@ const ActionPlan = () => {
           </svg>
         </div>
 
-        {expandedPhases.rootCause && (
-          <div className="mt-4 space-y-4">
-            {/* Root cause analysis content - keeping it condensed */}
-            {[1, 2, 3, 4, 5].map((num) => (
-              <div key={num} className="bg-[#262626] rounded-lg p-4">
-                <div className="flex items-start">
-                  <div className="w-8 h-8 rounded-full bg-[#1A4EFF] flex items-center justify-center mr-3 flex-shrink-0">
-                    <span className="text-white font-medium">{num}</span>
-                  </div>
-                  <div>
-                    <h3 className="text-white font-medium">
-                      Why Question {num}
-                    </h3>
-                    <p className="text-gray-400 mt-2">
-                      Analysis content for question {num}
-                    </p>
-                  </div>
-                </div>
+        {/* Phase 2 Tasks */}
+        <div className="self-stretch pb-5 border-b-[0.50px] border-neutral-600 flex flex-col justify-start items-start gap-1">
+          <div className="inline-flex justify-start items-start gap-5">
+            <div className="w-60 inline-flex flex-col justify-center items-start gap-4">
+              <div className="w-10 h-10 relative bg-neutral-800 rounded-[60px] overflow-hidden">
+                <div className="w-5 h-5 left-[10px] top-[10px] absolute bg-zinc-300" />
+                <div className="w-4 h-3.5 left-[12.07px] top-[12.92px] absolute bg-white" />
               </div>
-            ))}
-
-            <div className="bg-[#312E81] rounded-lg p-4 mt-6">
-              <h3 className="text-white font-medium mb-2">Root Cause:</h3>
-              <p className="text-gray-200">
-                The root cause of inefficient material flow is the absence of
-                material flow metrics in operational KPIs.
-              </p>
+              <div className="self-stretch justify-start text-white text-sm font-normal font-helvetica-now">
+                Implement targeted training programs based on individual needs
+              </div>
+            </div>
+            <div className="w-60 inline-flex flex-col justify-center items-start gap-4">
+              <div className="w-10 h-10 relative bg-neutral-800 rounded-[60px] overflow-hidden">
+                <div className="w-5 h-5 left-[10px] top-[10px] absolute bg-zinc-300" />
+                <div className="w-4 h-4 left-[12.08px] top-[12.08px] absolute bg-white" />
+              </div>
+              <div className="self-stretch justify-start text-white text-sm font-normal font-helvetica-now">
+                Deploy peer mentoring system with high-performing employees
+              </div>
+            </div>
+            <div className="w-60 inline-flex flex-col justify-center items-start gap-4">
+              <div className="w-10 h-10 relative bg-neutral-800 rounded-[60px] overflow-hidden">
+                <div className="w-5 h-5 left-[10px] top-[10px] absolute bg-zinc-300" />
+                <div className="w-3.5 h-3 left-[12.52px] top-[13.76px] absolute bg-white" />
+              </div>
+              <div className="self-stretch justify-start text-white text-sm font-normal font-helvetica-now">
+                Establish daily performance feedback loops
+              </div>
+            </div>
+            <div className="w-60 inline-flex flex-col justify-center items-start gap-4">
+              <div className="w-10 h-10 relative bg-neutral-800 rounded-[60px] overflow-hidden">
+                <div className="w-5 h-5 left-[10px] top-[10px] absolute bg-zinc-300" />
+                <div className="w-4 h-3 left-[12.08px] top-[13.75px] absolute bg-white" />
+              </div>
+              <div className="self-stretch justify-start text-white text-sm font-normal font-helvetica-now">
+                Create recognition and incentive programs
+              </div>
             </div>
           </div>
-        )}
+        </div>
+
+        {/* Owner */}
+        <div className="self-stretch pb-5 border-b-[0.50px] border-neutral-600 inline-flex justify-center items-center gap-2.5">
+          <div className="flex-1 justify-start">
+            <span className="text-gray-400 text-sm font-normal font-helvetica-now">
+              Owner:{" "}
+            </span>
+            <span className="text-white text-sm font-medium font-helvetica-now">
+              Training Coordinator & Shift Managers
+            </span>
+          </div>
+        </div>
+
+        {/* Assigned Employees */}
+        <div className="self-stretch pb-5 border-b-[0.50px] border-neutral-600 flex flex-col justify-center items-start gap-2">
+          <div className="justify-start text-gray-400 text-sm font-bold font-helvetica-now leading-tight">
+            Assigned Employees:
+          </div>
+          <div className="inline-flex justify-start items-start gap-2">
+            <div className="h-7 px-5 py-2.5 bg-neutral-800 rounded-[60px] flex justify-center items-center gap-1.5">
+              <div className="justify-start text-white text-xs font-bold font-helvetica-now uppercase leading-none">
+                John
+              </div>
+            </div>
+            <div className="h-7 px-5 py-2.5 bg-neutral-800 rounded-[60px] flex justify-center items-center gap-1.5">
+              <div className="justify-start text-white text-xs font-bold font-helvetica-now uppercase leading-none">
+                Akbar
+              </div>
+            </div>
+            <div className="h-7 px-5 py-2.5 bg-neutral-800 rounded-[60px] flex justify-center items-center gap-1.5">
+              <div className="justify-start text-white text-xs font-bold font-helvetica-now uppercase leading-none">
+                Lindsey
+              </div>
+            </div>
+            <div className="h-7 px-5 py-2.5 bg-neutral-800 rounded-[60px] flex justify-center items-center gap-1.5">
+              <div className="justify-start text-white text-xs font-bold font-helvetica-now uppercase leading-none">
+                Max
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Resources */}
+        <div className="self-stretch flex flex-col justify-center items-start gap-2">
+          <div className="justify-start text-gray-400 text-sm font-bold font-helvetica-now leading-tight">
+            Resources:
+          </div>
+          <div className="w-[669px] inline-flex justify-start items-start gap-2">
+            <div className="h-7 px-5 py-2.5 bg-neutral-800 rounded-[60px] flex justify-center items-center gap-1.5">
+              <div className="justify-start text-white text-xs font-bold font-helvetica-now leading-none">
+                Training Materials
+              </div>
+            </div>
+            <div className="h-7 px-5 py-2.5 bg-neutral-800 rounded-[60px] flex justify-center items-center gap-1.5">
+              <div className="justify-start text-white text-xs font-bold font-helvetica-now leading-none">
+                Mentoring Program
+              </div>
+            </div>
+            <div className="h-7 px-5 py-2.5 bg-neutral-800 rounded-[60px] flex justify-center items-center gap-1.5">
+              <div className="justify-start text-white text-xs font-bold font-helvetica-now leading-none">
+                Performance Dashboards
+              </div>
+            </div>
+            <div className="h-7 px-5 py-2.5 bg-neutral-800 rounded-[60px] flex justify-center items-center gap-1.5">
+              <div className="justify-start text-white text-xs font-bold font-helvetica-now leading-none">
+                Incentive System
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Implementation Timeline */}
-      <div>
-        <h2 className="text-[#A3A3A3] text-lg font-medium mb-4">
-          Phased Implementation Timeline
-        </h2>
-
-        {/* Phases 1-4 - condensed version */}
-        {[
-          {
-            phase: "phase1",
-            title: "Phase 1: Assessment & Baseline",
-            days: "0-30 days",
-            status: "Ready",
-            color: "bg-[#1A4E33]",
-          },
-          {
-            phase: "phase2",
-            title: "Phase 2: Training & Quick Wins",
-            days: "30-90 days",
-            status: "Planned",
-            color: "bg-[#312E81]",
-          },
-          {
-            phase: "phase3",
-            title: "Phase 3: Major Reconfiguration",
-            days: "90-150 days",
-            status: "Planned",
-            color: "bg-[#312E81]",
-          },
-          {
-            phase: "phase4",
-            title: "Phase 4: Optimization & Continuous Improvement",
-            days: "150-180 days",
-            status: "Planned",
-            color: "bg-[#312E81]",
-          },
-        ].map((item, index) => (
-          <div
-            key={item.phase}
-            className={`bg-[#1E1E1E] rounded-xl ${index < 3 ? "mb-4" : ""}`}
-          >
-            <div className="p-6">
-              <div className="flex justify-between items-center">
-                <div>
-                  <h3 className="text-white font-medium">{item.title}</h3>
-                  <p className="text-[#A3A3A3] text-sm mt-1">{item.days}</p>
-                </div>
-                <div className="flex items-center">
-                  <span
-                    className={`${item.color} text-white text-xs px-3 py-1 rounded-full`}
-                  >
-                    {item.status}
-                  </span>
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className={`ml-4 transform transition-transform cursor-pointer ${
-                      expandedPhases[item.phase] ? "rotate-180" : ""
-                    }`}
-                    onClick={() => togglePhase(item.phase)}
-                  >
-                    <path
-                      d="M7 10L12 15L17 10"
-                      stroke="white"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
+      {/* Phase 3 */}
+      <div className="self-stretch p-5 bg-zinc-950 rounded-2xl inline-flex justify-start items-center gap-3">
+        <div className="flex-1 inline-flex flex-col justify-start items-start gap-3">
+          <div className="self-stretch flex flex-col justify-start items-start gap-2">
+            <div className="self-stretch justify-start text-white text-base font-bold font-helvetica-now leading-tight">
+              Phase 3: Optimization & Sustainment
+            </div>
+            <div className="self-stretch justify-start text-gray-400 text-sm font-normal font-helvetica-now">
+              90-180 days
+            </div>
+          </div>
+          <div className="inline-flex justify-start items-center gap-2">
+            <div className="flex justify-start items-center gap-2">
+              <div className="h-7 px-5 py-2.5 bg-blue-900 rounded-[60px] flex justify-center items-center gap-1.5">
+                <div className="justify-start text-indigo-200 text-[10px] font-bold font-helvetica-now uppercase leading-3">
+                  Future
                 </div>
               </div>
             </div>
-
-            {expandedPhases[item.phase] && (
-              <div className="px-6 pb-6 border-t border-gray-700 pt-4">
-                <div className="space-y-4">
-                  <div className="flex items-start">
-                    <div className="w-10 h-10 rounded-full bg-[#1E1E1E] border border-gray-700 flex items-center justify-center mr-4 flex-shrink-0">
-                      <svg
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M9 12H15M12 9V15M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z"
-                          stroke="white"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </div>
-                    <div>
-                      <p className="text-white">
-                        {item.title} implementation details and tasks
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
-        ))}
+        </div>
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className="transform transition-transform cursor-pointer"
+        >
+          <path
+            d="M7 10L12 15L17 10"
+            stroke="white"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
       </div>
     </div>
   );

@@ -41,26 +41,7 @@ const CardDetailsPage = () => {
     >
       {/* Background image with overlay */}
       <Header />
-      {/* <div className="flex justify-between bg-black/20 max-w-[1440px] py-4 mx-auto items-center ">
-        <div className="flex items-center space-x-2 ">
-          <div className="flex cursor-pointer gap-4 ">
-            <img src="/icons/arrow-right.svg" />
-            <span>Return to Results</span>
-          </div>
-        </div>
-        <div className="flex items-center space-x-2">
-          <Image
-            src="/icons/info.svg"
-            alt="Help"
-            width={16}
-            height={16}
-            className="ml-auto text-gray-400"
-          />
-          <span className="text-gray-rgba(255, 255, 255, 1) text-sm cursor-pointer">
-            About this page
-          </span>
-        </div>
-      </div> */}
+
       <div className="relative z-10 bg-black/20 backdrop-blur-custom ">
         <div className="flex justify-between px-24 py-4">
           <div className="flex items-center gap-3 text-sm">
@@ -81,7 +62,7 @@ const CardDetailsPage = () => {
           </div>
         </div>
       </div>
-      <div className="relative z-10 max-w-7xl mx-auto px-4 py-8">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 py-4">
         {/* Tabs */}
         <div className="flex justify-center mb-8">
           <div className="inline-flex justify-start items-center">
