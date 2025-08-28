@@ -94,239 +94,647 @@ const ComparisonDialog = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4">
-      <div className="bg-[#121212] rounded-lg max-w-6xl w-full max-h-[90vh] overflow-y-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-800">
-          <h2 className="text-white text-sm font-bold uppercase tracking-wider">
-            COMPARE
-          </h2>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-white transition-colors"
-          >
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M18 6L6 18M6 6L18 18"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
-        </div>
-
-        {/* Content */}
-        <div className="p-4">
-          <div className="grid grid-cols-2 gap-4">
-            {selectedRecommendations.map((rec, index) => (
-              <div key={index} className="space-y-4">
-                {/* Header Card */}
-                <div className={`${rec.cardBg} p-4 rounded-lg`}>
-                  <div
-                    className={`inline-flex px-5 py-2.5 ${rec.riskColor} rounded-[60px] mb-4 justify-center items-center`}
-                  >
-                    <span className="text-white text-xs font-bold uppercase leading-none">
-                      {rec.risk}
-                    </span>
-                  </div>
-                  <div className="text-white border-b border-neutral-600 pb-4">
-                    <div className="text-left">
-                      <span className="text-3xl font-medium leading-loose">
-                        {rec.amount}
-                      </span>
-                      <span className="text-base font-normal leading-tight">
-                        {rec.period}
-                      </span>
-                    </div>
-                    <div className="text-base font-normal leading-tight mt-2.5">{rec.title}</div>
-                  </div>
-                  <div className="text-xs mt-4 pb-4 border-b border-neutral-600">
-                    <div className="text-gray-400 text-xs mb-4 line-clamp-3">
-                      {rec.description}
-                    </div>
-                    <div className="text-left">
-                      <span className="text-gray-400">Confidence: </span>
-                      <span className={rec.confidenceColor}>
-                        {rec.confidence}
-                      </span>
-                      <span className="text-gray-400">  |  </span>
-                      <span className="text-gray-400">Sources: </span>
-                      <span className="text-white font-bold">{rec.sources}</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* ROI Forecast */}
-                <div className="bg-[#1E1E1E] p-4 rounded-lg">
-                  <h3 className="text-gray-400 text-xs font-bold uppercase mb-4">
-                    ROI FORECAST
-                  </h3>
-                  <div className="space-y-2">
-                    {generateROIData(index).map((item, i) => (
-                      <div
-                        key={i}
-                        className="flex items-center justify-between"
-                      >
-                        <span className="text-gray-400 text-xs w-6">
-                          {item.month}
-                        </span>
-                        <div className="flex-1 mx-3">
-                          <div className="bg-[#2C2C2C] h-2 rounded-full overflow-hidden">
-                            <div
-                              className={`h-full ${
-                                index === 0 ? "bg-green-500" : "bg-red-500"
-                              }`}
-                              style={{ width: `${item.value}%` }}
-                            ></div>
-                          </div>
-                        </div>
-                        <span className="text-white text-xs w-8 text-right">
-                          {item.value}%
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Metrics */}
-                  <div className="grid grid-cols-2 gap-4 mt-6">
-                    <div className="bg-[#2C2C2C] p-3 rounded-lg text-center">
-                      <div className="text-yellow-500 mb-1">
-                        <svg
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="currentColor"
-                          className="mx-auto"
-                        >
-                          <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z" />
-                        </svg>
-                      </div>
-                      <div className="text-gray-400 text-xs">
-                        PAYBACK PERIOD
-                      </div>
-                      <div className="text-white text-sm font-bold">
-                        3.2 months
-                      </div>
-                    </div>
-                    <div className="bg-[#2C2C2C] p-3 rounded-lg text-center">
-                      <div className="text-blue-500 mb-1">
-                        <svg
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="currentColor"
-                          className="mx-auto"
-                        >
-                          <path d="M7 4V2C7 1.45 7.45 1 8 1S9 1.55 9 2V4H15V2C15 1.45 15.45 1 16 1S17 1.55 17 2V4H19C20.1 4 21 4.9 21 6V20C21 21.1 20.1 22 19 22H5C3.9 22 3 21.1 3 20V6C3 4.9 3.9 4 5 4H7Z" />
-                        </svg>
-                      </div>
-                      <div className="text-gray-400 text-xs">NPV (3 YEARS)</div>
-                      <div className="text-white text-sm font-bold">
-                        {index === 0 ? "+$89k/quarter" : "-$85k/quarter"}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Risk Profile */}
-                <div className="bg-[#1E1E1E] p-4 rounded-lg">
-                  <h3 className="text-gray-400 text-xs font-bold uppercase mb-4">
-                    RISK PROFILE
-                  </h3>
-                  <div className="text-white text-sm mb-3">{rec.risk}</div>
-                  <div className="text-gray-400 text-xs mb-4">
-                    Based on Risk Assessment
-                  </div>
-                  <div className="space-y-2">
-                    {getRiskItems(rec.risk).map((item, i) => (
-                      <div
-                        key={i}
-                        className="flex items-center justify-between p-2 bg-[#2C2C2C] rounded"
-                      >
-                        <span className="text-white text-xs">{item.label}</span>
-                        <span
-                          className={`px-2 py-1 rounded text-xs font-bold ${item.color} text-white`}
-                        >
-                          {item.level}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Dependencies Snapshot */}
-                <div className="bg-[#1E1E1E] p-4 rounded-lg">
-                  <h3 className="text-gray-400 text-xs font-bold uppercase mb-4">
-                    DEPENDENCIES SNAPSHOT
-                  </h3>
-                  <div className="text-gray-400 text-xs mb-3">
-                    Why this recommendation?
-                  </div>
-                  <div className="bg-[#121212] p-3 rounded relative h-24 overflow-hidden">
-                    {/* Simulated dependency network */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="grid grid-cols-6 gap-1">
-                        {Array.from({ length: 24 }).map((_, i) => (
-                          <div
-                            key={i}
-                            className={`w-2 h-2 rounded-sm ${
-                              Math.random() > 0.7
-                                ? index === 0
-                                  ? "bg-green-400"
-                                  : "bg-red-400"
-                                : "bg-gray-600"
-                            }`}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Systems Involved */}
-                <div className="bg-[#1E1E1E] p-4 rounded-lg">
-                  <h3 className="text-gray-400 text-xs font-bold uppercase mb-4">
-                    SYSTEMS INVOLVED
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {getSystemsInvolved(rec.sources).map((system, i) => (
-                      <span
-                        key={i}
-                        className="px-3 py-1 bg-[#2C2C2C] text-white text-xs rounded-full"
-                      >
-                        {system}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Action Buttons */}
-                <div className="space-y-3">
-                  <button className="w-full py-3 border border-gray-600 text-gray-300 rounded-lg hover:bg-gray-700 transition-colors">
-                    Drill deeper into this recommendation
-                  </button>
-                  <button className="w-full py-3 bg-[#1A4EFF] text-white rounded-lg hover:bg-blue-700 transition-colors">
-                    {index === 0 ? "Select for Action Plan" : "Select for Action Plan"}
-                  </button>
-                </div>
-              </div>
-            ))}
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="w-[1174px] h-[1810px] relative bg-zinc-950 rounded-[20px] overflow-hidden max-h-[90vh] overflow-y-auto">
+        <div className="w-[1232px] py-5 left-[21px] top-0 absolute border-b-[0.50px] border-neutral-600 inline-flex justify-center items-center gap-2.5">
+          <div className="text-center justify-start text-gray-400 text-xl font-bold font-helvetica-now uppercase leading-loose tracking-widest">
+            Compare
           </div>
         </div>
-        {/* Footer with Compare button */}
-        <div className="p-4 border-t border-gray-800 flex justify-center">
-          <button className="px-8 py-2 bg-transparent border border-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
-            Compare
-          </button>
+        <div className="w-[405px] h-[1590px] left-[597px] top-[110px] absolute bg-stone-900 rounded-[20px] overflow-hidden">
+          <div className="w-96 h-24 pb-4 left-[20px] top-[30px] absolute border-b border-neutral-600 inline-flex flex-col justify-start items-start gap-2.5">
+            <div className="self-stretch inline-flex justify-between items-center">
+              <div className="justify-start">
+                <span className="text-white text-4xl font-medium font-helvetica-now leading-10">
+                  +$156,780
+                </span>
+                <span className="text-white text-xl font-normal font-helvetica-now leading-normal">
+                  /qtr
+                </span>
+              </div>
+              <div className="h-7 px-5 py-2.5 bg-red-900 rounded-[60px] flex justify-center items-center gap-2.5">
+                <div className="justify-start text-white text-xs font-bold font-helvetica-now uppercase leading-none">
+                  High Risk
+                </div>
+              </div>
+            </div>
+            <div className="self-stretch justify-start text-white text-xl font-normal font-helvetica-now leading-normal">
+              Consolidate vendor contracts
+            </div>
+          </div>
+          <div className="w-96 pb-5 left-[20px] top-[148px] absolute border-b border-neutral-600 inline-flex flex-col justify-start items-start gap-4">
+            <div className="self-stretch justify-start text-white text-base font-normal font-helvetica-now leading-tight">
+              Smart energy management can reduce utility costs at Sites A and C.
+            </div>
+            <div className="self-stretch justify-start">
+              <span className="text-gray-400 text-sm font-normal font-helvetica-now leading-none">
+                Confidence:
+              </span>
+              <span className="text-white text-sm font-normal font-helvetica-now leading-none">
+                 
+              </span>
+              <span className="text-rose-500 text-sm font-bold font-helvetica-now leading-none">
+                55%
+              </span>
+              <span className="text-white text-sm font-bold font-helvetica-now leading-none">
+                {" "}
+              </span>
+              <span className="text-gray-400 text-sm font-normal font-helvetica-now leading-none">
+                |
+              </span>
+              <span className="text-white text-sm font-normal font-helvetica-now leading-none">
+                {" "}
+              </span>
+              <span className="text-gray-400 text-sm font-normal font-helvetica-now leading-none">
+                Sources:
+              </span>
+              <span className="text-white text-sm font-bold font-helvetica-now leading-none">
+                {" "}
+                HRIS,CRM
+              </span>
+            </div>
+          </div>
+          <div className="w-96 pb-5 left-[20px] top-[259px] absolute border-b-[0.50px] border-neutral-600 inline-flex flex-col justify-start items-start gap-5">
+            <div className="self-stretch flex flex-col justify-start items-start gap-3">
+              <div className="self-stretch text-left justify-start text-gray-400 text-base font-bold font-helvetica-now uppercase leading-normal tracking-widest">
+                ROI FORECAST
+              </div>
+              <div className="self-stretch h-56 relative bg-zinc-950 rounded-[10px]">
+                <div className="w-96 h-52 left-[9.63px] top-[8.76px] absolute opacity-0 bg-zinc-300" />
+                <div className="left-[9.63px] top-[8.76px] absolute justify-start text-Color-neutral-09/90 text-xs font-normal font-helvetica-now">
+                  Basic Bar X
+                </div>
+                <div className="w-80 h-36 left-[9.63px] top-[49.03px] absolute">
+                  <div className="w-80 h-36 left-[3.50px] top-0 absolute inline-flex flex-col justify-center items-start gap-px">
+                    <div className="self-stretch flex-1 relative">
+                      <div className="w-16 h-5 left-[-9.13px] top-[10.27px] absolute text-right justify-start text-Color-neutral-09/90 text-xs font-normal font-helvetica-now">
+                        Jan
+                      </div>
+                    </div>
+                    <div className="self-stretch flex-1 relative">
+                      <div className="w-16 h-5 left-[-9.13px] top-[10.27px] absolute text-right justify-start text-Color-neutral-09/90 text-xs font-normal font-helvetica-now">
+                        Feb
+                      </div>
+                    </div>
+                    <div className="self-stretch flex-1 relative">
+                      <div className="w-16 h-5 left-[-9.13px] top-[10.27px] absolute text-right justify-start text-Color-neutral-09/90 text-xs font-normal font-helvetica-now">
+                        Mar
+                      </div>
+                    </div>
+                    <div className="self-stretch flex-1 relative">
+                      <div className="w-16 h-5 left-[-9.13px] top-[10.27px] absolute text-right justify-start text-Color-neutral-09/90 text-xs font-normal font-helvetica-now">
+                        Apr
+                      </div>
+                    </div>
+                  </div>
+                  <div className="w-32 h-0 left-[64.79px] top-[137.62px] absolute origin-top-left -rotate-90 opacity-20 outline outline-1 outline-offset-[-0.44px] outline-Color-neutral-06/60"></div>
+                </div>
+                <div className="w-80 h-40 left-[59.54px] top-[49.03px] absolute">
+                  <div className="w-72 h-40 left-[0.88px] top-[0.88px] absolute inline-flex justify-center items-end gap-4">
+                    <div className="flex-1 self-stretch inline-flex flex-col justify-end items-center gap-1.5">
+                      <div className="w-9 h-3.5 text-center justify-start text-Color-neutral-09/90 text-xs font-normal font-sans">
+                        0
+                      </div>
+                    </div>
+                    <div className="flex-1 self-stretch inline-flex flex-col justify-end items-center gap-1.5">
+                      <div className="self-stretch flex-1 origin-top-left -rotate-90 opacity-20 outline outline-1 outline-offset-[-0.44px] outline-Color-neutral-06/60"></div>
+                      <div className="w-9 h-3.5 text-center justify-start text-Color-neutral-09/90 text-xs font-normal font-helvetica-now">
+                        100
+                      </div>
+                    </div>
+                    <div className="flex-1 self-stretch inline-flex flex-col justify-end items-center gap-1.5">
+                      <div className="self-stretch flex-1 origin-top-left -rotate-90 opacity-20 outline outline-1 outline-offset-[-0.44px] outline-Color-neutral-06/60"></div>
+                      <div className="w-9 h-3.5 text-center justify-start text-Color-neutral-09/90 text-xs font-normal font-helvetica-now">
+                        200
+                      </div>
+                    </div>
+                    <div className="flex-1 self-stretch inline-flex flex-col justify-end items-center gap-1.5">
+                      <div className="self-stretch flex-1 origin-top-left -rotate-90 opacity-20 outline outline-1 outline-offset-[-0.44px] outline-Color-neutral-06/60"></div>
+                      <div className="w-9 h-3.5 text-center justify-start text-Color-neutral-09/90 text-xs font-normal font-helvetica-now">
+                        300
+                      </div>
+                    </div>
+                    <div className="flex-1 self-stretch inline-flex flex-col justify-end items-center gap-1.5">
+                      <div className="self-stretch flex-1 origin-top-left -rotate-90 opacity-20 outline outline-1 outline-offset-[-0.44px] outline-Color-neutral-06/60"></div>
+                      <div className="w-9 h-3.5 text-center justify-start text-Color-neutral-09/90 text-xs font-normal font-helvetica-now">
+                        400
+                      </div>
+                    </div>
+                    <div className="flex-1 self-stretch inline-flex flex-col justify-end items-center gap-1.5">
+                      <div className="self-stretch flex-1 origin-top-left -rotate-90 opacity-20 outline outline-1 outline-offset-[-0.44px] outline-Color-neutral-06/60"></div>
+                      <div className="w-9 h-3.5 text-center justify-start text-Color-neutral-09/90 text-xs font-normal font-helvetica-now">
+                        500
+                      </div>
+                    </div>
+                    <div className="flex-1 self-stretch inline-flex flex-col justify-end items-center gap-1.5">
+                      <div className="self-stretch flex-1 origin-top-left -rotate-90 opacity-20 outline outline-1 outline-offset-[-0.44px] outline-Color-neutral-06/60"></div>
+                      <div className="w-9 h-3.5 text-center justify-start text-Color-neutral-09/90 text-xs font-normal font-helvetica-now">
+                        600
+                      </div>
+                    </div>
+                    <div className="flex-1 self-stretch inline-flex flex-col justify-end items-center gap-1.5">
+                      <div className="self-stretch flex-1 origin-top-left -rotate-90 opacity-20 outline outline-1 outline-offset-[-0.44px] outline-Color-neutral-06/60"></div>
+                      <div className="w-9 h-3.5 text-center justify-start text-Color-neutral-09/90 text-xs font-normal font-helvetica-now">
+                        700
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="w-64 h-36 left-[74.42px] top-[49.91px] absolute inline-flex flex-col justify-center items-start">
+                  <div className="self-stretch flex-1 relative">
+                    <div
+                      data-cleavage="False"
+                      data-orientation="Vertical"
+                      className="w-52 h-2.5 left-0 top-[13.40px] absolute inline-flex justify-center items-end"
+                    >
+                      <div className="flex-1 self-stretch bg-gradient-to-l from-red-900 to-red-900/0" />
+                    </div>
+                  </div>
+                  <div className="self-stretch flex-1 relative">
+                    <div
+                      data-cleavage="False"
+                      data-orientation="Vertical"
+                      className="w-44 h-2.5 left-0 top-[13.40px] absolute inline-flex justify-center items-end"
+                    >
+                      <div className="flex-1 self-stretch bg-gradient-to-l from-red-900 to-red-900/0" />
+                    </div>
+                  </div>
+                  <div className="self-stretch flex-1 relative">
+                    <div
+                      data-cleavage="False"
+                      data-orientation="Vertical"
+                      className="w-40 h-2.5 left-0 top-[13.40px] absolute inline-flex justify-center items-end"
+                    >
+                      <div className="flex-1 self-stretch bg-gradient-to-l from-red-900 to-red-900/0" />
+                    </div>
+                  </div>
+                  <div className="self-stretch flex-1 relative">
+                    <div
+                      data-cleavage="False"
+                      data-orientation="Vertical"
+                      className="w-28 h-2.5 left-0 top-[13.40px] absolute inline-flex justify-center items-end"
+                    >
+                      <div className="flex-1 self-stretch bg-gradient-to-l from-red-900 to-red-900/0" />
+                    </div>
+                  </div>
+                </div>
+                <div
+                  data-series="not"
+                  data-shape="Square"
+                  data-方向="水平"
+                  className="w-96 h-5 left-[8.76px] top-[26.27px] absolute"
+                >
+                  <div className="w-96 px-5 left-0 top-0 absolute inline-flex justify-end items-center gap-3.5" />
+                </div>
+              </div>
+            </div>
+            <div className="self-stretch inline-flex justify-start items-start gap-5">
+              <div className="flex-1 p-5 bg-yellow-100/10 rounded-[10px] inline-flex flex-col justify-center items-start gap-2">
+                <div className="self-stretch flex flex-col justify-start items-start gap-2">
+                  <img src="/icons/timer.svg" />
+                  <div className="self-stretch text-left text-gray-400 text-[10px] font-bold font-helvetica-now uppercase leading-none tracking-wide">
+                    Payback Period
+                  </div>
+                  <div className="self-stretch text-left text-yellow-100 text-xl font-bold font-helvetica-now leading-normal">
+                    3.2 months
+                  </div>
+                </div>
+              </div>
+              <div className="flex-1 p-5 bg-stone-800 rounded-[10px] inline-flex flex-col justify-center items-start gap-2">
+                <div className="self-stretch flex flex-col justify-start items-start gap-2">
+                  <img src="/icons/presentation.svg" />
+                  <div className="self-stretch text-left justify-start text-gray-400 text-[10px] font-bold font-helvetica-now uppercase leading-none tracking-wide">
+                    Risk-Adjusted ROI
+                  </div>
+                  <div className="self-stretch text-left justify-start text-indigo-300 text-lg font-bold font-helvetica-now leading-normal">
+                    +$89k/quarter
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="w-96 pb-5 left-[20px] top-[693px] absolute border-b-[0.50px] border-neutral-600 inline-flex flex-col justify-start items-start gap-5">
+            <div className="self-stretch flex flex-col justify-start items-start gap-3">
+              <div className="self-stretch text-left justify-start text-gray-400 text-base font-bold font-helvetica-now uppercase leading-normal tracking-widest">
+                RISK PROFILE
+              </div>
+            </div>
+            <div className="self-stretch flex flex-col justify-start items-start gap-3">
+              <div className="w-96 flex flex-col justify-start items-start gap-2">
+                <div className="self-stretch text-left justify-start text-white text-base font-medium font-helvetica-now leading-tight">
+                  Medium Risk
+                </div>
+                <div className="self-stretch text-left justify-start text-gray-400 text-sm font-normal font-helvetica-now leading-none">
+                  Based on 3 risk factors
+                </div>
+              </div>
+              <div className="self-stretch flex flex-col justify-start items-start gap-2.5">
+                <div className="self-stretch p-5 bg-neutral-800 rounded-[10px] inline-flex justify-between items-center">
+                  <div className="justify-start text-gray-400 text-sm font-bold font-helvetica-now">
+                    System Integration Complexity
+                  </div>
+                  <div className="w-14 h-5 bg-teal-800 rounded-[60px] flex justify-center items-center gap-2.5">
+                    <div className="justify-start text-white text-[10px] font-normal font-helvetica-now uppercase">
+                      Low
+                    </div>
+                  </div>
+                </div>
+                <div className="self-stretch p-5 bg-neutral-800 rounded-[10px] inline-flex justify-between items-center">
+                  <div className="justify-start text-gray-400 text-sm font-bold font-helvetica-now">
+                    Change Mgmt Required
+                  </div>
+                  <div className="w-14 h-5 bg-yellow-900 rounded-[60px] flex justify-center items-center gap-2.5">
+                    <div className="justify-start text-white text-[10px] font-normal font-helvetica-now uppercase">
+                      Medium
+                    </div>
+                  </div>
+                </div>
+                <div className="self-stretch p-5 bg-neutral-800 rounded-[10px] inline-flex justify-between items-center">
+                  <div className="justify-start text-gray-400 text-sm font-bold font-helvetica-now">
+                    Department Alignment
+                  </div>
+                  <div className="w-14 h-5 bg-red-900 rounded-[60px] flex justify-center items-center gap-2.5">
+                    <div className="justify-start text-white text-[10px] font-normal font-helvetica-now uppercase">
+                      High
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="w-96 pb-5 left-[20px] top-[1036px] absolute border-b-[0.50px] border-neutral-600 inline-flex flex-col justify-start items-start gap-5">
+            <div className="self-stretch flex flex-col justify-start items-start gap-3">
+              <div className="self-stretch text-left justify-start text-gray-400 text-base font-bold font-helvetica-now uppercase leading-normal tracking-widest">
+                DEPENDENCIES SNAPSHOT
+              </div>
+            </div>
+            <div className="self-stretch flex flex-col justify-start items-start gap-3">
+              <div className="self-stretch text-left justify-start text-blue-300 text-sm font-bold font-helvetica-now leading-none">
+                Why this recommendation?
+              </div>
+              <img
+                className="self-stretch h-56 w-96 relative border-gray-200"
+                src="/images/p1.png"
+              />
+            </div>
+          </div>
+          <div className="w-96 pb-5 left-[20px] top-[1354px] absolute border-b-[0.50px] border-neutral-600 inline-flex flex-col justify-start items-start gap-3">
+            <div className="self-stretch flex flex-col justify-start items-start gap-3">
+              <div className="self-stretch text-left justify-start text-gray-400 text-base font-bold font-helvetica-now uppercase leading-normal tracking-widest">
+                SYSTEMS INVOLVED
+              </div>
+            </div>
+            <div className="inline-flex justify-start items-start gap-2">
+              <div className="h-7 px-5 py-2.5 bg-neutral-800 rounded-[60px] flex justify-center items-center gap-1.5">
+                <div className="justify-start text-white text-xs font-bold font-helvetica-now uppercase leading-none">
+                  WMS
+                </div>
+              </div>
+              <div className="h-7 px-5 py-2.5 bg-neutral-800 rounded-[60px] flex justify-center items-center gap-1.5">
+                <div className="justify-start text-white text-xs font-bold font-helvetica-now uppercase leading-none">
+                  IOT
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="w-96 left-[20px] top-[1458px] absolute inline-flex flex-col justify-start items-start gap-4">
+            <div className="self-stretch h-12 px-10 py-5 bg-neutral-900 rounded-[60px] shadow-[0px_40px_120px_0px_rgba(1,68,199,0.30)] outline outline-1 outline-white inline-flex justify-center items-center gap-2">
+              <div className="justify-start text-white text-base font-bold font-helvetica-now leading-normal">
+                Drill deeper into this recommendation
+              </div>
+            </div>
+            <div className="self-stretch h-12 px-10 py-5 rounded-[60px] shadow-[0px_40px_120px_0px_rgba(1,68,199,0.30)] outline outline-2 outline-white/0 inline-flex justify-center items-center gap-2">
+              <div className="justify-start text-white text-base font-bold font-helvetica-now leading-normal">
+                Select for Action Plan
+              </div>
+            </div>
+          </div>
         </div>
+        <div className="w-[405px] h-[1590px] left-[150px] top-[110px] absolute bg-neutral-900 rounded-[20px] overflow-hidden">
+          <div className="w-96 h-24 pb-4 left-[20px] top-[30px] absolute border-b border-neutral-600 inline-flex flex-col justify-start items-start gap-2.5">
+            <div className="self-stretch inline-flex justify-between items-center">
+              <div className="justify-start">
+                <span className="text-white text-4xl font-medium font-helvetica-now leading-10">
+                  +$89,230
+                </span>
+                <span className="text-white text-xl font-normal font-helvetica-now leading-normal">
+                  /qtr
+                </span>
+              </div>
+              <div className="h-7 px-5 py-2.5 bg-yellow-900 rounded-[60px] flex justify-center items-center gap-2.5">
+                <div className="justify-start text-white text-xs font-bold font-helvetica-now uppercase leading-none">
+                  Medium Risk
+                </div>
+              </div>
+            </div>
+            <div className="self-stretch justify-start text-white text-xl font-normal font-helvetica-now leading-normal">
+              Optimize shift scheduling patterns
+            </div>
+          </div>
+          <div className="w-96 pb-5 left-[20px] top-[148px] absolute border-b border-neutral-600 inline-flex flex-col justify-start items-start gap-4">
+            <div className="self-stretch justify-start text-white text-base font-normal font-helvetica-now leading-tight">
+              Smart energy management can reduce utility costs at Sites A and C.
+            </div>
+            <div className="self-stretch justify-start">
+              <span className="text-gray-400 text-sm font-normal font-helvetica-now leading-none">
+                Confidence:
+              </span>
+              <span className="text-white text-sm font-normal font-helvetica-now leading-none">
+                 
+              </span>
+              <span className="text-rose-500 text-sm font-bold font-helvetica-now leading-none">
+                55%
+              </span>
+              <span className="text-white text-sm font-bold font-helvetica-now leading-none">
+                {" "}
+              </span>
+              <span className="text-gray-400 text-sm font-normal font-helvetica-now leading-none">
+                |
+              </span>
+              <span className="text-white text-sm font-normal font-helvetica-now leading-none">
+                {" "}
+              </span>
+              <span className="text-gray-400 text-sm font-normal font-helvetica-now leading-none">
+                Sources:
+              </span>
+              <span className="text-white text-sm font-bold font-helvetica-now leading-none">
+                {" "}
+                HRIS,CRM
+              </span>
+            </div>
+          </div>
+          <div className="w-96 pb-5 left-[20px] top-[259px] absolute border-b-[0.50px] border-neutral-600 inline-flex flex-col justify-start items-start gap-5">
+            <div className="self-stretch flex flex-col justify-start items-start gap-3">
+              <div className="self-stretch justify-start text-left text-gray-400 text-base font-bold font-helvetica-now uppercase leading-normal tracking-widest">
+                ROI FORECAST
+              </div>
+              <div className="self-stretch h-56 relative bg-zinc-950 rounded-[10px]">
+                <div className="w-96 h-52 left-[9.63px] top-[8.76px] absolute opacity-0 bg-zinc-300" />
+                <div className="left-[9.63px] top-[8.76px] absolute justify-start text-Color-neutral-09/90 text-xs font-normal font-helvetica-now">
+                  Basic Bar X
+                </div>
+                <div className="w-80 h-36 left-[9.63px] top-[49.03px] absolute">
+                  <div className="w-80 h-36 left-[3.50px] top-0 absolute inline-flex flex-col justify-center items-start gap-px">
+                    <div className="self-stretch flex-1 relative">
+                      <div className="w-16 h-5 left-[-9.13px] top-[10.27px] absolute text-right justify-start text-Color-neutral-09/90 text-xs font-normal font-helvetica-now">
+                        Jan
+                      </div>
+                    </div>
+                    <div className="self-stretch flex-1 relative">
+                      <div className="w-16 h-5 left-[-9.13px] top-[10.27px] absolute text-right justify-start text-Color-neutral-09/90 text-xs font-normal font-helvetica-now">
+                        Feb
+                      </div>
+                    </div>
+                    <div className="self-stretch flex-1 relative">
+                      <div className="w-16 h-5 left-[-9.13px] top-[10.27px] absolute text-right justify-start text-Color-neutral-09/90 text-xs font-normal font-helvetica-now">
+                        Mar
+                      </div>
+                    </div>
+                    <div className="self-stretch flex-1 relative">
+                      <div className="w-16 h-5 left-[-9.13px] top-[10.27px] absolute text-right justify-start text-Color-neutral-09/90 text-xs font-normal font-helvetica-now">
+                        Apr
+                      </div>
+                    </div>
+                  </div>
+                  <div className="w-32 h-0 left-[64.79px] top-[137.62px] absolute origin-top-left -rotate-90 opacity-20 outline outline-1 outline-offset-[-0.44px] outline-Color-neutral-06/60"></div>
+                </div>
+                <div className="w-80 h-40 left-[59.54px] top-[49.03px] absolute">
+                  <div className="w-72 h-40 left-[0.88px] top-[0.88px] absolute inline-flex justify-center items-end gap-4">
+                    <div className="flex-1 self-stretch inline-flex flex-col justify-end items-center gap-1.5">
+                      <div className="w-9 h-3.5 text-center justify-start text-Color-neutral-09/90 text-xs font-normal font-sans">
+                        0
+                      </div>
+                    </div>
+                    <div className="flex-1 self-stretch inline-flex flex-col justify-end items-center gap-1.5">
+                      <div className="self-stretch flex-1 origin-top-left -rotate-90 opacity-20 outline outline-1 outline-offset-[-0.44px] outline-Color-neutral-06/60"></div>
+                      <div className="w-9 h-3.5 text-center justify-start text-Color-neutral-09/90 text-xs font-normal font-helvetica-now">
+                        100
+                      </div>
+                    </div>
+                    <div className="flex-1 self-stretch inline-flex flex-col justify-end items-center gap-1.5">
+                      <div className="self-stretch flex-1 origin-top-left -rotate-90 opacity-20 outline outline-1 outline-offset-[-0.44px] outline-Color-neutral-06/60"></div>
+                      <div className="w-9 h-3.5 text-center justify-start text-Color-neutral-09/90 text-xs font-normal font-helvetica-now">
+                        200
+                      </div>
+                    </div>
+                    <div className="flex-1 self-stretch inline-flex flex-col justify-end items-center gap-1.5">
+                      <div className="self-stretch flex-1 origin-top-left -rotate-90 opacity-20 outline outline-1 outline-offset-[-0.44px] outline-Color-neutral-06/60"></div>
+                      <div className="w-9 h-3.5 text-center justify-start text-Color-neutral-09/90 text-xs font-normal font-helvetica-now">
+                        300
+                      </div>
+                    </div>
+                    <div className="flex-1 self-stretch inline-flex flex-col justify-end items-center gap-1.5">
+                      <div className="self-stretch flex-1 origin-top-left -rotate-90 opacity-20 outline outline-1 outline-offset-[-0.44px] outline-Color-neutral-06/60"></div>
+                      <div className="w-9 h-3.5 text-center justify-start text-Color-neutral-09/90 text-xs font-normal font-helvetica-now">
+                        400
+                      </div>
+                    </div>
+                    <div className="flex-1 self-stretch inline-flex flex-col justify-end items-center gap-1.5">
+                      <div className="self-stretch flex-1 origin-top-left -rotate-90 opacity-20 outline outline-1 outline-offset-[-0.44px] outline-Color-neutral-06/60"></div>
+                      <div className="w-9 h-3.5 text-center justify-start text-Color-neutral-09/90 text-xs font-normal font-helvetica-now">
+                        500
+                      </div>
+                    </div>
+                    <div className="flex-1 self-stretch inline-flex flex-col justify-end items-center gap-1.5">
+                      <div className="self-stretch flex-1 origin-top-left -rotate-90 opacity-20 outline outline-1 outline-offset-[-0.44px] outline-Color-neutral-06/60"></div>
+                      <div className="w-9 h-3.5 text-center justify-start text-Color-neutral-09/90 text-xs font-normal font-helvetica-now">
+                        600
+                      </div>
+                    </div>
+                    <div className="flex-1 self-stretch inline-flex flex-col justify-end items-center gap-1.5">
+                      <div className="self-stretch flex-1 origin-top-left -rotate-90 opacity-20 outline outline-1 outline-offset-[-0.44px] outline-Color-neutral-06/60"></div>
+                      <div className="w-9 h-3.5 text-center justify-start text-Color-neutral-09/90 text-xs font-normal font-helvetica-now">
+                        700
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="w-64 h-36 left-[74.42px] top-[49.91px] absolute inline-flex flex-col justify-center items-start">
+                  <div className="self-stretch flex-1 relative">
+                    <div
+                      data-cleavage="False"
+                      data-orientation="Vertical"
+                      className="w-52 h-2.5 left-0 top-[13.40px] absolute inline-flex justify-center items-end"
+                    >
+                      <div className="flex-1 self-stretch bg-gradient-to-l from-teal-800 to-teal-800/0" />
+                    </div>
+                  </div>
+                  <div className="self-stretch flex-1 relative">
+                    <div
+                      data-cleavage="False"
+                      data-orientation="Vertical"
+                      className="w-44 h-2.5 left-0 top-[13.40px] absolute inline-flex justify-center items-end"
+                    >
+                      <div className="flex-1 self-stretch bg-gradient-to-l from-teal-800 to-teal-800/0" />
+                    </div>
+                  </div>
+                  <div className="self-stretch flex-1 relative">
+                    <div
+                      data-cleavage="False"
+                      data-orientation="Vertical"
+                      className="w-40 h-2.5 left-0 top-[13.40px] absolute inline-flex justify-center items-end"
+                    >
+                      <div className="flex-1 self-stretch bg-gradient-to-l from-teal-800 to-teal-800/0" />
+                    </div>
+                  </div>
+                  <div className="self-stretch flex-1 relative">
+                    <div
+                      data-cleavage="False"
+                      data-orientation="Vertical"
+                      className="w-28 h-2.5 left-0 top-[13.40px] absolute inline-flex justify-center items-end"
+                    >
+                      <div className="flex-1 self-stretch bg-gradient-to-l from-teal-800 to-teal-800/0" />
+                    </div>
+                  </div>
+                </div>
+                <div
+                  data-series="not"
+                  data-shape="Square"
+                  data-方向="水平"
+                  className="w-96 h-5 left-[8.76px] top-[26.27px] absolute"
+                >
+                  <div className="w-96 px-5 left-0 top-0 absolute inline-flex justify-end items-center gap-3.5" />
+                </div>
+              </div>
+            </div>
+            <div className="self-stretch inline-flex justify-start items-start gap-5">
+              <div className="flex-1 p-5 bg-yellow-100/10 rounded-[10px] inline-flex flex-col justify-center items-start gap-2">
+                <div className="self-stretch flex flex-col justify-start items-start gap-2">
+                  <img src="/icons/timer.svg" />
+                  <div className="self-stretch text-left justify-start text-gray-400 text-[10px] font-bold font-helvetica-now uppercase leading-none tracking-wide">
+                    Payback Period
+                  </div>
+                  <div className="self-stretch text-left justify-start text-yellow-100 text-xl font-bold font-helvetica-now leading-normal">
+                    3.2 months
+                  </div>
+                </div>
+              </div>
+              <div className="flex-1 p-5 bg-stone-800 rounded-[10px] inline-flex flex-col justify-center items-start gap-2">
+                <div className="self-stretch flex flex-col justify-start items-start gap-2">
+                  <img src="/icons/presentation.svg" />
+                  <div className="self-stretch text-left justify-start text-gray-400 text-[10px] font-bold font-helvetica-now uppercase leading-none tracking-wide">
+                    Risk-Adjusted ROI
+                  </div>
+                  <div className="self-stretch text-left justify-start text-indigo-300 text-lg font-bold font-helvetica-now leading-normal">
+                    +$89k/quarter
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="w-96 pb-5 left-[20px] top-[693px] absolute border-b-[0.50px] border-neutral-600 inline-flex flex-col justify-start items-start gap-5">
+            <div className="self-stretch flex flex-col justify-start items-start gap-3">
+              <div className="self-stretch text-left justify-start text-gray-400 text-base font-bold font-helvetica-now uppercase leading-normal tracking-widest">
+                RISK PROFILE
+              </div>
+            </div>
+            <div className="self-stretch flex flex-col justify-start items-start gap-3">
+              <div className="w-96 flex flex-col justify-start items-start gap-2">
+                <div className="self-stretch text-left justify-start text-white text-base font-medium font-helvetica-now leading-tight">
+                  Medium Risk
+                </div>
+                <div className="self-stretch text-left justify-start text-gray-400 text-sm font-normal font-helvetica-now leading-none">
+                  Based on 3 risk factors
+                </div>
+              </div>
+              <div className="self-stretch flex flex-col justify-start items-start gap-2.5">
+                <div className="self-stretch p-5 bg-neutral-800 rounded-[10px] inline-flex justify-between items-center">
+                  <div className="justify-start text-gray-400 text-sm font-bold font-helvetica-now">
+                    System Integration Complexity
+                  </div>
+                  <div className="w-14 h-5 bg-teal-800 rounded-[60px] flex justify-center items-center gap-2.5">
+                    <div className="justify-start text-white text-[10px] font-normal font-helvetica-now uppercase">
+                      Low
+                    </div>
+                  </div>
+                </div>
+                <div className="self-stretch p-5 bg-neutral-800 rounded-[10px] inline-flex justify-between items-center">
+                  <div className="justify-start text-gray-400 text-sm font-bold font-helvetica-now">
+                    Change Mgmt Required
+                  </div>
+                  <div className="w-14 h-5 bg-yellow-900 rounded-[60px] flex justify-center items-center gap-2.5">
+                    <div className="justify-start text-white text-[10px] font-normal font-helvetica-now uppercase">
+                      Medium
+                    </div>
+                  </div>
+                </div>
+                <div className="self-stretch p-5 bg-neutral-800 rounded-[10px] inline-flex justify-between items-center">
+                  <div className="justify-start text-gray-400 text-sm font-bold font-helvetica-now">
+                    Department Alignment
+                  </div>
+                  <div className="w-14 h-5 bg-red-900 rounded-[60px] flex justify-center items-center gap-2.5">
+                    <div className="justify-start text-white text-[10px] font-normal font-helvetica-now uppercase">
+                      High
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="w-96 pb-5 left-[20px] top-[1036px] absolute border-b-[0.50px] border-neutral-600 inline-flex flex-col justify-start items-start gap-5">
+            <div className="self-stretch flex flex-col justify-start items-start gap-3">
+              <div className="self-stretch text-left justify-start text-gray-400 text-base font-bold font-helvetica-now uppercase leading-normal tracking-widest">
+                DEPENDENCIES SNAPSHOT
+              </div>
+            </div>
+            <div className="self-stretch flex flex-col justify-start items-start gap-3">
+              <div className="self-stretch text-left justify-start text-blue-300 text-sm font-bold font-helvetica-now leading-none">
+                Why this recommendation?
+              </div>
+              <img
+                className="self-stretch h-[250px] w-[380px] relative rounded-[10px] border-gray-200"
+                src="/images/p2.png"
+              />
+            </div>
+          </div>
+          <div className="w-96 pb-5 left-[20px] top-[1354px] absolute border-b-[0.50px] border-neutral-600 inline-flex flex-col justify-start items-start gap-3">
+            <div className="self-stretch flex flex-col justify-start items-start gap-3">
+              <div className="self-stretch text-left justify-start text-gray-400 text-base font-bold font-helvetica-now uppercase leading-normal tracking-widest">
+                SYSTEMS INVOLVED
+              </div>
+            </div>
+            <div className="inline-flex justify-start items-start gap-2">
+              <div className="h-7 px-5 py-2.5 bg-neutral-800 rounded-[60px] flex justify-center items-center gap-1.5">
+                <div className="w-8 h-5 justify-start text-gray-50 text-sm font-normal font-inter">
+                  ERP
+                </div>
+              </div>
+              <div className="h-7 px-5 py-2.5 bg-neutral-800 rounded-[60px] flex justify-center items-center gap-1.5">
+                <div className="justify-start text-white text-xs font-bold font-helvetica-now uppercase leading-none">
+                  HRIS
+                </div>
+              </div>
+              <div className="h-7 px-5 py-2.5 bg-neutral-800 rounded-[60px] flex justify-center items-center gap-1.5">
+                <div className="justify-start text-white text-xs font-bold font-helvetica-now uppercase leading-none">
+                  CRM
+                </div>
+              </div>
+              <div className="h-7 px-5 py-2.5 bg-neutral-800 rounded-[60px] flex justify-center items-center gap-1.5">
+                <div className="justify-start text-white text-xs font-bold font-helvetica-now uppercase leading-none">
+                  WMS
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="w-96 left-[20px] top-[1458px] absolute inline-flex flex-col justify-start items-start gap-4">
+            <div className="self-stretch h-12 px-10 py-5 bg-neutral-900 rounded-[60px] shadow-[0px_40px_120px_0px_rgba(1,68,199,0.30)] outline outline-1 outline-white inline-flex justify-center items-center gap-2">
+              <div className="justify-start text-white text-base font-bold font-helvetica-now leading-normal">
+                Drill deeper into this recommendation
+              </div>
+            </div>
+            <div className="self-stretch h-12 px-10 py-5 rounded-[60px] shadow-[0px_40px_120px_0px_rgba(1,68,199,0.30)] outline outline-2 outline-white/0 inline-flex justify-center items-center gap-2">
+              <div className="justify-start text-white text-base font-bold font-helvetica-now leading-normal">
+                Select for Action Plan
+              </div>
+            </div>
+          </div>
+        </div>
+        <img
+          className="w-6 h-6 left-[1131.13px] top-[2.13px] absolute cursor-pointer"
+          src="/icons/cancel.svg"
+          onClick={onClose}
+          alt="Close"
+        />
       </div>
     </div>
   );
