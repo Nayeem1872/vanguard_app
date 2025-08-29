@@ -90,10 +90,10 @@ const ActionPlan = () => {
           </svg>
         </div>
 
-        {/* Phase 2 - Expanded */}
+        {/* Phase 2 - Collapsible */}
         <div className="self-stretch p-5 bg-zinc-950 rounded-2xl flex flex-col justify-center items-start gap-5">
           {/* Phase 2 Header */}
-          <div className="self-stretch pb-5 border-b-[0.50px] border-neutral-600 inline-flex justify-between items-center">
+          <div className="self-stretch inline-flex justify-between items-center">
             <div className="flex-1 inline-flex flex-col justify-start items-start gap-3">
               <div className="self-stretch flex flex-col justify-start items-start gap-2">
                 <div className="self-stretch justify-start text-white text-base font-bold font-helvetica-now leading-tight">
@@ -117,7 +117,10 @@ const ActionPlan = () => {
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              className="transform transition-transform cursor-pointer"
+              className={`transform transition-transform cursor-pointer ${
+                expandedPhases.phase2 ? "rotate-180" : ""
+              }`}
+              onClick={() => togglePhase("phase2")}
             >
               <path
                 d="M7 10L12 15L17 10"
@@ -129,113 +132,122 @@ const ActionPlan = () => {
             </svg>
           </div>
 
-          {/* Phase 2 Tasks */}
-          <div className="self-stretch pb-5 border-b-[0.50px] border-neutral-600 flex flex-col justify-start items-start gap-1">
-            <div className="inline-flex justify-start items-start gap-5">
-              <div className="w-60 inline-flex flex-col justify-center items-start gap-4">
-                <div className="w-10 h-10 relative bg-neutral-800 rounded-[60px] overflow-hidden">
-                  <img src="/icons/p3.svg" />
-                </div>
-                <div className="self-stretch justify-start text-white text-sm font-normal font-helvetica-now">
-                  Implement targeted training programs based on individual needs
-                </div>
-              </div>
-              <div className="w-60 inline-flex flex-col justify-center items-start gap-4">
-                <div className="w-10 h-10 relative bg-neutral-800 rounded-[60px] overflow-hidden">
-                  <img src="/icons/p6.svg" />
-                </div>
-                <div className="self-stretch justify-start text-white text-sm font-normal font-helvetica-now">
-                  Deploy peer mentoring system with high-performing employees
-                </div>
-              </div>
-              <div className="w-60 inline-flex flex-col justify-center items-start gap-4">
-                <div className="w-10 h-10 relative bg-neutral-800 rounded-[60px] overflow-hidden">
-                  <img src="/icons/p5.svg" />
-                </div>
-                <div className="self-stretch justify-start text-white text-sm font-normal font-helvetica-now">
-                  Establish daily performance feedback loops
-                </div>
-              </div>
-              <div className="w-60 inline-flex flex-col justify-center items-start gap-4">
-                <div className="w-10 h-10 relative bg-neutral-800 rounded-[60px] overflow-hidden">
-                  <img src="/icons/p4.svg" />
-                </div>
-                <div className="self-stretch justify-start text-white text-sm font-normal font-helvetica-now">
-                  Create recognition and incentive programs
-                </div>
-              </div>
-            </div>
-          </div>
+          {/* Phase 2 Expanded Content */}
+          {expandedPhases.phase2 && (
+            <>
+              <div className="self-stretch h-px bg-neutral-600" />
 
-          {/* Owner */}
-          <div className="self-stretch pb-5 border-b-[0.50px] border-neutral-600 inline-flex justify-center items-center gap-2.5">
-            <div className="flex-1 justify-start">
-              <span className="text-gray-400 text-sm font-normal font-helvetica-now">
-                Owner:{" "}
-              </span>
-              <span className="text-white text-sm font-medium font-helvetica-now">
-                Training Coordinator & Shift Managers
-              </span>
-            </div>
-          </div>
+              {/* Phase 2 Tasks */}
+              <div className="self-stretch pb-5 border-b-[0.50px] border-neutral-600 flex flex-col justify-start items-start gap-1">
+                <div className="inline-flex justify-start items-start gap-5">
+                  <div className="w-60 inline-flex flex-col justify-center items-start gap-4">
+                    <div className="w-10 h-10 relative bg-neutral-800 rounded-[60px] overflow-hidden">
+                      <img src="/icons/p3.svg" />
+                    </div>
+                    <div className="self-stretch justify-start text-white text-sm font-normal font-helvetica-now">
+                      Implement targeted training programs based on individual
+                      needs
+                    </div>
+                  </div>
+                  <div className="w-60 inline-flex flex-col justify-center items-start gap-4">
+                    <div className="w-10 h-10 relative bg-neutral-800 rounded-[60px] overflow-hidden">
+                      <img src="/icons/p6.svg" />
+                    </div>
+                    <div className="self-stretch justify-start text-white text-sm font-normal font-helvetica-now">
+                      Deploy peer mentoring system with high-performing
+                      employees
+                    </div>
+                  </div>
+                  <div className="w-60 inline-flex flex-col justify-center items-start gap-4">
+                    <div className="w-10 h-10 relative bg-neutral-800 rounded-[60px] overflow-hidden">
+                      <img src="/icons/p5.svg" />
+                    </div>
+                    <div className="self-stretch justify-start text-white text-sm font-normal font-helvetica-now">
+                      Establish daily performance feedback loops
+                    </div>
+                  </div>
+                  <div className="w-60 inline-flex flex-col justify-center items-start gap-4">
+                    <div className="w-10 h-10 relative bg-neutral-800 rounded-[60px] overflow-hidden">
+                      <img src="/icons/p4.svg" />
+                    </div>
+                    <div className="self-stretch justify-start text-white text-sm font-normal font-helvetica-now">
+                      Create recognition and incentive programs
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-          {/* Assigned Employees */}
-          <div className="self-stretch pb-5 border-b-[0.50px] border-neutral-600 flex flex-col justify-center items-start gap-2">
-            <div className="justify-start text-gray-400 text-sm font-bold font-helvetica-now leading-tight">
-              Assigned Employees:
-            </div>
-            <div className="inline-flex justify-start items-start gap-2">
-              <div className="h-7 px-5 py-2.5 bg-neutral-800 rounded-[60px] flex justify-center items-center gap-1.5">
-                <div className="justify-start text-white text-xs font-bold font-helvetica-now uppercase leading-none">
-                  John
+              {/* Owner */}
+              <div className="self-stretch pb-5 border-b-[0.50px] border-neutral-600 inline-flex justify-center items-center gap-2.5">
+                <div className="flex-1 justify-start">
+                  <span className="text-gray-400 text-sm font-normal font-helvetica-now">
+                    Owner:{" "}
+                  </span>
+                  <span className="text-white text-sm font-medium font-helvetica-now">
+                    Training Coordinator & Shift Managers
+                  </span>
                 </div>
               </div>
-              <div className="h-7 px-5 py-2.5 bg-neutral-800 rounded-[60px] flex justify-center items-center gap-1.5">
-                <div className="justify-start text-white text-xs font-bold font-helvetica-now uppercase leading-none">
-                  Akbar
-                </div>
-              </div>
-              <div className="h-7 px-5 py-2.5 bg-neutral-800 rounded-[60px] flex justify-center items-center gap-1.5">
-                <div className="justify-start text-white text-xs font-bold font-helvetica-now uppercase leading-none">
-                  Lindsey
-                </div>
-              </div>
-              <div className="h-7 px-5 py-2.5 bg-neutral-800 rounded-[60px] flex justify-center items-center gap-1.5">
-                <div className="justify-start text-white text-xs font-bold font-helvetica-now uppercase leading-none">
-                  Max
-                </div>
-              </div>
-            </div>
-          </div>
 
-          {/* Resources */}
-          <div className="self-stretch flex flex-col justify-center items-start gap-2">
-            <div className="justify-start text-gray-400 text-sm font-bold font-helvetica-now leading-tight">
-              Resources:
-            </div>
-            <div className="w-[669px] inline-flex justify-start items-start gap-2">
-              <div className="h-7 px-5 py-2.5 bg-neutral-800 rounded-[60px] flex justify-center items-center gap-1.5">
-                <div className="justify-start text-white text-xs font-bold font-helvetica-now leading-none">
-                  Training Materials
+              {/* Assigned Employees */}
+              <div className="self-stretch pb-5 border-b-[0.50px] border-neutral-600 flex flex-col justify-center items-start gap-2">
+                <div className="justify-start text-gray-400 text-sm font-bold font-helvetica-now leading-tight">
+                  Assigned Employees:
+                </div>
+                <div className="inline-flex justify-start items-start gap-2">
+                  <div className="h-7 px-5 py-2.5 bg-neutral-800 rounded-[60px] flex justify-center items-center gap-1.5">
+                    <div className="justify-start text-white text-xs font-bold font-helvetica-now uppercase leading-none">
+                      John
+                    </div>
+                  </div>
+                  <div className="h-7 px-5 py-2.5 bg-neutral-800 rounded-[60px] flex justify-center items-center gap-1.5">
+                    <div className="justify-start text-white text-xs font-bold font-helvetica-now uppercase leading-none">
+                      Akbar
+                    </div>
+                  </div>
+                  <div className="h-7 px-5 py-2.5 bg-neutral-800 rounded-[60px] flex justify-center items-center gap-1.5">
+                    <div className="justify-start text-white text-xs font-bold font-helvetica-now uppercase leading-none">
+                      Lindsey
+                    </div>
+                  </div>
+                  <div className="h-7 px-5 py-2.5 bg-neutral-800 rounded-[60px] flex justify-center items-center gap-1.5">
+                    <div className="justify-start text-white text-xs font-bold font-helvetica-now uppercase leading-none">
+                      Max
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div className="h-7 px-5 py-2.5 bg-neutral-800 rounded-[60px] flex justify-center items-center gap-1.5">
-                <div className="justify-start text-white text-xs font-bold font-helvetica-now leading-none">
-                  Mentoring Program
+
+              {/* Resources */}
+              <div className="self-stretch flex flex-col justify-center items-start gap-2">
+                <div className="justify-start text-gray-400 text-sm font-bold font-helvetica-now leading-tight">
+                  Resources:
+                </div>
+                <div className="w-[669px] inline-flex justify-start items-start gap-2">
+                  <div className="h-7 px-5 py-2.5 bg-neutral-800 rounded-[60px] flex justify-center items-center gap-1.5">
+                    <div className="justify-start text-white text-xs font-bold font-helvetica-now leading-none">
+                      Training Materials
+                    </div>
+                  </div>
+                  <div className="h-7 px-5 py-2.5 bg-neutral-800 rounded-[60px] flex justify-center items-center gap-1.5">
+                    <div className="justify-start text-white text-xs font-bold font-helvetica-now leading-none">
+                      Mentoring Program
+                    </div>
+                  </div>
+                  <div className="h-7 px-5 py-2.5 bg-neutral-800 rounded-[60px] flex justify-center items-center gap-1.5">
+                    <div className="justify-start text-white text-xs font-bold font-helvetica-now leading-none">
+                      Performance Dashboards
+                    </div>
+                  </div>
+                  <div className="h-7 px-5 py-2.5 bg-neutral-800 rounded-[60px] flex justify-center items-center gap-1.5">
+                    <div className="justify-start text-white text-xs font-bold font-helvetica-now leading-none">
+                      Incentive System
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div className="h-7 px-5 py-2.5 bg-neutral-800 rounded-[60px] flex justify-center items-center gap-1.5">
-                <div className="justify-start text-white text-xs font-bold font-helvetica-now leading-none">
-                  Performance Dashboards
-                </div>
-              </div>
-              <div className="h-7 px-5 py-2.5 bg-neutral-800 rounded-[60px] flex justify-center items-center gap-1.5">
-                <div className="justify-start text-white text-xs font-bold font-helvetica-now leading-none">
-                  Incentive System
-                </div>
-              </div>
-            </div>
-          </div>
+            </>
+          )}
         </div>
 
         {/* Phase 3 */}

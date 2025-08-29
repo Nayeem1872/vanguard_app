@@ -89,45 +89,9 @@ const ROI = () => {
         <div className="w-[513px] h-0 left-[12.58px] top-[266.37px] absolute opacity-20 outline outline-1 outline-offset-[-0.50px] outline-Color-neutral-06/60"></div>
       </div>
       <div className="w-[477.80px] h-60 left-[109.28px] top-[114.92px] absolute">
-        <div className="w-[478.20px] h-60 left-0 top-0 absolute inline-flex justify-center items-end gap-3.5">
-          <div className="flex-1 self-stretch relative">
-            <div className="w-[474.72px] h-48 left-[0.07px] top-[46.96px] absolute bg-gradient-to-b from-yellow-100/60 to-yellow-100/0" />
-            <div className="w-[474.62px] h-32 left-[0.07px] top-[46.96px] absolute outline outline-2 outline-offset-[-1px] outline-yellow-100" />
-            <div className="w-3.5 h-4 left-[-6.75px] top-[39.56px] absolute">
-              <div className="w-2 h-2 left-[3.01px] top-[4px] absolute bg-yellow-100 rounded-full border-2 border-yellow-100" />
-            </div>
-            <div className="w-3.5 h-4 left-[110.24px] top-[123.56px] absolute">
-              <div className="w-2 h-2 left-[3.01px] top-[4px] absolute bg-yellow-100 rounded-full border-2 border-yellow-100" />
-            </div>
-            <div className="w-3.5 h-4 left-[230.25px] top-[110.56px] absolute">
-              <div className="w-2 h-2 left-[3.01px] top-[4px] absolute bg-yellow-100 rounded-full border-2 border-yellow-100" />
-            </div>
-            <div className="w-3.5 h-4 left-[348.24px] top-[158.56px] absolute">
-              <div className="w-2 h-2 left-[3.01px] top-[4px] absolute bg-yellow-100 rounded-full border-2 border-yellow-100" />
-            </div>
-            <div className="w-3.5 h-4 left-[467.25px] top-[147.56px] absolute">
-              <div className="w-2 h-2 left-[3.01px] top-[4px] absolute bg-yellow-100 rounded-full border-2 border-yellow-100" />
-            </div>
-            <div className="w-[475.33px] h-44 left-[0.08px] top-[54.86px] absolute bg-gradient-to-b from-blue-500/60 to-blue-500/0" />
-            <div className="w-[474.62px] h-32 left-[0.07px] top-[54.47px] absolute outline outline-2 outline-offset-[-1px] outline-blue-500" />
-            <div className="w-3.5 h-4 left-[-3.23px] top-[132.24px] absolute">
-              <div className="w-2 h-2 left-[3.01px] top-[4px] absolute bg-blue-500 rounded-full border-2 border-blue-500" />
-            </div>
-            <div className="w-3.5 h-4 left-[112.76px] top-[86.97px] absolute">
-              <div className="w-2 h-2 left-[3.01px] top-[4px] absolute bg-blue-500 rounded-full border-2 border-blue-500" />
-            </div>
-            <div className="w-3.5 h-4 left-[230.25px] top-[165.56px] absolute">
-              <div className="w-2 h-2 left-[3.01px] top-[4px] absolute bg-blue-500 rounded-full border-2 border-blue-500" />
-            </div>
-            <div className="w-3.5 h-4 left-[349.93px] top-[49.02px] absolute">
-              <div className="w-2 h-2 left-[3.01px] top-[4px] absolute bg-blue-500 rounded-full border-2 border-blue-500" />
-            </div>
-            <div className="w-3.5 h-4 left-[469.48px] top-[110.79px] absolute">
-              <div className="w-2 h-2 left-[3.01px] top-[4px] absolute bg-blue-500 rounded-full border-2 border-blue-500" />
-            </div>
-          </div>
-        </div>
+        <img src="/images/graph.png" />
       </div>
+
       <div className="w-[608.14px] h-9 left-[14px] top-[79px] absolute inline-flex justify-end items-center gap-4">
         <div className="w-96 h-6 relative">
           <div className="w-96 left-0 top-0 absolute inline-flex justify-end items-center gap-4">
