@@ -5,6 +5,7 @@ import Header from "../components/DecisionEngineComponent/Header";
 import Overview from "./Overview";
 import ActionPlan from "../components/DecisionEngineComponent/ActionPlan";
 import Image from "next/image";
+import ROI from "./ROI";
 
 const CardDetailsPage = () => {
   const [activeTab, setActiveTab] = useState("Overview");
@@ -97,14 +98,7 @@ const CardDetailsPage = () => {
         {activeTab === "Action Plan" && <ActionPlan />}
 
         {/* Placeholder content for other tabs */}
-        {activeTab === "ROI" && (
-          <div className="bg-[#1E1E1E] rounded-xl p-6">
-            <h2 className="text-white text-lg font-medium mb-4">
-              ROI Analysis
-            </h2>
-            <p className="text-gray-400">ROI content will be displayed here.</p>
-          </div>
-        )}
+        {activeTab === "ROI" && <ROI />}
 
         {activeTab === "Risk" && (
           <div className="bg-[#1E1E1E] rounded-xl p-6">
