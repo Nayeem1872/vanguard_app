@@ -129,7 +129,7 @@ const RecommendationCards = ({
                         {rec.period}
                       </span>
                     </div>
-                    <div className="self-stretch text-left text-white text-base font-normal font-helvetica-now leading-tight">
+                    <div className="self-stretch text-left text-white text-base font-normal font-helvetica-now leading-tight whitespace-pre-line">
                       {rec.title}
                     </div>
                   </div>

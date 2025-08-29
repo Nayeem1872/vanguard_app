@@ -46,6 +46,7 @@ const MainContent = ({
     "Last 6 months",
     "Last 12 months",
     "Last 24 months",
+    "Custom",
   ];
 
   return (
@@ -68,14 +69,15 @@ const MainContent = ({
                 setFunctionOpen(false);
                 setPeriodOpen(false);
               }}
-              className="flex items-center gap-2 cursor-pointer"
+              className="flex items-center gap-1 cursor-pointer"
             >
               <span className="text-gray-400 font-medium">Region:</span>
               <span className="text-white font-semibold">{selectedRegion}</span>
-              <span className="text-gray-400 text-sm">▼</span>
+              {/* <span className="text-gray-400 text-sm">▼</span> */}
+              <img src="/icons/arrow_up.svg" alt="" />
             </button>
             {regionOpen && (
-              <div className="absolute top-full mt-2 bg-gray-800 border border-gray-600 rounded-lg shadow-lg z-20 min-w-[150px]">
+              <div className="absolute top-full bg-black border border-black rounded-sm shadow-lg z-20 min-w-[200px]">
                 {regions.map((region) => (
                   <button
                     key={region}
@@ -100,16 +102,16 @@ const MainContent = ({
                 setRegionOpen(false);
                 setPeriodOpen(false);
               }}
-              className="flex items-center gap-2 cursor-pointer"
+              className="flex items-center gap-1 cursor-pointer"
             >
               <span className="text-gray-400 font-medium">Function:</span>
               <span className="text-white font-semibold">
                 {selectedFunction}
               </span>
-              <span className="text-gray-400 text-sm">▼</span>
+              <img src="/icons/arrow_up.svg" alt="" />
             </button>
             {functionOpen && (
-              <div className="absolute top-full mt-2 bg-gray-800 border border-gray-600 rounded-lg shadow-lg z-20 min-w-[120px]">
+              <div className="absolute top-full mt-2 bg-black border border-black rounded-sm shadow-lg z-20 min-w-[200px]">
                 {functions.map((func) => (
                   <button
                     key={func}
@@ -134,14 +136,14 @@ const MainContent = ({
                 setRegionOpen(false);
                 setFunctionOpen(false);
               }}
-              className="flex items-center gap-2 cursor-pointer"
+              className="flex items-center gap-1 cursor-pointer"
             >
               <span className="text-gray-400 font-medium">Period:</span>
               <span className="text-white font-semibold">{selectedPeriod}</span>
-              <span className="text-gray-400 text-sm">▼</span>
+              <img src="/icons/arrow_up.svg" alt="" />
             </button>
             {periodOpen && (
-              <div className="absolute top-full mt-2 bg-gray-800 border border-gray-600 rounded-lg shadow-lg z-20 min-w-[150px]">
+              <div className="absolute top-full mt-2 bg-black border border-black rounded-sm shadow-lg z-20 min-w-[200px]">
                 {periods.map((period) => (
                   <button
                     key={period}

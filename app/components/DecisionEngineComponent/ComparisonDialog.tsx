@@ -1,6 +1,4 @@
 "use client";
-import { useState } from "react";
-
 interface Recommendation {
   risk: string;
   riskColor: string;
@@ -97,11 +95,11 @@ const ComparisonDialog = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="w-[1174px] h-[1810px] relative bg-zinc-950 rounded-[20px] overflow-hidden max-h-[90vh] overflow-y-auto">
         <div className="w-[1232px] py-5 left-[21px] top-0 absolute border-b-[0.50px] border-neutral-600 inline-flex justify-center items-center gap-2.5">
-          <div className="text-center justify-start text-gray-400 text-xl font-bold font-helvetica-now uppercase leading-loose tracking-widest">
+          <div className="text-center justify-center text-gray-400 text-xl font-bold font-helvetica-now uppercase leading-loose tracking-widest">
             Compare
           </div>
         </div>
-        <div className="w-[405px] h-[1590px] left-[597px] top-[110px] absolute bg-stone-900 rounded-[20px] overflow-hidden">
+        <div className="w-[409px] h-[1590px] left-[597px] top-[110px] absolute bg-[#261718] rounded-[20px] overflow-hidden">
           <div className="w-96 h-24 pb-4 left-[20px] top-[30px] absolute border-b border-neutral-600 inline-flex flex-col justify-start items-start gap-2.5">
             <div className="self-stretch inline-flex justify-between items-center">
               <div className="justify-start">
@@ -118,15 +116,15 @@ const ComparisonDialog = ({
                 </div>
               </div>
             </div>
-            <div className="self-stretch justify-start text-white text-xl font-normal font-helvetica-now leading-normal">
+            <div className="self-stretch text-left justify-start text-white text-xl font-normal font-helvetica-now leading-normal">
               Consolidate vendor contracts
             </div>
           </div>
           <div className="w-96 pb-5 left-[20px] top-[148px] absolute border-b border-neutral-600 inline-flex flex-col justify-start items-start gap-4">
-            <div className="self-stretch justify-start text-white text-base font-normal font-helvetica-now leading-tight">
+            <div className="self-stretch  text-left justify-start text-white text-base font-normal font-helvetica-now leading-tight">
               Smart energy management can reduce utility costs at Sites A and C.
             </div>
-            <div className="self-stretch justify-start">
+            <div className="self-stretch text-left justify-start">
               <span className="text-gray-400 text-sm font-normal font-helvetica-now leading-none">
                 Confidence:
               </span>
@@ -189,7 +187,7 @@ const ComparisonDialog = ({
                   </div>
                   <div className="w-32 h-0 left-[64.79px] top-[137.62px] absolute origin-top-left -rotate-90 opacity-20 outline outline-1 outline-offset-[-0.44px] outline-Color-neutral-06/60"></div>
                 </div>
-                <div className="w-80 h-40 left-[59.54px] top-[49.03px] absolute">
+                <div className="w-72 h-40 left-[59.54px] top-[49.03px] absolute">
                   <div className="w-72 h-40 left-[0.88px] top-[0.88px] absolute inline-flex justify-center items-end gap-4">
                     <div className="flex-1 self-stretch inline-flex flex-col justify-end items-center gap-1.5">
                       <div className="w-9 h-3.5 text-center justify-start text-Color-neutral-09/90 text-xs font-normal font-sans">
@@ -230,12 +228,6 @@ const ComparisonDialog = ({
                       <div className="self-stretch flex-1 origin-top-left -rotate-90 opacity-20 outline outline-1 outline-offset-[-0.44px] outline-Color-neutral-06/60"></div>
                       <div className="w-9 h-3.5 text-center justify-start text-Color-neutral-09/90 text-xs font-normal font-helvetica-now">
                         600
-                      </div>
-                    </div>
-                    <div className="flex-1 self-stretch inline-flex flex-col justify-end items-center gap-1.5">
-                      <div className="self-stretch flex-1 origin-top-left -rotate-90 opacity-20 outline outline-1 outline-offset-[-0.44px] outline-Color-neutral-06/60"></div>
-                      <div className="w-9 h-3.5 text-center justify-start text-Color-neutral-09/90 text-xs font-normal font-helvetica-now">
-                        700
                       </div>
                     </div>
                   </div>
@@ -406,7 +398,7 @@ const ComparisonDialog = ({
             <img src="/images/selectButton.png" />
           </div>
         </div>
-        <div className="w-[405px] h-[1590px] left-[150px] top-[110px] absolute bg-neutral-900 rounded-[20px] overflow-hidden">
+        <div className="w-[409px] h-[1590px] left-[150px] top-[110px] absolute bg-[#19120A] rounded-[20px] overflow-hidden">
           <div className="w-96 h-24 pb-4 left-[20px] top-[30px] absolute border-b border-neutral-600 inline-flex flex-col justify-start items-start gap-2.5">
             <div className="self-stretch inline-flex justify-between items-center">
               <div className="justify-start">
@@ -423,15 +415,15 @@ const ComparisonDialog = ({
                 </div>
               </div>
             </div>
-            <div className="self-stretch justify-start text-white text-xl font-normal font-helvetica-now leading-normal">
+            <div className="self-stretch text-left justify-start text-white text-xl font-normal font-helvetica-now leading-normal">
               Optimize shift scheduling patterns
             </div>
           </div>
           <div className="w-96 pb-5 left-[20px] top-[148px] absolute border-b border-neutral-600 inline-flex flex-col justify-start items-start gap-4">
-            <div className="self-stretch justify-start text-white text-base font-normal font-helvetica-now leading-tight">
+            <div className="self-stretch text-left justify-start text-white text-base font-normal font-helvetica-now leading-tight">
               Smart energy management can reduce utility costs at Sites A and C.
             </div>
-            <div className="self-stretch justify-start">
+            <div className="self-stretch text-left justify-start">
               <span className="text-gray-400 text-sm font-normal font-helvetica-now leading-none">
                 Confidence:
               </span>
@@ -535,12 +527,6 @@ const ComparisonDialog = ({
                       <div className="self-stretch flex-1 origin-top-left -rotate-90 opacity-20 outline outline-1 outline-offset-[-0.44px] outline-Color-neutral-06/60"></div>
                       <div className="w-9 h-3.5 text-center justify-start text-Color-neutral-09/90 text-xs font-normal font-helvetica-now">
                         600
-                      </div>
-                    </div>
-                    <div className="flex-1 self-stretch inline-flex flex-col justify-end items-center gap-1.5">
-                      <div className="self-stretch flex-1 origin-top-left -rotate-90 opacity-20 outline outline-1 outline-offset-[-0.44px] outline-Color-neutral-06/60"></div>
-                      <div className="w-9 h-3.5 text-center justify-start text-Color-neutral-09/90 text-xs font-normal font-helvetica-now">
-                        700
                       </div>
                     </div>
                   </div>
