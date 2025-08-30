@@ -1,6 +1,34 @@
 "use client";
 import { useState } from "react";
+import axios from "axios";
 import RecommendationCards from "./RecommendationCards";
+
+interface RiskFactor {
+  label: string;
+  level: string;
+  color: string;
+}
+
+interface Recommendation {
+  id?: string;
+  _id?: string;
+  risk: string;
+  riskColor: string;
+  cardBg: string;
+  amount: string;
+  period: string;
+  title: string;
+  confidence: string;
+  description: string;
+  confidenceColor: string;
+  sources: string;
+  paybackPeriod?: string;
+  riskAdjustedROI?: string;
+  riskProfileDescription?: string;
+  riskFactors?: RiskFactor[];
+  dependenciesSnapshotImage?: string;
+  systemsInvolved?: string[];
+}
 
 interface MainContentProps {
   message: string;
@@ -39,6 +67,39 @@ const MainContent = ({
   showRecommendations,
   handleGenerateRecommendations,
 }: MainContentProps) => {
+  const [loading, setLoading] = useState(false);
+  const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
+  const handleSubmit = async () => {
+    setLoading(true);
+    try {
+      const requestBody = {
+        question: message,
+        filters: {
+          region: selectedRegion,
+          func: selectedFunction,
+          domain: "", // You can add domain selection if needed
+        },
+        period: selectedPeriod,
+        org_id: "", // You can add org_id if available
+      };
+
+      const response = await axios.post("/api/ai/ask", requestBody);
+      console.log("API Response:", response.data);
+
+      // Extract recommendations from API response
+      if (response.data.success && response.data.data) {
+        setRecommendations(response.data.data);
+      }
+
+      // Call the existing handler after successful API call
+      handleGenerateRecommendations();
+    } catch (error) {
+      console.error("Error making API request:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const regions = ["North America", "Europe", "Asia Pacific", "Latin America"];
   const functions = ["Operations", "Marketing", "Finance", "HR", "IT"];
   const periods = [
@@ -178,7 +239,7 @@ const MainContent = ({
           </div>
 
           <button
-            onClick={handleGenerateRecommendations}
+            onClick={handleSubmit}
             type="submit"
             className="flex flex-col relative min-h-14 w-full items-center gap-2.5 cursor-pointer text-xl text-white font-bold justify-center mt-[30px] px-10 py-[13px] rounded-[60px] max-md:max-w-full max-md:px-5 disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90 transition-opacity"
           >
@@ -191,7 +252,11 @@ const MainContent = ({
         </div>
 
         {/* Recommendation Cards */}
-        <RecommendationCards showRecommendations={showRecommendations} />
+        <RecommendationCards
+          showRecommendations={showRecommendations}
+          recommendations={recommendations}
+          loading={loading}
+        />
       </div>
     </div>
   );

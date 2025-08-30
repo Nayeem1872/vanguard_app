@@ -2,6 +2,8 @@
 import { useEffect } from "react";
 
 interface Recommendation {
+  id?: string;
+  _id?: string;
   risk: string;
   riskColor: string;
   cardBg: string;

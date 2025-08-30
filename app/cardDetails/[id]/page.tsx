@@ -1,14 +1,20 @@
 "use client";
-import React, { useState } from "react";
-
-import Header from "../components/DecisionEngineComponent/Header";
-import Overview from "./Overview";
-import ActionPlan from "../components/DecisionEngineComponent/ActionPlan";
+import React, { useState, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
+import axios from "axios";
+import Header from "../../components/DecisionEngineComponent/Header";
+import Overview from "../Overview";
+import ActionPlan from "../../components/DecisionEngineComponent/ActionPlan";
 import Image from "next/image";
-import ROI from "./ROI";
+import ROI from "../ROI";
 
 const CardDetailsPage = () => {
+  const params = useParams();
+  const router = useRouter();
+  const id = params.id as string;
+
   const [activeTab, setActiveTab] = useState("Overview");
+  const [recommendationData, setRecommendationData] = useState(null);
   const [expandedPhases, setExpandedPhases] = useState<{
     [key: string]: boolean;
   }>({
@@ -19,12 +25,37 @@ const CardDetailsPage = () => {
     rootCause: false,
   });
 
+  const handleReturnToResults = () => {
+    router.push("/");
+  };
+
   const togglePhase = (phase: string) => {
     setExpandedPhases((prev) => ({
       ...prev,
       [phase]: !prev[phase],
     }));
   };
+
+  // Fetch recommendation data based on ID
+  useEffect(() => {
+    if (id) {
+      console.log("Recommendation ID:", id);
+
+      const fetchRecommendationData = async () => {
+        try {
+          const response = await axios.get(
+            `/api/ai/recommendations/${id}/overview`
+          );
+          console.log("Recommendation data:", response.data);
+          setRecommendationData(response.data);
+        } catch (error) {
+          console.error("Error fetching recommendation:", error);
+        }
+      };
+
+      fetchRecommendationData();
+    }
+  }, [id]);
 
   const tabs = [
     { name: "Overview" },
@@ -45,7 +76,10 @@ const CardDetailsPage = () => {
 
       <div className="relative z-10 bg-black/20 backdrop-blur-custom ">
         <div className="flex justify-between px-24 py-4">
-          <div className="flex items-center gap-3 text-sm">
+          <div
+            className="flex items-center gap-3 text-sm cursor-pointer"
+            onClick={handleReturnToResults}
+          >
             <img src="/icons/arrow-right.svg" />
             <span>Return to Results</span>
           </div>
@@ -58,7 +92,7 @@ const CardDetailsPage = () => {
               className="ml-auto text-gray-400"
             />
             <span className="text-gray-rgba(255, 255, 255, 1) text-sm cursor-pointer">
-              About this page
+              About this page (ID: {id})
             </span>
           </div>
         </div>
@@ -103,7 +137,7 @@ const CardDetailsPage = () => {
         {activeTab === "Risk" && (
           <div className="bg-[#1E1E1E] rounded-xl p-6">
             <h2 className="text-white text-lg font-medium mb-4">
-              Risk Assessment
+              Risk Assessment for Recommendation {id}
             </h2>
             <p className="text-gray-400">
               Risk assessment content will be displayed here.
@@ -114,7 +148,7 @@ const CardDetailsPage = () => {
         {activeTab === "Dependencies" && (
           <div className="bg-[#1E1E1E] rounded-xl p-6">
             <h2 className="text-white text-lg font-medium mb-4">
-              Dependencies
+              Dependencies for Recommendation {id}
             </h2>
             <p className="text-gray-400">
               Dependencies content will be displayed here.
@@ -125,7 +159,7 @@ const CardDetailsPage = () => {
         {activeTab === "Trace" && (
           <div className="bg-[#1E1E1E] rounded-xl p-6">
             <h2 className="text-white text-lg font-medium mb-4">
-              Trace Analysis
+              Trace Analysis for Recommendation {id}
             </h2>
             <p className="text-gray-400">
               Trace analysis content will be displayed here.

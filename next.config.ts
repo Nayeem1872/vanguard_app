@@ -1,7 +1,15 @@
-import type { NextConfig } from "next";
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  output: "standalone",
 
-const nextConfig: NextConfig = {
-  /* config options here */
+  rewrites: () => {
+    return [
+      {
+        source: "/api/:path*",
+        destination: "https://aithink-production.up.railway.app/api/:path*",
+      },
+    ];
+  },
 };
 
-export default nextConfig;
+module.exports = nextConfig;
