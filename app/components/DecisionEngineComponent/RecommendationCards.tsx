@@ -46,9 +46,22 @@ const RecommendationCards = ({
   const [selectedCards, setSelectedCards] = useState<number[]>([]);
   const [showComparisonDialog, setShowComparisonDialog] = useState(false);
 
+  // Helper function to get background color based on risk level
+  const getRiskBackgroundColor = (risk: string) => {
+    const riskLower = risk.toLowerCase();
+    if (riskLower.includes("low")) {
+      return "rgba(17, 56, 45, 0.40)";
+    } else if (riskLower.includes("medium")) {
+      return "rgba(107, 70, 31, 0.20)";
+    } else if (riskLower.includes("high")) {
+      return "rgba(107, 31, 32, 0.20)";
+    }
+    return "rgba(17, 56, 45, 0.40)"; // default to low risk color
+  };
+
   // Loader component
   const LoaderCard = () => (
-    <div className="w-[260px] p-4 flex flex-col items-start gap-4 flex-shrink-0 overflow-hidden rounded-[20px] bg-[rgba(17,56,45,0.40)] animate-pulse">
+    <div className="w-[260px] h-[400px] p-4 flex flex-col items-start gap-4 flex-shrink-0 overflow-hidden rounded-[20px] bg-[rgba(17,56,45,0.40)] animate-pulse">
       <div className="h-7 w-20 bg-gray-600 rounded-[60px]"></div>
       <div className="self-stretch pb-4 border-b border-neutral-600 flex flex-col justify-start items-start gap-2.5">
         <div className="h-8 w-32 bg-gray-600 rounded"></div>
@@ -106,17 +119,20 @@ const RecommendationCards = ({
                 const isAnyCardActive =
                   hoveredCard !== null || selectedCards.length > 0;
 
+                const baseBackgroundColor = getRiskBackgroundColor(rec.risk);
+
                 const cardDynamicStyles =
                   isHovered || isSelected
-                    ? "transform scale-105 border border-white opacity-100 rounded-[20px] shadow-[0_40px_60px_0_rgba(0,0,0,0.60)] mb-4 bg-[rgba(107,70,31,0.20)]"
+                    ? "transform scale-105 border border-white opacity-100 rounded-[20px] shadow-[0_40px_60px_0_rgba(0,0,0,0.60)] mb-4"
                     : isAnyCardActive
-                    ? "border-2 border-transparent opacity-50 transform scale-y-90 rounded-[20px] bg-[rgba(17,56,45,0.40)]"
-                    : "border-2 border-transparent opacity-100 rounded-[20px] bg-[rgba(17,56,45,0.40)]";
+                    ? "border-2 border-transparent opacity-50 transform scale-y-90 rounded-[20px]"
+                    : "border-2 border-transparent opacity-100 rounded-[20px]";
 
                 return (
                   <div
                     key={index}
-                    className={`w-[260px] p-4 flex flex-col items-start gap-4 flex-shrink-0 overflow-hidden transition-all duration-300 cursor-pointer ${cardDynamicStyles}`}
+                    className={`w-[260px] h-full p-4 flex flex-col items-start gap-4 flex-shrink-0 overflow-hidden transition-all duration-300 cursor-pointer ${cardDynamicStyles}`}
+                    style={{ backgroundColor: baseBackgroundColor }}
                     onMouseEnter={() => setHoveredCard(index)}
                     onMouseLeave={() => setHoveredCard(null)}
                     onClick={() => handleCardClick(rec, index)}
