@@ -3,6 +3,14 @@ import { useState } from "react";
 import axios from "axios";
 import RecommendationCards from "./RecommendationCards";
 
+// Create axios instance with extended timeout
+const apiClient = axios.create({
+  timeout: 120000, // 2 minutes
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
 interface RiskFactor {
   label: string;
   level: string;
@@ -83,7 +91,9 @@ const MainContent = ({
         org_id: "", // You can add org_id if available
       };
 
-      const response = await axios.post("/api/ai/ask", requestBody);
+      console.log("Making API request with 2-minute timeout...");
+
+      const response = await apiClient.post("/api/ai/ask", requestBody);
       console.log("API Response:", response.data);
 
       // Extract recommendations from API response
@@ -95,6 +105,22 @@ const MainContent = ({
       handleGenerateRecommendations();
     } catch (error) {
       console.error("Error making API request:", error);
+
+      // Check if it's a timeout error
+      if (axios.isAxiosError(error)) {
+        if (error.code === "ECONNABORTED") {
+          console.error("Request timed out after 2 minutes");
+          alert("Request is taking longer than expected. Please try again.");
+        } else if (error.response) {
+          console.error(
+            "Server responded with error:",
+            error.response.status,
+            error.response.data
+          );
+        } else {
+          console.error("Network error:", error.message);
+        }
+      }
     } finally {
       setLoading(false);
     }

@@ -106,7 +106,7 @@ const RecommendationCards = ({
 
   return (
     <div>
-      <div className="mt-16 max-w-7xl mx-auto mb-16">
+      <div className="my-16 max-w-7xl mx-auto mb-16">
         <div className="flex justify-center items-end gap-6">
           {loading
             ? // Show loader cards when loading
@@ -123,7 +123,7 @@ const RecommendationCards = ({
 
                 const cardDynamicStyles =
                   isHovered || isSelected
-                    ? "transform scale-105 border border-white opacity-100 rounded-[20px] shadow-[0_40px_60px_0_rgba(0,0,0,0.60)] mb-4"
+                    ? "transform scale-105 border border-white opacity-100 rounded-[20px] shadow-[0_40px_60px_0_rgba(0,0,0,0.60)] z-10"
                     : isAnyCardActive
                     ? "border-2 border-transparent opacity-50 transform scale-y-90 rounded-[20px]"
                     : "border-2 border-transparent opacity-100 rounded-[20px]";
@@ -131,8 +131,11 @@ const RecommendationCards = ({
                 return (
                   <div
                     key={index}
-                    className={`w-[260px] h-full p-4 flex flex-col items-start gap-4 flex-shrink-0 overflow-hidden transition-all duration-300 cursor-pointer ${cardDynamicStyles}`}
-                    style={{ backgroundColor: baseBackgroundColor }}
+                    className={`w-[260px] h-[400px] p-4 flex flex-col items-start gap-4 flex-shrink-0 overflow-hidden transition-all duration-300 cursor-pointer ${cardDynamicStyles}`}
+                    style={{
+                      backgroundColor: baseBackgroundColor,
+                      transformOrigin: "center center",
+                    }}
                     onMouseEnter={() => setHoveredCard(index)}
                     onMouseLeave={() => setHoveredCard(null)}
                     onClick={() => handleCardClick(rec, index)}
@@ -159,50 +162,50 @@ const RecommendationCards = ({
                         </div>
                       </div>
 
-                      <div className="self-stretch pb-4 border-b border-neutral-600 flex flex-col justify-start items-start gap-4">
-                        {(isHovered || isSelected) && (
+                      {(isHovered || isSelected) && (
+                        <div className="self-stretch pb-4 border-b border-neutral-600 flex flex-col justify-start items-start gap-4">
                           <div className="self-stretch text-left text-gray-400 text-xs font-medium leading-relaxed line-clamp-3">
                             {rec.description}
                           </div>
-                        )}
-                        <div className="self-stretch text-left">
-                          <span className="text-gray-400 text-xs font-normal font-helvetica-now leading-none">
-                            Confidence:
-                          </span>
-                          <span className="text-white text-xs font-normal font-helvetica-now leading-none">
-                            {" "}
-                          </span>
-                          <span
-                            className={`text-xs font-bold font-helvetica-now leading-none ${rec.confidenceColor}`}
-                          >
-                            {rec.confidence}
-                          </span>
-                          <span className="text-white text-xs font-bold font-helvetica-now leading-none">
-                            {"  "}
-                          </span>
-                          <span className="text-gray-400 text-xs font-normal font-helvetica-now leading-none">
-                            |
-                          </span>
-                          <span className="text-white text-xs font-normal font-helvetica-now leading-none">
-                            {"  "}
-                          </span>
-                          <span className="text-gray-400 text-xs font-normal font-helvetica-now leading-none">
-                            Sources:
-                          </span>
-                          <span className="text-white text-xs font-normal font-helvetica-now leading-none">
-                            {" "}
-                          </span>
-                          <span className="text-white text-xs font-bold font-helvetica-now leading-none">
-                            {rec.sources}
-                          </span>
-                          <span className="text-white text-xs font-normal font-helvetica-now leading-none">
-                            {" "}
-                          </span>
                         </div>
+                      )}
+                      <div className="self-stretch text-left">
+                        <span className="text-gray-400 text-xs font-normal font-helvetica-now leading-none">
+                          Confidence:
+                        </span>
+                        <span className="text-white text-xs font-normal font-helvetica-now leading-none">
+                          {" "}
+                        </span>
+                        <span
+                          className={`text-xs font-bold font-helvetica-now leading-none ${rec.confidenceColor}`}
+                        >
+                          {rec.confidence}
+                        </span>
+                        <span className="text-white text-xs font-bold font-helvetica-now leading-none">
+                          {"  "}
+                        </span>
+                        <span className="text-gray-400 text-xs font-normal font-helvetica-now leading-none">
+                          |
+                        </span>
+                        <span className="text-white text-xs font-normal font-helvetica-now leading-none">
+                          {"  "}
+                        </span>
+                        <span className="text-gray-400 text-xs font-normal font-helvetica-now leading-none">
+                          Sources:
+                        </span>
+                        <span className="text-white text-xs font-normal font-helvetica-now leading-none">
+                          {" "}
+                        </span>
+                        <span className="text-white text-xs font-bold font-helvetica-now leading-none">
+                          {rec.sources}
+                        </span>
+                        <span className="text-white text-xs font-normal font-helvetica-now leading-none">
+                          {" "}
+                        </span>
                       </div>
                     </div>
 
-                    <div className="w-full mt-auto">
+                    <div className="w-full ">
                       <div className="self-stretch text-left text-blue-300 text-xs font-bold font-helvetica-now leading-none mb-4">
                         Why this recommendation?
                       </div>
