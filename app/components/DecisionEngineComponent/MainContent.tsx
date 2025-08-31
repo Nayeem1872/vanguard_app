@@ -253,7 +253,7 @@ const MainContent = ({
           {/* Text Area */}
           <div className="relative">
             <textarea
-              value={message}
+              value={loading ? "Agent is thinking..." : message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder="Write your message ..."
               className="w-full h-32 border rounded-2xl px-6 py-5 text-white placeholder-gray-400 resize-none focus:outline-none"
@@ -261,6 +261,7 @@ const MainContent = ({
                 backgroundColor: "rgba(36, 38, 40, 1)",
                 borderColor: "#515151",
               }}
+              disabled={loading}
             />
           </div>
 

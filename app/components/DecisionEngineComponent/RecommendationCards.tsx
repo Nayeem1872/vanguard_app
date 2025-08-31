@@ -121,6 +121,9 @@ const RecommendationCards = ({
 
                 const baseBackgroundColor = getRiskBackgroundColor(rec.risk);
 
+                const cardHeight =
+                  isHovered || isSelected ? "h-[405px]" : "h-[350px]";
+
                 const cardDynamicStyles =
                   isHovered || isSelected
                     ? "transform scale-105 border border-white opacity-100 rounded-[20px] shadow-[0_40px_60px_0_rgba(0,0,0,0.60)] z-10"
@@ -131,7 +134,7 @@ const RecommendationCards = ({
                 return (
                   <div
                     key={index}
-                    className={`w-[260px] h-[400px] p-4 flex flex-col items-start gap-4 flex-shrink-0 overflow-hidden transition-all duration-300 cursor-pointer ${cardDynamicStyles}`}
+                    className={`w-[260px] ${cardHeight} p-4 flex flex-col items-start gap-4 flex-shrink-0 overflow-hidden transition-all duration-300 cursor-pointer ${cardDynamicStyles}`}
                     style={{
                       backgroundColor: baseBackgroundColor,
                       transformOrigin: "center center",
