@@ -1,7 +1,12 @@
 "use client";
 import React, { useState } from "react";
 
-const ActionPlan = () => {
+interface ActionPlanProps {
+  recommendationData?: any;
+}
+
+const ActionPlan = ({ recommendationData }: ActionPlanProps) => {
+  const timeline = recommendationData?.data?.ai_overview?.overview?.timeline;
   const [expandedPhases, setExpandedPhases] = useState<{
     [key: string]: boolean;
   }>({
@@ -53,42 +58,103 @@ const ActionPlan = () => {
           </div>
         </div>
 
-        {/* Phase 1 */}
-        <div className="self-stretch p-5 bg-zinc-950 rounded-2xl inline-flex justify-start items-center gap-3">
-          <div className="flex-1 inline-flex flex-col justify-start items-start gap-3">
-            <div className="self-stretch flex flex-col justify-start items-start gap-2">
-              <div className="self-stretch justify-start text-white text-base font-bold font-helvetica-now leading-tight">
-                Phase 1: Assessment & Baseline
+        {/* Dynamic Phases from API */}
+        {timeline?.phases?.map((phase: any, index: number) => (
+          <div
+            key={index}
+            className="self-stretch p-5 bg-zinc-950 rounded-2xl inline-flex justify-start items-center gap-3"
+          >
+            <div className="flex-1 inline-flex flex-col justify-start items-start gap-3">
+              <div className="self-stretch flex flex-col justify-start items-start gap-2">
+                <div className="self-stretch justify-start text-white text-base font-bold font-helvetica-now leading-tight">
+                  {phase.name}
+                </div>
+                <div className="self-stretch justify-start text-gray-400 text-sm font-normal font-helvetica-now">
+                  {phase.duration_months} month
+                  {phase.duration_months !== 1 ? "s" : ""}
+                </div>
               </div>
-              <div className="self-stretch justify-start text-gray-400 text-sm font-normal font-helvetica-now">
-                0-30 days
-              </div>
-            </div>
-            <div className="inline-flex justify-start items-center gap-2">
-              <div className="h-7 px-5 py-2.5 bg-teal-800 rounded-[60px] flex justify-center items-center gap-1.5">
-                <div className="justify-start text-white text-[10px] font-bold font-helvetica-now uppercase leading-3">
-                  Ready
+              <div className="inline-flex justify-start items-center gap-2">
+                <div
+                  className={`h-7 px-5 py-2.5 ${
+                    index === 0
+                      ? "bg-teal-800"
+                      : index === 1
+                      ? "bg-yellow-900"
+                      : "bg-blue-900"
+                  } rounded-[60px] flex justify-center items-center gap-1.5`}
+                >
+                  <div
+                    className={`justify-start text-[10px] font-bold font-helvetica-now uppercase leading-3 ${
+                      index === 0
+                        ? "text-white"
+                        : index === 1
+                        ? "text-white"
+                        : "text-indigo-200"
+                    }`}
+                  >
+                    {index === 0 ? "Ready" : index === 1 ? "Planned" : "Future"}
+                  </div>
                 </div>
               </div>
             </div>
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="transform transition-transform cursor-pointer"
+            >
+              <path
+                d="M7 10L12 15L17 10"
+                stroke="white"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
           </div>
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="transform transition-transform cursor-pointer"
-          >
-            <path
-              d="M7 10L12 15L17 10"
-              stroke="white"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </div>
+        )) || (
+          // Fallback to static phases if no API data
+          <>
+            <div className="self-stretch p-5 bg-zinc-950 rounded-2xl inline-flex justify-start items-center gap-3">
+              <div className="flex-1 inline-flex flex-col justify-start items-start gap-3">
+                <div className="self-stretch flex flex-col justify-start items-start gap-2">
+                  <div className="self-stretch justify-start text-white text-base font-bold font-helvetica-now leading-tight">
+                    Phase 1: Assessment & Baseline
+                  </div>
+                  <div className="self-stretch justify-start text-gray-400 text-sm font-normal font-helvetica-now">
+                    0-30 days
+                  </div>
+                </div>
+                <div className="inline-flex justify-start items-center gap-2">
+                  <div className="h-7 px-5 py-2.5 bg-teal-800 rounded-[60px] flex justify-center items-center gap-1.5">
+                    <div className="justify-start text-white text-[10px] font-bold font-helvetica-now uppercase leading-3">
+                      Ready
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="transform transition-transform cursor-pointer"
+              >
+                <path
+                  d="M7 10L12 15L17 10"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+          </>
+        )}
 
         {/* Phase 2 - Collapsible */}
         <div className="self-stretch p-5 bg-zinc-950 rounded-2xl flex flex-col justify-center items-start gap-5">

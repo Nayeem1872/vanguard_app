@@ -13,6 +13,7 @@ interface Recommendation {
   id?: string;
   _id?: string;
   risk: string;
+  recommendation_id?: string;
   riskColor: string;
   cardBg: string;
   amount: string;
@@ -90,7 +91,8 @@ const RecommendationCards = ({
 
   const handleCardClick = (rec: Recommendation, index: number) => {
     // Get the ID from the recommendation, fallback to index if no ID is available
-    const recommendationId = rec.id || rec._id || index.toString();
+    const recommendationId =
+      rec.recommendation_id || rec._id || index.toString();
     router.push(`/cardDetails/${recommendationId}`);
   };
 
@@ -122,7 +124,7 @@ const RecommendationCards = ({
                 const baseBackgroundColor = getRiskBackgroundColor(rec.risk);
 
                 const cardHeight =
-                  isHovered || isSelected ? "h-[405px]" : "h-[350px]";
+                  isHovered || isSelected ? "h-[405px]" : "h-[390px]";
 
                 const cardDynamicStyles =
                   isHovered || isSelected

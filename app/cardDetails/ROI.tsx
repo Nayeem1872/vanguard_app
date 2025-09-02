@@ -1,6 +1,11 @@
 import React from "react";
 
-const ROI = () => {
+interface ROIProps {
+  recommendationData?: any;
+}
+
+const ROI = ({ recommendationData }: ROIProps) => {
+  const recommendation = recommendationData?.data?.recommendation;
   return (
     <div className="w-full flex flex-col gap-8">
       {/* Main Chart Container */}
@@ -15,8 +20,12 @@ const ROI = () => {
             </div>
           </div>
           <div className="w-60 inline-flex flex-col justify-start items-start">
-            <div className="self-stretch text-right justify-start text-white text-2xl font-bold font-helvetica-now">
-              87%
+            <div
+              className={`self-stretch text-right justify-start text-2xl font-bold font-helvetica-now ${
+                recommendation?.confidenceColor || "text-white"
+              }`}
+            >
+              {recommendation?.confidence || "87%"}
             </div>
             <div className="self-stretch text-right justify-start text-gray-400 text-sm font-normal font-helvetica-now">
               AI Confidence
@@ -123,7 +132,7 @@ const ROI = () => {
               </div>
               <div className="self-stretch flex flex-col justify-start items-start gap-2">
                 <div className="self-stretch justify-start text-yellow-100 text-2xl font-bold font-helvetica-now leading-7">
-                  3.2 months
+                  {recommendation?.paybackPeriod || "3.2 months"}
                 </div>
                 <div className="self-stretch justify-start text-neutral-100 text-sm font-normal font-helvetica-now leading-none">
                   Time until cost of implementation is recovered
@@ -144,7 +153,7 @@ const ROI = () => {
               </div>
               <div className="self-stretch flex flex-col justify-start items-start gap-2">
                 <div className="self-stretch justify-start text-indigo-300 text-2xl font-bold font-helvetica-now leading-7">
-                  +$89k/quarter
+                  {recommendation?.riskAdjustedROI || "+$89k/quarter"}
                 </div>
                 <div className="self-stretch justify-start text-neutral-100 text-sm font-normal font-helvetica-now leading-none">
                   Includes mitigation costs and uncertainty buffer
@@ -167,7 +176,9 @@ const ROI = () => {
             </div>
             <div className="flex-1  inline-flex flex-col justify-start items-start gap-2.5">
               <div className="self-stretch justify-start text-white text-3xl font-medium font-helvetica-now leading-loose">
-                $162,000
+                {recommendation?.amount
+                  ? `${recommendation.amount}${recommendation.period}`
+                  : "$162,000"}
               </div>
               <div className="self-stretch justify-start text-white text-base font-normal font-helvetica-now leading-tight">
                 Gross Projected ROI
