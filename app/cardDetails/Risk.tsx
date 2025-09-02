@@ -114,37 +114,65 @@ const RiskAnalysis = () => {
       {/* Top Section: Risk Level & Contributors */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Execution Risk Level */}
-        <div>
-          <h2 className="text-gray-400 text-sm font-bold uppercase tracking-widest mb-4">
-            {executionRiskLevel.title}
-          </h2>
-          <div className="bg-neutral-900 p-6 rounded-2xl flex items-center gap-8">
-            {/* Chart Placeholder */}
-            <div className="w-48 h-48 relative">
-              {/* This is a placeholder for the radial chart.
-                  You would typically use an SVG or a charting library here. */}
-              <img
-                src="/images/radial-chart-placeholder.svg"
-                alt="Execution Risk Chart"
-              />
+        <div className="self-stretch self-stretch p-5 bg-zinc-950 rounded-[20px] border-gray-200 inline-flex flex-col justify-center items-start gap-2.5">
+          <div className="inline-flex justify-start items-center gap-12">
+            <div className="w-36 h-36 relative">
+              <img src="/icons/4 Doughnut.png" />
             </div>
-            <div className="flex flex-col gap-4">
-              {executionRiskLevel.levels.map((level) => (
-                <div key={level.name} className="flex items-center gap-4">
-                  <div className="flex-shrink-0 w-16 text-gray-300">
-                    {level.name}
-                  </div>
-                  <div
-                    className={`border-l-2 ${level.borderColorClass} h-6`}
-                  ></div>
-                  <div className={`font-bold text-2xl ${level.colorClass}`}>
-                    {level.value}
+            <div className="w-48 inline-flex flex-col justify-start items-start gap-2">
+              <div className="self-stretch inline-flex justify-start items-start gap-10 flex-wrap content-start">
+                <div className="flex justify-start items-center gap-2.5">
+                  <div className="w-[3px] self-stretch relative bg-green-400 rounded-sm" />
+                  <div className="self-stretch inline-flex flex-col justify-center items-start">
+                    <div className="justify-start text-Color-neutral-09/90 text-sm font-normal font-['Helvetica_Now_Display']">
+                      Low
+                    </div>
+                    <div className="inline-flex justify-start items-center gap-0.5">
+                      <div className="justify-start text-green-400 text-2xl font-normal font-['Helvetica_Now_Display']">
+                        25
+                      </div>
+                      <div className="w-2.5 h-2.5 opacity-50 justify-start text-Color-neutral-09/90 text-xs font-normal font-['Helvetica_Now_Display'] leading-3">
+                        %
+                      </div>
+                    </div>
                   </div>
                 </div>
-              ))}
-              <p className="text-gray-500 text-sm mt-2">
-                {executionRiskLevel.subtitle}
-              </p>
+                <div className="flex justify-start items-center gap-2.5">
+                  <div className="w-[3px] self-stretch relative bg-amber-400 rounded-sm" />
+                  <div className="self-stretch inline-flex flex-col justify-center items-start">
+                    <div className="justify-start text-Color-neutral-09/90 text-sm font-normal font-['Helvetica_Now_Display']">
+                      Medium
+                    </div>
+                    <div className="inline-flex justify-start items-center gap-0.5">
+                      <div className="justify-start text-amber-400/90 text-2xl font-normal font-['Helvetica_Now_Display']">
+                        57.78%
+                      </div>
+                      <div className="w-2.5 h-2.5 opacity-50 justify-start text-Color-neutral-09/90 text-xs font-normal font-['Helvetica_Now_Display'] leading-3">
+                        %
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex justify-start items-center gap-2.5">
+                  <div className="w-[3px] self-stretch relative bg-red-500 rounded-sm" />
+                  <div className="self-stretch inline-flex flex-col justify-center items-start">
+                    <div className="justify-start text-Color-neutral-09/90 text-sm font-normal font-['Helvetica_Now_Display']">
+                      High
+                    </div>
+                    <div className="inline-flex justify-start items-center gap-0.5">
+                      <div className="justify-start text-red-500/90 text-2xl font-normal font-['Helvetica_Now_Display']">
+                        100%
+                      </div>
+                      <div className="w-2.5 h-2.5 opacity-50 justify-start text-Color-neutral-09/90 text-xs font-normal font-['Helvetica_Now_Display'] leading-3">
+                        %
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="self-stretch justify-start text-gray-400 text-sm font-normal font-['Helvetica_Now_Display']">
+                Based on 7 operational factors
+              </div>
             </div>
           </div>
         </div>
