@@ -1,234 +1,216 @@
 import React from "react";
 
-const impactData = {
-  header: {
-    filters: [
-      {
-        id: "erp",
-        label: "ERP",
-        isActive: true,
-      },
-      {
-        id: "hris",
-        label: "HRIS",
-        isActive: false,
-      },
-      {
-        id: "wms",
-        label: "WMS",
-        isActive: false,
-      },
-    ],
-    simulation: {
-      label: "Simulate Disruption:",
-      options: ["None", "Site B Failure", "Dock Bottleneck"],
-      defaultValue: "None",
-    },
-    exportButton: {
-      label: "Export",
-      icon: "/icons/download.svg",
-    },
-  },
-  processFlow: [
-    {
-      id: 1,
-      title: "Site B",
-      description: "Regional distribution center with 14% excess capacity",
-      tags: [
-        {
-          label: "ERP",
-          bgColor: "bg-blue-600",
-          textColor: "text-white",
-        },
-        {
-          label: "WMS",
-          bgColor: "bg-purple-600",
-          textColor: "text-white",
-        },
-      ],
-    },
-    {
-      id: 2,
-      title: "Receiving Dock",
-      description: "8 bays with 37% bottleneck occurrence",
-      tags: [
-        {
-          label: "ERP",
-          bgColor: "bg-blue-600",
-          textColor: "text-white",
-        },
-      ],
-    },
-    {
-      id: 3,
-      title: "Zone 3",
-      description:
-        "23% inefficiency due to dock delays distribution center with excess capacity",
-      tags: [
-        {
-          label: "HRIS",
-          bgColor: "bg-teal-600",
-          textColor: "text-white",
-        },
-      ],
-    },
-  ],
-  dependencyImpactAnalysis: {
-    title: "DEPENDENCY IMPACT ANALYSIS",
-    cards: [
-      {
-        id: "critical-path",
-        icon: "/icons/critical-path.svg",
-        title: "Critical Path",
-        bgColor: "bg-blue-800",
-        content: {
-          path: "Receiving Dock → Zone 3",
-          details: "Highest impact on throughput (37% bottleneck)",
-          bulletColor: "bg-blue-400",
-        },
-      },
-      {
-        id: "system-reliance",
-        icon: "/icons/system-reliance.svg",
-        title: "System Reliance",
-        bgColor: "bg-teal-900",
-        content: {
-          items: [
-            {
-              text: "WMS: 5/5 nodes",
-              bulletColor: "bg-blue-400",
-            },
-            {
-              text: "ERP: 3/5 nodes",
-              bulletColor: "bg-purple-400",
-            },
-            {
-              text: "HRIS: 2/5 nodes",
-              bulletColor: "bg-green-400",
-            },
-          ],
-        },
-      },
-      {
-        id: "recommendation-focus",
-        icon: "/icons/recommendation-focus.svg",
-        title: "Recommendation Focus",
-        bgColor: "bg-purple-900",
-        content: {
-          items: ["Optimize dock scheduling and handler allocation"],
-        },
-      },
-    ],
-  },
-};
-
 const DependencyImpact = () => {
-  const { header, processFlow, dependencyImpactAnalysis } = impactData;
-
   return (
-    <div className="bg-black p-8 text-white font-sans">
-      {/* Header Controls */}
-      <div className="flex justify-between items-center mb-8 p-4 bg-neutral-900/50 rounded-xl">
-        <div className="flex items-center gap-4">
-          <span>Filter by:</span>
-          {header.filters.map((filter) => (
-            <button
-              key={filter.id}
-              className={`px-4 py-1 rounded-full text-sm ${
-                filter.isActive
-                  ? "bg-white text-black"
-                  : "bg-neutral-700 text-gray-300"
-              }`}
-            >
-              {filter.label}
-            </button>
-          ))}
+    <div className="p-8 ">
+      <div className="self-stretch  inline-flex flex-col justify-start items-start gap-2 overflow-hidden">
+        <div className="self-stretch justify-start text-gray-400 text-base font-bold  uppercase leading-normal tracking-widest">
+          System Dependencies
         </div>
-        <div className="flex items-center gap-4">
-          <label htmlFor="disruption-select">{header.simulation.label}</label>
-          <select
-            id="disruption-select"
-            className="bg-neutral-800 border border-neutral-600 rounded-md px-3 py-1.5"
-          >
-            {header.simulation.options.map((opt) => (
-              <option key={opt}>{opt}</option>
-            ))}
-          </select>
-          <button className="flex items-center gap-2 bg-blue-600 px-4 py-2 rounded-lg">
-            <img
-              src={header.exportButton.icon}
-              alt="Export"
-              className="w-4 h-4"
-            />
-            {header.exportButton.label}
-          </button>
+        <div className="self-stretch justify-start text-white text-base font-normal  leading-normal">
+          This visualization shows how the recommendation relies on
+          interconnected parts of your enterprise systems.
         </div>
       </div>
 
-      {/* Process Flow */}
-      <div className="flex justify-center items-start gap-4 mb-12">
-        {processFlow.map((node, index) => (
-          <React.Fragment key={node.id}>
-            <div className="bg-neutral-800 p-5 rounded-xl w-64 flex flex-col gap-3">
-              <h3 className="font-bold text-lg">{node.title}</h3>
-              <p className="text-gray-400 text-sm">{node.description}</p>
-              <div className="flex items-center gap-2 mt-2">
-                {node.tags.map((tag) => (
-                  <span
-                    key={tag.label}
-                    className={`px-3 py-1 text-xs font-semibold rounded-full ${tag.bgColor} ${tag.textColor}`}
-                  >
-                    {tag.label}
-                  </span>
-                ))}
+      <div className="w-[1040px] mt-6 p-7 bg-zinc-950 rounded-[20px]  inline-flex flex-col justify-start items-start gap-5 overflow-hidden">
+        <div className="w-[980px] inline-flex justify-between items-center">
+          <div className="flex justify-start items-center gap-4">
+            <div className="justify-start text-gray-400 text-sm font-bold  leading-tight">
+              Filter by:
+            </div>
+            <div className="flex justify-start items-start gap-2">
+              <div className="h-7 px-5 py-2.5 bg-white rounded-[60px] flex justify-center items-center gap-1.5">
+                <div className="justify-start text-neutral-900 text-xs font-bold  uppercase leading-none">
+                  ERP
+                </div>
+              </div>
+              <div className="h-7 px-5 py-2.5 rounded-[60px] outline outline-1 outline-offset-[-1px] outline-gray-400 flex justify-center items-center gap-1.5">
+                <div className="justify-start text-gray-400 text-xs font-bold  uppercase leading-none">
+                  HRIS
+                </div>
+              </div>
+              <div className="h-7 px-5 py-2.5 rounded-[60px] outline outline-1 outline-offset-[-1px] outline-gray-400 flex justify-center items-center gap-1.5">
+                <div className="justify-start text-gray-400 text-xs font-bold  uppercase leading-none">
+                  WMS
+                </div>
               </div>
             </div>
-            {index < processFlow.length - 1 && (
-              <div className="text-2xl mt-12">→</div>
-            )}
-          </React.Fragment>
-        ))}
+          </div>
+          <div className="flex justify-start items-center gap-4">
+            <div className="flex justify-start items-center gap-4">
+              <div className="text-gray-400 text-sm font-bold leading-tight">
+                Simulate Disruption:
+              </div>
+
+              <div className="flex-1 relative">
+                <select className="w-full h-9 pl-5 pr-10 rounded-[60px] outline outline-1 outline-offset-[-1px] outline-gray-400 text-gray-400 text-xs font-bold leading-none appearance-none bg-transparent">
+                  <option>None</option>
+                  <option>Low Impact</option>
+                  <option>High Impact</option>
+                </select>
+                <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none">
+                  <svg
+                    className="w-4 h-4 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M19 9l-7 7-7-7"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div className="h-9 py-5  flex justify-center items-center gap-2">
+              <img src="/images/Frame 2147224348.png" />
+            </div>
+          </div>
+        </div>
+        <div className="self-stretch inline-flex justify-start items-center gap-5 flex-wrap content-center">
+          <div className="w-80 h-36 p-5 bg-neutral-800 rounded-2xl inline-flex flex-col justify-center items-start gap-3">
+            <div className="self-stretch flex flex-col justify-start items-start gap-2">
+              <div className="self-stretch justify-start text-white text-base font-bold  leading-tight">
+                Site B
+              </div>
+              <div className="self-stretch justify-start text-gray-400 text-sm font-normal ">
+                Regional distribution center with 14% excess capacity
+              </div>
+            </div>
+            <div className="inline-flex justify-start items-center gap-2">
+              <div className="h-7 px-5 py-2.5 bg-blue-900 rounded-[60px] flex justify-center items-center gap-1.5">
+                <div className="justify-start text-indigo-200 text-[10px] font-bold  uppercase leading-3">
+                  ERP
+                </div>
+              </div>
+              <div className="h-7 px-5 py-2.5 bg-purple-900 rounded-[60px] flex justify-center items-center gap-1.5">
+                <div className="justify-start text-fuchsia-300 text-[10px] font-bold  uppercase leading-3">
+                  WMS
+                </div>
+              </div>
+            </div>
+          </div>
+          <img src="/icons/arrowright.svg" />
+          <div className="w-80 h-36 p-5 bg-neutral-800 rounded-2xl inline-flex flex-col justify-center items-start gap-3">
+            <div className="self-stretch flex flex-col justify-start items-start gap-2">
+              <div className="self-stretch justify-start text-white text-base font-bold  leading-tight">
+                Receiving Dock
+              </div>
+              <div className="self-stretch justify-start text-gray-400 text-sm font-normal ">
+                8 bays with 37% bottleneck
+                <br />
+                occurrence
+              </div>
+            </div>
+            <div className="inline-flex justify-start items-center gap-2">
+              <div className="h-7 px-5 py-2.5 bg-blue-900 rounded-[60px] flex justify-center items-center gap-1.5">
+                <div className="justify-start text-indigo-200 text-[10px] font-bold  uppercase leading-3">
+                  ERP
+                </div>
+              </div>
+            </div>
+          </div>
+          <img src="/icons/arrowright.svg" />
+          <div className="w-52 h-36 p-5 bg-neutral-800 rounded-tl-2xl rounded-bl-2xl inline-flex flex-col justify-center items-start gap-3">
+            <div className="self-stretch flex flex-col justify-start items-start gap-2">
+              <div className="self-stretch justify-start text-white text-base font-bold  leading-tight">
+                Zone 3
+              </div>
+              <div className="self-stretch justify-start text-gray-400 text-sm font-normal ">
+                23% inefficiency due with excess capacity
+              </div>
+            </div>
+            <div className="inline-flex justify-start items-center gap-2">
+              <div className="h-7 px-5 py-2.5 bg-teal-800 rounded-[60px] flex justify-center items-center gap-1.5">
+                <div className="justify-start text-white text-[10px] font-bold  uppercase leading-3">
+                  HRIS
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Dependency Impact Analysis */}
-      <div>
-        <h2 className="text-gray-400 text-sm font-bold uppercase tracking-widest mb-4">
-          {dependencyImpactAnalysis.title}
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {dependencyImpactAnalysis.cards.map((card) => (
-            <div key={card.id} className={`p-6 rounded-2xl ${card.bgColor}`}>
-              <img src={card.icon} alt="" className="w-6 h-6 mb-4 opacity-80" />
-              <h3 className="font-bold text-lg mb-3">{card.title}</h3>
-              {/* Render content based on card id or structure */}
-              {card.id === "critical-path" && (
-                <div>
-                  <div className="flex items-center gap-2">
-                    <div
-                      className={`w-2 h-2 rounded-full ${card.content.bulletColor}`}
-                    ></div>
-                    <p>{card.content.path}</p>
-                  </div>
-                  <p className="text-gray-300 text-sm mt-1 ml-4">
-                    {card.content.details}
-                  </p>
+      <div className="w-[1040px] mt-6 inline-flex flex-col justify-start items-start gap-5 overflow-hidden">
+        <div className="self-stretch justify-start text-gray-400 text-base font-bold  uppercase leading-normal tracking-widest">
+          Dependency Impact Analysis
+        </div>
+        <div className="self-stretch inline-flex justify-start items-start gap-5">
+          <div className="flex-1 self-stretch p-5 bg-[#071865] rounded-2xl  inline-flex flex-col justify-start items-start gap-3">
+            <div className="self-stretch flex flex-col justify-start items-start gap-3">
+              <img src="/icons/graph_1.svg" />
+              <div className="self-stretch flex flex-col justify-start items-start gap-2">
+                <div className="self-stretch justify-start text-white text-base font-bold  leading-tight">
+                  Critical Path
                 </div>
-              )}
-              {/* {card.id === 'system-reliance' && (
-                <ul className="space-y-1">
-                  {card.content.items.map(item => (
-                     <li key={item.text} className="flex items-center gap-2">
-                        <div className={`w-2 h-2 rounded-full ${item.bulletColor}`}></div>
-                        <span>{item.text}</span>
-                     </li>
-                  ))}
-                </ul>
-              )}
-               {card.id === 'recommendation-focus' && (
-                  <p className="text-gray-200">{card.content.items[0]}</p>
-              )} */}
+                <div className="inline-flex justify-start items-center gap-2">
+                  <div className="w-2 h-2 relative bg-blue-500 rounded-full border-gray-200" />
+                  <div className="w-44 h-5 justify-start text-gray-400 text-sm font-normal font-['Inter'] leading-tight">
+                    Receiving Dock → Zone 3
+                  </div>
+                </div>
+                <div className="self-stretch justify-start text-gray-400 text-[10px] font-medium  leading-none">
+                  Highest impact on throughput (37% bottleneck)
+                </div>
+              </div>
             </div>
-          ))}
+          </div>
+          <div className="flex-1 p-5 bg-[#142320] rounded-2xl inline-flex flex-col justify-start items-start gap-3">
+            <div className="self-stretch flex flex-col justify-start items-start gap-3">
+              <img src="/icons/featured_play_list.svg" />
+              <div className="self-stretch flex flex-col justify-start items-start gap-2">
+                <div className="self-stretch justify-start text-white text-base font-bold  leading-tight">
+                  System Reliance
+                </div>
+                <div className="w-72 inline-flex justify-start items-start gap-2 flex-wrap content-start">
+                  <div className="flex justify-start items-center gap-2">
+                    <div className="w-2 h-2 relative bg-blue-500 rounded-full border-gray-200" />
+                    <div className="justify-start text-gray-400 text-sm font-normal font-['Inter'] leading-tight">
+                      WMS: 5/5 nodes
+                    </div>
+                  </div>
+                  <div className="flex justify-start items-center gap-2">
+                    <div className="w-2 h-2 relative bg-violet-500 rounded-full border-gray-200" />
+                    <div className="justify-start text-gray-400 text-sm font-normal font-['Inter'] leading-tight">
+                      ERP: 3/5 nodes
+                    </div>
+                  </div>
+                  <div className="flex justify-start items-center gap-2">
+                    <div className="w-2 h-2 relative bg-teal-800 rounded-full border-gray-200" />
+                    <div className="justify-start text-gray-400 text-sm font-normal font-['Inter'] leading-tight">
+                      HRIS: 2/5 nodes
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="flex-1 self-stretch p-5 bg-[#2E083A] rounded-2xl  inline-flex flex-col justify-start items-start gap-3">
+            <div className="self-stretch flex flex-col justify-start items-start gap-3">
+              <img src="/icons/featured_play_list.svg" />
+              <div className="self-stretch h-12 flex flex-col justify-start items-start gap-2">
+                <div className="self-stretch justify-start text-white text-base font-bold leading-tight">
+                  Recommendation Focus
+                </div>
+                <div className="self-stretch inline-flex justify-start items-start gap-2">
+                  <div className="w-4 h-4 flex justify-center items-center overflow-hidden">
+                    <div className="w-4 h-4 relative bg-black/0 border-gray-200 overflow-hidden">
+                      <img src="/icons/Frame.svg" />
+                    </div>
+                  </div>
+                  <div className="flex-1 justify-start text-gray-400 text-sm font-normal font-['Inter'] leading-tight">
+                    Optimize dock scheduling and handler allocation
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
