@@ -136,8 +136,8 @@ const RiskAnalysis = () => {
       </div>
 
       <div className="flex flex-col items-center gap-5 overflow-hidden mt-10 w-full max-w-6xl">
-        <div className="flex justify-center items-center gap-3 w-full">
-          <div className="text-gray-400 text-base font-bold uppercase leading-normal tracking-widest">
+        <div className="flex ml-24 gap-3 w-full">
+          <div className="text-gray-400 text-left text-base font-bold uppercase leading-normal tracking-widest">
             Mitigation Plan Identified
           </div>
           <div className="h-6 px-5 py-2.5 bg-blue-900 rounded-[60px] flex justify-center items-center gap-2.5">
@@ -213,15 +213,25 @@ const RiskAnalysis = () => {
               </div>
             </div>
           </div>
-          <div className="flex justify-center w-full">
-            <div className="w-80 h-12 px-10 py-5 rounded-[60px] shadow-[0px_40px_120px_0px_rgba(1,68,199,0.30)] border border-gray-600 flex justify-center items-center gap-2">
-              <div className="text-white text-base font-bold leading-normal">
+          <div className="flex justify-end w-full cursor-pointer">
+            <div className="w-96 h-12 px-10 py-5 rounded-[60px] flex justify-center items-center gap-2">
+              <div className="text-white text-base text-right font-bold leading-normal">
                 Compare with past performance
               </div>
               <div className="w-6 h-6 relative">
-                <div className="w-1.5 h-3 left-[14.43px] top-[5.93px] absolute border border-white" />
-                <div className="w-4 h-0 left-[3.50px] top-[12px] absolute border-t border-white" />
+                <img src="/icons/arrowright.svg" />
               </div>
+            </div>
+          </div>
+
+          <div className="flex w-full justify-end mt-10 mr-20">
+            <div className="flex items-center gap-5">
+              <div className="h-12 px-10 py-5 rounded-[60px] shadow-[0px_40px_120px_0px_rgba(1,68,199,0.30)] border border-white flex justify-center items-center gap-2">
+                <div className="text-white text-base font-bold leading-normal">
+                  Save for later
+                </div>
+              </div>
+              <img src="/icons/Frame 2147224348.png" />
             </div>
           </div>
         </div>
