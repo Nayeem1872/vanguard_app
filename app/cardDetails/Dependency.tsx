@@ -2,7 +2,7 @@ import React from "react";
 
 const DependencyImpact = () => {
   return (
-    <div className="p-8 flex flex-col items-center justify-center">
+    <div className=" flex flex-col items-center justify-center">
       <div className="w-full max-w-6xl flex flex-col justify-start items-start gap-2 overflow-hidden">
         <div className="self-stretch justify-start text-gray-400 text-base font-bold  uppercase leading-normal tracking-widest">
           System Dependencies
@@ -211,6 +211,51 @@ const DependencyImpact = () => {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      <div className="w-[1440px] mt-20 px-24 py-3 bg-zinc-900  inline-flex justify-between items-center">
+        <div className="flex justify-start items-center gap-2">
+          <div className="justify-start text-gray-400 text-xs font-medium  leading-none">
+            Systems:
+          </div>
+          <div className="flex justify-start items-start gap-2">
+            <div className="flex justify-start items-center gap-2">
+              <div className="w-2 h-2 relative bg-blue-500 rounded-full border-gray-200" />
+              <div className="justify-start text-gray-400 text-sm font-normal font-['Inter'] leading-tight">
+                ERP
+              </div>
+            </div>
+            <div className="flex justify-start items-center gap-2">
+              <div className="w-2 h-2 relative bg-teal-800 rounded-full border-gray-200" />
+              <div className="justify-start text-gray-400 text-sm font-normal font-['Inter'] leading-tight">
+                HRIS
+              </div>
+            </div>
+            <div className="flex justify-start items-center gap-2">
+              <div className="w-2 h-2 relative bg-violet-500 rounded-full border-gray-200" />
+              <div className="justify-start text-gray-400 text-sm font-normal font-['Inter'] leading-tight">
+                WMS
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="flex justify-start items-center gap-4">
+          <div className="flex justify-start items-center gap-1">
+            <div className="w-8 h-2 relative bg-zinc-700 border-gray-200" />
+            <div className="w-16 h-4 justify-start text-gray-400 text-xs font-normal font-['Inter'] leading-none">
+              Direct flow
+            </div>
+          </div>
+          <div className="bg-black/0 border-gray-200 flex justify-start items-center gap-1">
+            <div className="w-8 h-px relative bg-black/0 border-t border-gray-500" />
+            <div className="w-24 h-4 justify-start text-gray-500 text-xs font-normal font-['Inter'] leading-none">
+              Conditional flow
+            </div>
+          </div>
+        </div>
+        <div className="w-48 h-4 justify-start text-gray-500 text-xs font-normal font-['Inter'] leading-none">
+          Last updated: Today at 10:45 AM
         </div>
       </div>
     </div>

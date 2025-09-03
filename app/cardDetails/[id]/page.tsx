@@ -99,7 +99,7 @@ const CardDetailsPage = () => {
               className="ml-auto text-gray-400"
             />
             <span className="text-gray-rgba(255, 255, 255, 1) text-sm cursor-pointer">
-              About this page (ID: {id})
+              About this page
             </span>
           </div>
         </div>
