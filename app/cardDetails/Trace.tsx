@@ -1,193 +1,257 @@
 import React from "react";
-const timelineData = {
-  timelineTitle: "AI Recommendation Genesis",
-  steps: [
+
+interface TimelineStep {
+  id: number;
+  title: string;
+  description: string;
+  tags?: { text: string; bgClass: string; textClass: string }[];
+  details?: { label: string; value: string }[];
+  confidence?: string;
+  status?: {
+    text: string;
+    icon?: string;
+    bgClass?: string;
+    textClass?: string;
+    approved?: boolean;
+  }[];
+  icon: string;
+  iconBg: string;
+}
+
+const Timeline = () => {
+  const timelineSteps: TimelineStep[] = [
     {
       id: 1,
-      icon: "/icons/timeline-data.svg",
-      iconBgColor: "bg-blue-600",
       title: "Analyzed ERP and HRIS Data (12 months)",
       description:
         "Pulled cost and throughput data across Site B, Receiving, and Zone 3.",
-      details: {
-        type: "tags",
-        items: [
-          {
-            label: "ERP",
-            bgColor: "bg-blue-600",
-            textColor: "text-white",
-          },
-          {
-            label: "WMS",
-            bgColor: "bg-purple-600",
-            textColor: "text-white",
-          },
-        ],
-      },
+      tags: [
+        { text: "ERP", bgClass: "bg-blue-900", textClass: "text-indigo-200" },
+        {
+          text: "WMS",
+          bgClass: "bg-purple-900",
+          textClass: "text-fuchsia-300",
+        },
+      ],
+      icon: "/images/a5.svg",
+      iconBg: "bg-blue-900",
     },
     {
       id: 2,
-      icon: "/icons/timeline-target.svg",
-      iconBgColor: "bg-yellow-600",
       title: "Identified Process Bottlenecks",
       description:
         "Detected 23% inefficiency in Zone 3 due to inconsistent receiving dock availability.",
-      details: {
-        type: "bulletPoint",
-        item: {
-          label: "Performance Anomaly",
-          value: "23% Inefficiency",
-          bulletColor: "bg-blue-400",
-        },
-      },
+      details: [{ label: "Performance Anomaly", value: "23% Inefficiency" }],
+      icon: "/images/a6.svg",
+      iconBg: "bg-yellow-900",
     },
     {
       id: 3,
-      icon: "/icons/timeline-simulation.svg",
-      iconBgColor: "bg-purple-600",
       title: "Simulated Material Routing Optimizations",
       description:
         "Ran 1000+ Monte Carlo simulations to test various reconfigurations.",
-      details: {
-        type: "iconTextWithTag",
-        item: {
-          icon: "/icons/analysis.svg",
-          label: "Monte Carlo Analysis",
-          value: "23% Inefficiency",
-          tag: {
-            label: "CONFIDENCE 87%",
-            bgColor: "bg-blue-700",
-            textColor: "text-white",
-          },
+      status: [
+        { text: "Monte Carlo Analysis", icon: "/images/finance_mode.svg" },
+        {
+          text: "Implementation Approved",
+          bgClass: "bg-zinc-900",
+          textClass: "text-emerald-300",
+          approved: true,
         },
-      },
+      ],
+      confidence: "87%",
+      icon: "/images/a7.svg",
+      iconBg: "bg-purple-900",
     },
     {
       id: 4,
-      icon: "/icons/timeline-impact.svg",
-      iconBgColor: "bg-gray-500",
       title: "Calculated Financial and Operational Impact",
       description:
         "Projected ROI of $127k/qtr with low execution risk using mitigation plan.",
-      details: {
-        type: "tags",
-        items: [
-          {
-            label: "ROI",
-            bgColor: "bg-blue-600",
-            textColor: "text-white",
-          },
-          {
-            label: "RISK",
-            bgColor: "bg-purple-600",
-            textColor: "text-white",
-          },
-        ],
-      },
+      tags: [
+        { text: "ROI", bgClass: "bg-blue-900", textClass: "text-indigo-200" },
+        {
+          text: "RISK",
+          bgClass: "bg-purple-900",
+          textClass: "text-fuchsia-300",
+        },
+      ],
+      icon: "/images/a8.svg",
+      iconBg: "bg-stone-600",
     },
     {
       id: 5,
-      icon: "/icons/timeline-approval.svg",
-      iconBgColor: "bg-green-600",
       title: "Reconfigure Material Routing at Site B",
       description:
         "Final decision issued based on performance gain vs. execution complexity.",
-      details: {
-        type: "status",
-        items: [
-          {
-            label: "Recommendation Ready",
-            icon: "/icons/box-check.svg",
-            textColor: "text-gray-300",
-          },
-          {
-            label: "Implementation Approved",
-            icon: "/icons/check.svg",
-            textColor: "text-green-300",
-            bgColor: "bg-green-800/50",
-          },
-        ],
-      },
+      status: [
+        { text: "Recommendation Ready", icon: "/images/a2.svg" },
+        {
+          text: "Implementation Approved",
+          bgClass: "bg-zinc-900",
+          textClass: "text-emerald-300",
+          approved: true,
+        },
+      ],
+      icon: "/images/a4.svg",
+      iconBg: "bg-teal-800",
     },
-  ],
-};
+  ];
 
-const Timeline = ({ timelineData }: any) => {
-  const renderDetails = (details: any) => {
-    if (!details) return null;
+  return (
+    <div className="p-8 flex flex-col items-center justify-center ">
+      {/* Header */}
+      <div className="w-full max-w-6xl mb-8">
+        <div className="flex flex-col gap-2">
+          <h1 className="text-gray-400 text-base font-bold uppercase leading-normal tracking-widest">
+            AI Reasoning Timeline
+          </h1>
+          <p className="text-white text-base font-normal leading-normal">
+            Step-by-step breakdown of how the AI arrived at this recommendation
+          </p>
+        </div>
+      </div>
 
-    switch (details.type) {
-      case "tags":
-        return (
-          <div className="flex items-center gap-2">
-            {details.items.map((tag: any) => (
-              <span
-                key={tag.label}
-                className={`px-3 py-1 text-xs font-semibold rounded-full ${tag.bgColor} ${tag.textColor}`}
-              >
-                {tag.label}
-              </span>
-            ))}
-          </div>
-        );
-      case "bulletPoint":
-        return (
-          <div className="flex items-center gap-2 text-sm text-gray-300">
-            <div
-              className={`w-2 h-2 rounded-full ${details.item.bulletColor}`}
-            ></div>
-            <span>{details.item.label}</span>
-            <span className="text-gray-400">{details.item.value}</span>
-          </div>
-        );
-      case "iconTextWithTag":
-        return (
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-sm text-gray-300">
-              <img
-                src={details.item.icon}
-                alt=""
-                className="w-4 h-4 opacity-70"
-              />
-              <span>{details.item.label}</span>
-              <span className="text-gray-400">{details.item.value}</span>
-            </div>
-            <span
-              className={`px-3 py-1 text-xs font-bold rounded-md ${details.item.tag.bgColor} ${details.item.tag.textColor}`}
-            >
-              {details.item.tag.label}
-            </span>
-          </div>
-        );
-      case "status":
-        return (
-          <div className="flex items-center gap-4">
-            {details.items.map((status: any) => (
+      {/* Timeline Layout */}
+      <div className="w-full max-w-6xl flex gap-8">
+        {/* Timeline Line - Left Side */}
+        <div className="relative flex flex-col items-center mt-9">
+          {/* Vertical Line */}
+          <div className="absolute left-1/2 transform -translate-x-1/2 w-0.5 h-full bg-gray-600"></div>
+
+          {/* Timeline Icons */}
+          <div className="flex flex-col gap-6 relative z-10">
+            {timelineSteps.map((step, stepIndex) => (
               <div
-                key={status.label}
-                className={`flex items-center gap-2 text-sm font-medium p-1 rounded ${
-                  status.bgColor || ""
-                }`}
+                key={step.id}
+                className="flex items-center justify-center"
+                style={{ marginTop: stepIndex === 0 ? "2rem" : "6rem" }}
               >
-                <img src={status.icon} alt="" className="w-4 h-4" />
-                <span className={status.textColor}>{status.label}</span>
+                <div
+                  className={`w-12 h-12 rounded-full flex items-center justify-center`}
+                >
+                  <img src={step.icon} alt="" className="w-12 h-12" />
+                </div>
               </div>
             ))}
           </div>
-        );
-      default:
-        return null;
-    }
-  };
-
-  return (
-    <div className="p-8 ">
-      <div className=" inline-flex flex-col justify-start items-start gap-2 overflow-hidden">
-        <div className="self-stretch justify-start text-gray-400 text-base font-bold font-['Helvetica_Now_Display'] uppercase leading-normal tracking-widest">
-          AI Reasoning Timeline
         </div>
-        <div className="self-stretch justify-start text-white text-base font-normal font-['Helvetica_Now_Display'] leading-normal">
-          Step-by-step breakdown of how the AI arrived at this recommendation
+
+        {/* Timeline Cards - Right Side */}
+        <div className="flex-1 flex flex-col gap-6">
+          {timelineSteps.map((step, index) => (
+            <div key={step.id} className="relative">
+              {/* Card */}
+              <div className="bg-zinc-950 rounded-2xl p-6 flex flex-col gap-4">
+                {/* Header with step number and info icon */}
+                <div className="flex items-center justify-between">
+                  <h3 className="text-white text-base font-bold leading-tight">
+                    {step.title}
+                  </h3>
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center">
+                      <img src="/images/a3.svg" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Description */}
+                <p className="text-gray-400 text-sm font-normal leading-relaxed">
+                  {step.description}
+                </p>
+
+                {/* Tags */}
+                {step.tags && (
+                  <div className="flex gap-2">
+                    {step.tags.map((tag, tagIndex) => (
+                      <div
+                        key={tagIndex}
+                        className={`h-7 px-4 py-2 ${tag.bgClass} rounded-full flex items-center`}
+                      >
+                        <span
+                          className={`text-[10px] font-bold uppercase ${tag.textClass}`}
+                        >
+                          {tag.text}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Details */}
+                {step.details && (
+                  <div className="flex gap-4">
+                    {step.details.map((detail, detailIndex) => (
+                      <div
+                        key={detailIndex}
+                        className="flex items-center gap-2"
+                      >
+                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                        <span className="text-gray-400 text-sm">
+                          {detail.label}
+                        </span>
+                        <span className="text-gray-400 text-sm">
+                          {detail.value}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Confidence */}
+
+                {/* Status */}
+                {step.status && (
+                  <div className="flex items-center gap-3">
+                    {step.status.map((status, statusIndex) => (
+                      <div
+                        key={statusIndex}
+                        className="flex items-center gap-2"
+                      >
+                        {status.approved ? (
+                          <div
+                            className={`${status.bgClass} rounded-full px-4 py-1 flex items-center gap-2`}
+                          >
+                            <span className="text-emerald-300 text-xs">✓</span>
+                            <span
+                              className={`text-xs font-bold ${status.textClass}`}
+                            >
+                              {status.text}
+                            </span>
+                          </div>
+                        ) : (
+                          <>
+                            {status.icon ? (
+                              <img
+                                src={status.icon}
+                                alt=""
+                                className="w-4 h-4"
+                              />
+                            ) : (
+                              <span className="text-lg">👍</span>
+                            )}
+                            <span className="text-gray-400 text-sm">
+                              {status.text}
+                            </span>
+                          </>
+                        )}
+                      </div>
+                    ))}
+                    {step.confidence && (
+                      <div className="bg-blue-900 rounded-full px-4 py-1">
+                        <span className="text-indigo-200 text-[10px] font-normal uppercase">
+                          Confidence:{" "}
+                        </span>
+                        <span className="text-indigo-200 text-xs font-bold uppercase">
+                          {step.confidence}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
