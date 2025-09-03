@@ -16,6 +16,7 @@ interface TimelineStep {
   }[];
   icon: string;
   iconBg: string;
+  marginTop?: string;
 }
 
 const Timeline = () => {
@@ -35,6 +36,7 @@ const Timeline = () => {
       ],
       icon: "/images/a5.svg",
       iconBg: "bg-blue-900",
+      marginTop: "9px",
     },
     {
       id: 2,
@@ -44,6 +46,7 @@ const Timeline = () => {
       details: [{ label: "Performance Anomaly", value: "23% Inefficiency" }],
       icon: "/images/a6.svg",
       iconBg: "bg-yellow-900",
+      marginTop: "2px",
     },
     {
       id: 3,
@@ -62,6 +65,7 @@ const Timeline = () => {
       confidence: "87%",
       icon: "/images/a7.svg",
       iconBg: "bg-purple-900",
+      marginTop: "-12px",
     },
     {
       id: 4,
@@ -76,6 +80,7 @@ const Timeline = () => {
           textClass: "text-fuchsia-300",
         },
       ],
+      marginTop: "-18px",
       icon: "/images/a8.svg",
       iconBg: "bg-stone-600",
     },
@@ -93,6 +98,7 @@ const Timeline = () => {
           approved: true,
         },
       ],
+      marginTop: "-15px",
       icon: "/images/a4.svg",
       iconBg: "bg-teal-800",
     },
@@ -115,20 +121,35 @@ const Timeline = () => {
       {/* Timeline Layout */}
       <div className="w-full max-w-6xl flex gap-8">
         {/* Timeline Line - Left Side */}
-        <div className="relative flex flex-col items-center mt-9">
-          {/* Vertical Line */}
-          <div className="absolute left-1/2 transform -translate-x-1/2 w-0.5 h-full bg-gray-600"></div>
-
+        <div className="relative flex flex-col items-center">
           {/* Timeline Icons */}
-          <div className="flex flex-col gap-6 relative z-10">
+          <div className="flex flex-col relative z-10">
             {timelineSteps.map((step, stepIndex) => (
               <div
                 key={step.id}
-                className="flex items-center justify-center"
-                style={{ marginTop: stepIndex === 0 ? "2rem" : "6rem" }}
+                className="relative flex mt-12 items-start justify-center"
+                style={{
+                  height: stepIndex === 0 ? "auto" : "auto",
+                  marginBottom:
+                    stepIndex < timelineSteps.length - 1 ? "6rem" : "0",
+                }}
               >
+                {/* Vertical Line Segment */}
+                {stepIndex < timelineSteps.length - 1 && (
+                  <div
+                    className="absolute left-1/2 transform -translate-x-1/2 border-l border-dashed border-gray-600 z-0"
+                    // Replaced width and background with border utilities
+                    style={{
+                      top: "3rem",
+                      height: "9rem",
+                    }}
+                  ></div>
+                )}
+
+                {/* Icon */}
                 <div
-                  className={`w-12 h-12 rounded-full flex items-center justify-center`}
+                  className="w-12 h-12 rounded-full flex items-center justify-center relative z-10"
+                  style={{ marginTop: step.marginTop }}
                 >
                   <img src={step.icon} alt="" className="w-12 h-12" />
                 </div>
@@ -139,7 +160,7 @@ const Timeline = () => {
 
         {/* Timeline Cards - Right Side */}
         <div className="flex-1 flex flex-col gap-6">
-          {timelineSteps.map((step, index) => (
+          {timelineSteps.map((step) => (
             <div key={step.id} className="relative">
               {/* Card */}
               <div className="bg-zinc-950 rounded-2xl p-6 flex flex-col gap-4">
@@ -252,6 +273,17 @@ const Timeline = () => {
               </div>
             </div>
           ))}
+        </div>
+      </div>
+      {/* Action Buttons */}
+      <div className="w-full max-w-6xl flex justify-end items-center gap-5 mt-8">
+        <div className="w-56 h-12 px-10 py-5 rounded-[60px] shadow-[0px_40px_120px_0px_rgba(1,68,199,0.30)] outline-1 outline-white flex justify-center items-center gap-2">
+          <div className="text-white text-base font-bold leading-normal">
+            Download Trace
+          </div>
+        </div>
+        <div className="w-72 h-12 py-5 flex justify-center items-center gap-2">
+          <img src="/images/a1.png" />
         </div>
       </div>
     </div>
