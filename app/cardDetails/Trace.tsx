@@ -181,37 +181,14 @@ const Timeline = ({ timelineData }: any) => {
   };
 
   return (
-    <div className="p-8 bg-black">
-      <div className="relative flex flex-col items-start pl-16">
-        {/* The vertical dotted line */}
-        <div className="absolute left-6 top-6 bottom-6 w-0.5 border-l-2 border-dashed border-neutral-700"></div>
-
-        {timelineData.steps.map((step: any) => (
-          <div key={step.id} className="relative w-full mb-8">
-            {/* Icon on the timeline */}
-            <div
-              className={`absolute -left-16 top-1 w-12 h-12 rounded-full flex items-center justify-center ${step.iconBgColor}`}
-            >
-              <img src={step.icon} alt="" className="w-6 h-6" />
-            </div>
-
-            {/* Content Card */}
-            <div className="bg-neutral-900 p-5 rounded-xl flex flex-col gap-3 ml-4 relative">
-              <div className="flex justify-between items-start">
-                <div>
-                  <h3 className="font-bold text-white text-lg">{step.title}</h3>
-                  <p className="text-gray-400 text-sm mt-1">
-                    {step.description}
-                  </p>
-                </div>
-                <div className="w-5 h-5 bg-neutral-700 rounded-full flex items-center justify-center text-gray-400 text-xs font-serif cursor-pointer">
-                  i
-                </div>
-              </div>
-              <div className="mt-2">{renderDetails(step.details)}</div>
-            </div>
-          </div>
-        ))}
+    <div className="p-8 ">
+      <div className=" inline-flex flex-col justify-start items-start gap-2 overflow-hidden">
+        <div className="self-stretch justify-start text-gray-400 text-base font-bold font-['Helvetica_Now_Display'] uppercase leading-normal tracking-widest">
+          AI Reasoning Timeline
+        </div>
+        <div className="self-stretch justify-start text-white text-base font-normal font-['Helvetica_Now_Display'] leading-normal">
+          Step-by-step breakdown of how the AI arrived at this recommendation
+        </div>
       </div>
     </div>
   );

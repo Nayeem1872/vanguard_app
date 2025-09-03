@@ -2,8 +2,8 @@ import React from "react";
 
 const DependencyImpact = () => {
   return (
-    <div className="p-8 ">
-      <div className="self-stretch  inline-flex flex-col justify-start items-start gap-2 overflow-hidden">
+    <div className="p-8 flex flex-col items-center justify-center">
+      <div className="w-full max-w-6xl flex flex-col justify-start items-start gap-2 overflow-hidden">
         <div className="self-stretch justify-start text-gray-400 text-base font-bold  uppercase leading-normal tracking-widest">
           System Dependencies
         </div>
@@ -13,8 +13,8 @@ const DependencyImpact = () => {
         </div>
       </div>
 
-      <div className="w-[1040px] mt-6 p-7 bg-zinc-950 rounded-[20px]  inline-flex flex-col justify-start items-start gap-5 overflow-hidden">
-        <div className="w-[980px] inline-flex justify-between items-center">
+      <div className="w-full max-w-6xl mt-6 p-7 bg-zinc-950 rounded-[20px] flex flex-col justify-start items-start gap-5 overflow-hidden">
+        <div className="w-full flex justify-between items-center">
           <div className="flex justify-start items-center gap-4">
             <div className="justify-start text-gray-400 text-sm font-bold  leading-tight">
               Filter by:
@@ -116,7 +116,7 @@ const DependencyImpact = () => {
             </div>
           </div>
           <img src="/icons/arrowright.svg" />
-          <div className="w-52 h-36 p-5 bg-neutral-800 rounded-tl-2xl rounded-bl-2xl inline-flex flex-col justify-center items-start gap-3">
+          <div className="w-80 h-36 p-5 bg-neutral-800 rounded-2xl inline-flex flex-col justify-center items-start gap-3">
             <div className="self-stretch flex flex-col justify-start items-start gap-2">
               <div className="self-stretch justify-start text-white text-base font-bold  leading-tight">
                 Zone 3
@@ -137,7 +137,7 @@ const DependencyImpact = () => {
       </div>
 
       {/* Dependency Impact Analysis */}
-      <div className="w-[1040px] mt-6 inline-flex flex-col justify-start items-start gap-5 overflow-hidden">
+      <div className="w-full max-w-6xl mt-6 flex flex-col justify-start items-start gap-5 overflow-hidden">
         <div className="self-stretch justify-start text-gray-400 text-base font-bold  uppercase leading-normal tracking-widest">
           Dependency Impact Analysis
         </div>
