@@ -1,244 +1,228 @@
 import React from "react";
 
-const riskData = {
-  executionRiskLevel: {
-    title: "EXECUTION RISK LEVEL",
-    subtitle: "Based on 7 operational factors",
-    levels: [
-      {
-        name: "Low",
-        value: "25%",
-        colorClass: "text-green-400",
-        borderColorClass: "border-green-400",
-      },
-      {
-        name: "Medium",
-        value: "57.78%",
-        colorClass: "text-yellow-400",
-        borderColorClass: "border-yellow-400",
-      },
-      {
-        name: "High",
-        value: "100%",
-        colorClass: "text-red-500",
-        borderColorClass: "border-red-500",
-      },
-    ],
-  },
-  riskContributors: {
-    title: "RISK CONTRIBUTORS",
-    contributors: [
-      {
-        id: 1,
-        title: "Moderate change management required",
-        description: "Warehouse staff will need training on new system",
-        icon: "/icons/risk-contributor-1.svg",
-        tag: {
-          text: "MEDIUM",
-          bgClass: "bg-yellow-800",
-          textClass: "text-yellow-200",
-        },
-        cardBgClass: "bg-yellow-900/40",
-      },
-      {
-        id: 2,
-        title: "System integration complexity",
-        description: "Compatible with existing ERP infrastructure",
-        icon: "/icons/risk-contributor-2.svg",
-        tag: {
-          text: "LOW",
-          bgClass: "bg-green-800",
-          textClass: "text-green-200",
-        },
-        cardBgClass: "bg-teal-900/40",
-      },
-      {
-        id: 3,
-        title: "Departmental alignment",
-        description: "Requires coordination between Operations and IT",
-        icon: "/icons/risk-contributor-3.svg",
-        tag: {
-          text: "HIGH RISK",
-          bgClass: "bg-red-800",
-          textClass: "text-red-200",
-        },
-        cardBgClass: "bg-red-900/40",
-      },
-    ],
-  },
-  mitigationPlan: {
-    title: "MITIGATION PLAN IDENTIFIED",
-    status: {
-      text: "MITIGATION ACTIVE",
-      bgClass: "bg-blue-600",
-      textClass: "text-white",
-    },
-    items: [
-      {
-        id: 1,
-        title: "Phased rollout schedule",
-        description:
-          "Implementation divided into 3 phases over 12 weeks to minimize operational disruption",
-        icon: "/icons/mitigation-plan-1.svg",
-      },
-      {
-        id: 2,
-        title: "Department-level change ownership",
-        description:
-          "Designated champions in each department to facilitate adoption and feedback",
-        icon: "/icons/mitigation-plan-2.svg",
-      },
-      {
-        id: 3,
-        title: "Monitoring dashboards enabled",
-        description:
-          "Real-time KPI tracking to identify and address performance issues early",
-        icon: "/icons/mitigation-plan-3.svg",
-      },
-      {
-        id: 4,
-        title: "Rollback mechanism available",
-        description:
-          "Parallel systems maintained for first 30 days to enable quick reversion if needed",
-        icon: "/icons/mitigation-plan-4.svg",
-      },
-    ],
-  },
-};
-
 const RiskAnalysis = () => {
-  const { executionRiskLevel, riskContributors, mitigationPlan } = riskData;
-
   return (
-    <div className="p-8 bg-black text-white font-sans flex flex-col gap-12">
+    <div className="p-8 ">
       {/* Top Section: Risk Level & Contributors */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Execution Risk Level */}
-        <div className="self-stretch self-stretch p-5 bg-zinc-950 rounded-[20px] border-gray-200 inline-flex flex-col justify-center items-start gap-2.5">
-          <div className="inline-flex justify-start items-center gap-12">
-            <div className="w-36 h-36 relative">
-              <img src="/icons/4 Doughnut.png" />
-            </div>
-            <div className="w-48 inline-flex flex-col justify-start items-start gap-2">
-              <div className="self-stretch inline-flex justify-start items-start gap-10 flex-wrap content-start">
-                <div className="flex justify-start items-center gap-2.5">
-                  <div className="w-[3px] self-stretch relative bg-green-400 rounded-sm" />
-                  <div className="self-stretch inline-flex flex-col justify-center items-start">
-                    <div className="justify-start text-Color-neutral-09/90 text-sm font-normal font-['Helvetica_Now_Display']">
-                      Low
-                    </div>
-                    <div className="inline-flex justify-start items-center gap-0.5">
-                      <div className="justify-start text-green-400 text-2xl font-normal font-['Helvetica_Now_Display']">
-                        25
-                      </div>
-                      <div className="w-2.5 h-2.5 opacity-50 justify-start text-Color-neutral-09/90 text-xs font-normal font-['Helvetica_Now_Display'] leading-3">
-                        %
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex justify-start items-center gap-2.5">
-                  <div className="w-[3px] self-stretch relative bg-amber-400 rounded-sm" />
-                  <div className="self-stretch inline-flex flex-col justify-center items-start">
-                    <div className="justify-start text-Color-neutral-09/90 text-sm font-normal font-['Helvetica_Now_Display']">
-                      Medium
-                    </div>
-                    <div className="inline-flex justify-start items-center gap-0.5">
-                      <div className="justify-start text-amber-400/90 text-2xl font-normal font-['Helvetica_Now_Display']">
-                        57.78%
-                      </div>
-                      <div className="w-2.5 h-2.5 opacity-50 justify-start text-Color-neutral-09/90 text-xs font-normal font-['Helvetica_Now_Display'] leading-3">
-                        %
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex justify-start items-center gap-2.5">
-                  <div className="w-[3px] self-stretch relative bg-red-500 rounded-sm" />
-                  <div className="self-stretch inline-flex flex-col justify-center items-start">
-                    <div className="justify-start text-Color-neutral-09/90 text-sm font-normal font-['Helvetica_Now_Display']">
-                      High
-                    </div>
-                    <div className="inline-flex justify-start items-center gap-0.5">
-                      <div className="justify-start text-red-500/90 text-2xl font-normal font-['Helvetica_Now_Display']">
-                        100%
-                      </div>
-                      <div className="w-2.5 h-2.5 opacity-50 justify-start text-Color-neutral-09/90 text-xs font-normal font-['Helvetica_Now_Display'] leading-3">
-                        %
-                      </div>
-                    </div>
-                  </div>
-                </div>
+      <div className="inline-flex justify-start items-center gap-5 mx-auto">
+        <div className=" inline-flex flex-col justify-start items-start gap-5 overflow-hidden">
+          <div className="self-stretch justify-start text-gray-400 text-base font-bold  uppercase leading-normal tracking-widest">
+            Execution Risk Level
+          </div>
+          <div className="self-stretch flex-1 px-5 py-10 bg-zinc-950 rounded-[20px] border-gray-200 flex flex-col justify-center items-start gap-2.5">
+            <div className="inline-flex justify-start items-center gap-12">
+              <div className="w-36 h-36 relative">
+                <img src="/icons/4 Doughnut.png" />
               </div>
-              <div className="self-stretch justify-start text-gray-400 text-sm font-normal font-['Helvetica_Now_Display']">
-                Based on 7 operational factors
+              <div className="w-56 inline-flex flex-col justify-start items-start gap-2">
+                <div className="self-stretch inline-flex justify-start items-start gap-10 flex-wrap content-start">
+                  <div className="flex justify-start items-center gap-2.5">
+                    <div className="w-[3px] self-stretch relative bg-green-400 rounded-sm" />
+                    <div className="self-stretch inline-flex flex-col justify-center items-start">
+                      <div className="justify-start text-Color-neutral-09/90 text-sm font-normal ">
+                        Low
+                      </div>
+                      <div className="inline-flex justify-start items-center gap-0.5">
+                        <div className="justify-start text-green-400 text-2xl font-normal ">
+                          25
+                        </div>
+                        <div className="w-2.5 h-2.5 opacity-50 justify-start text-Color-neutral-09/90 text-xs font-normal  leading-3">
+                          %
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex justify-start items-center gap-2.5">
+                    <div className="w-[3px] self-stretch relative bg-amber-400 rounded-sm" />
+                    <div className="self-stretch inline-flex flex-col justify-center items-start">
+                      <div className="justify-start text-Color-neutral-09/90 text-sm font-normal ">
+                        Medium
+                      </div>
+                      <div className="inline-flex justify-start items-center gap-0.5">
+                        <div className="justify-start text-amber-400/90 text-2xl font-normal ">
+                          57.78%
+                        </div>
+                        <div className="w-2.5 h-2.5 opacity-50 justify-start text-Color-neutral-09/90 text-xs font-normal  leading-3">
+                          %
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex justify-start items-center gap-2.5">
+                    <div className="w-[3px] self-stretch relative bg-red-500 rounded-sm" />
+                    <div className="self-stretch inline-flex flex-col justify-center items-start">
+                      <div className="justify-start text-Color-neutral-09/90 text-sm font-normal ">
+                        High
+                      </div>
+                      <div className="inline-flex justify-start items-center gap-0.5">
+                        <div className="justify-start text-red-500/90 text-2xl font-normal ">
+                          100%
+                        </div>
+                        <div className="w-2.5 h-2.5 opacity-50 justify-start text-Color-neutral-09/90 text-xs font-normal  leading-3">
+                          %
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="self-stretch justify-start text-gray-400 text-sm font-normal ">
+                  Based on 7 operational factors
+                </div>
               </div>
             </div>
           </div>
         </div>
-
-        {/* Risk Contributors */}
-        <div>
-          <h2 className="text-gray-400 text-sm font-bold uppercase tracking-widest mb-4">
-            {riskContributors.title}
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {riskContributors.contributors.map((contributor) => (
-              <div
-                key={contributor.id}
-                className={`p-5 rounded-2xl flex flex-col justify-between ${contributor.cardBgClass}`}
-              >
-                <div>
-                  <img
-                    src={contributor.icon}
-                    alt=""
-                    className="w-8 h-8 mb-4 opacity-70"
-                  />
-                  <h3 className="font-bold text-white mb-2">
-                    {contributor.title}
-                  </h3>
-                  <p className="text-gray-300 text-sm mb-4">
-                    {contributor.description}
-                  </p>
-                </div>
-                <div
-                  className={`px-3 py-1 rounded-full text-xs font-bold self-start ${contributor.tag.bgClass} ${contributor.tag.textClass}`}
-                >
-                  {contributor.tag.text}
+        <div className="w-[592px] inline-flex flex-col justify-start items-start gap-5">
+          <div className="self-stretch h-6 justify-start text-gray-400 text-base font-bold  uppercase leading-normal tracking-widest">
+            Risk Contributors
+          </div>
+          <div className="self-stretch inline-flex justify-start items-start gap-5">
+            <div className="flex-1 self-stretch p-5 bg-stone-900 rounded-2xl outline outline-[0.50px] outline-offset-[-0.50px] outline-neutral-600 inline-flex flex-col justify-start items-start gap-3">
+              <div className="self-stretch flex flex-col justify-start items-start gap-3">
+                <img src="/icons/swap_driving_apps_wheel.svg" />
+                <div className="self-stretch flex flex-col justify-start items-start gap-2">
+                  <div className="self-stretch justify-start text-white text-base font-bold  leading-tight">
+                    Moderate change management required
+                  </div>
+                  <div className="self-stretch justify-start text-gray-400 text-sm font-medium  leading-none">
+                    Warehouse staff will need training on new system
+                  </div>
                 </div>
               </div>
-            ))}
+              <div className="h-7 px-5 py-2.5 bg-yellow-900 rounded-[60px] inline-flex justify-center items-center gap-2.5">
+                <div className="justify-start text-white text-xs font-bold  uppercase leading-none">
+                  Medium
+                </div>
+              </div>
+            </div>
+            <div className="flex-1 self-stretch p-5 bg-zinc-900 rounded-2xl outline outline-[0.50px] outline-offset-[-0.50px] outline-neutral-600 inline-flex flex-col justify-between items-start">
+              <div className="self-stretch flex flex-col justify-start items-start gap-3">
+                <img src="/icons/linked_services.svg" />
+                <div className="self-stretch flex flex-col justify-start items-start gap-2">
+                  <div className="self-stretch justify-start text-white text-base font-bold  leading-tight">
+                    System integration complexity
+                  </div>
+                  <div className="self-stretch justify-start text-gray-400 text-sm font-medium  leading-none">
+                    Compatible with existing ERP infrastructure
+                  </div>
+                </div>
+              </div>
+              <div className="h-7 px-5 py-2.5 bg-teal-800 rounded-[60px] inline-flex justify-center items-center gap-2.5">
+                <div className="justify-start text-white text-xs font-bold  uppercase leading-none">
+                  Low
+                </div>
+              </div>
+            </div>
+            <div className="flex-1 self-stretch p-5 bg-stone-900 rounded-2xl outline outline-[0.50px] outline-offset-[-0.50px] outline-neutral-600 inline-flex flex-col justify-between items-start">
+              <div className="self-stretch flex flex-col justify-start items-start gap-3">
+                <img src="/icons/thumbs_up_double.svg" />
+                <div className="self-stretch flex flex-col justify-start items-start gap-2">
+                  <div className="self-stretch justify-start text-white text-base font-bold  leading-tight">
+                    Departmental alignment
+                  </div>
+                  <div className="self-stretch justify-start text-gray-400 text-sm font-medium  leading-none">
+                    Requires coordination between Operations and IT
+                  </div>
+                </div>
+              </div>
+              <div className="h-7 px-5 py-2.5 bg-red-900 rounded-[60px] inline-flex justify-center items-center gap-2.5">
+                <div className="justify-start text-white text-xs font-bold  uppercase leading-none">
+                  High Risk
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Mitigation Plan Section */}
-      <div>
-        <div className="flex items-center gap-4 mb-4">
-          <h2 className="text-gray-400 text-sm font-bold uppercase tracking-widest">
-            {mitigationPlan.title}
-          </h2>
-          <div
-            className={`px-3 py-1 rounded-md text-xs font-bold ${mitigationPlan.status.bgClass} ${mitigationPlan.status.textClass}`}
-          >
-            {mitigationPlan.status.text}
+      <div className="inline-flex flex-col justify-start items-start gap-5 overflow-hidden mt-10">
+        <div className="self-stretch inline-flex justify-start items-center gap-3">
+          <div className="justify-start text-gray-400 text-base font-bold  uppercase leading-normal tracking-widest">
+            Mitigation Plan Identified
+          </div>
+          <div className="h-6 px-5 py-2.5 bg-blue-900 rounded-[60px] flex justify-center items-center gap-2.5">
+            <div className="justify-start text-indigo-200 text-[10px] font-bold  uppercase leading-3">
+              Mitigation Active
+            </div>
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {mitigationPlan.items.map((item) => (
-            <div
-              key={item.id}
-              className="bg-neutral-800/80 p-5 rounded-2xl flex items-center gap-5"
-            >
-              <div className="bg-neutral-700 w-12 h-12 rounded-full flex-shrink-0 flex items-center justify-center">
-                <img src={item.icon} alt="" className="w-6 h-6" />
+        <div className="flex flex-col justify-start items-end gap-5">
+          <div className="w-full inline-flex justify-start items-start gap-5 flex-wrap content-start">
+            <div className="w-[520px] p-5 bg-neutral-800 rounded-2xl flex justify-start items-center gap-3">
+              <div className="w-12 h-12 relative bg-zinc-700 rounded-[60px] overflow-hidden">
+                <div className="w-7 h-7 left-[11px] top-[11px] absolute">
+                  <img src="/icons/clock.svg" />
+                </div>
               </div>
-              <div>
-                <h3 className="font-bold text-white">{item.title}</h3>
-                <p className="text-gray-400 text-sm">{item.description}</p>
+              <div className="flex-1 inline-flex flex-col justify-start items-start gap-2">
+                <div className="self-stretch justify-start text-white text-base font-bold  leading-tight">
+                  Phased rollout schedule
+                </div>
+                <div className="self-stretch justify-start text-gray-400 text-sm font-normal ">
+                  Implementation divided into 3 phases over 12 weeks to minimize
+                  operational disruption
+                </div>
               </div>
             </div>
-          ))}
+            <div className="w-[520px] p-5 bg-neutral-800 rounded-2xl flex justify-start items-center gap-3">
+              <div className="w-12 h-12 relative bg-zinc-700 rounded-[60px] overflow-hidden">
+                <div className="w-7 h-7 left-[11px] top-[11px] absolute">
+                  <img src="/icons/profile-tick.svg" />
+                </div>
+              </div>
+              <div className="flex-1 inline-flex flex-col justify-start items-start gap-2">
+                <div className="self-stretch justify-start text-white text-base font-bold  leading-tight">
+                  Department-level change ownership
+                </div>
+                <div className="self-stretch justify-start text-gray-400 text-sm font-normal ">
+                  Designated champions in each department to facilitate adoption
+                  and feedback
+                </div>
+              </div>
+            </div>
+            <div className="w-[520px] p-5 bg-neutral-800 rounded-2xl flex justify-start items-center gap-3">
+              <div className="w-12 h-12 relative bg-zinc-700 rounded-[60px] overflow-hidden">
+                <div className="w-7 h-7 left-[11px] top-[11px] absolute">
+                  <img src="/icons/status-up.svg" />
+                </div>
+              </div>
+              <div className="flex-1 inline-flex flex-col justify-start items-start gap-2">
+                <div className="self-stretch justify-start text-white text-base font-bold  leading-tight">
+                  Monitoring dashboards enabled
+                </div>
+                <div className="self-stretch justify-start text-gray-400 text-sm font-normal ">
+                  Real-time KPI tracking to identify and address performance
+                  issues early
+                </div>
+              </div>
+            </div>
+            <div className="w-[520px] p-5 bg-neutral-800 rounded-2xl flex justify-start items-center gap-3">
+              <div className="w-12 h-12 relative bg-zinc-700 rounded-[60px] overflow-hidden">
+                <div className="w-7 h-7 left-[11px] top-[11px] absolute">
+                  <img src="/icons/refresh-left-square.svg" />
+                </div>
+              </div>
+              <div className="flex-1 inline-flex flex-col justify-start items-start gap-2">
+                <div className="self-stretch justify-start text-white text-base font-bold  leading-tight">
+                  Rollback mechanism available
+                </div>
+                <div className="self-stretch justify-start text-gray-400 text-sm font-normal ">
+                  Parallel systems maintained for first 30 days to enable quick
+                  reversion if needed
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="w-80 h-12 px-10 py-5 rounded-[60px] shadow-[0px_40px_120px_0px_rgba(1,68,199,0.30)] outline outline-1 inline-flex justify-center items-center gap-2">
+            <div className="justify-start text-white text-base font-bold  leading-normal">
+              Compare with past performance
+            </div>
+            <div className="w-6 h-6 relative">
+              <div className="w-1.5 h-3 left-[14.43px] top-[5.93px] absolute outline outline-[1.50px] outline-offset-[-0.75px] outline-white" />
+              <div className="w-4 h-0 left-[3.50px] top-[12px] absolute outline outline-[1.50px] outline-offset-[-0.75px] outline-white" />
+              <div className="w-6 h-6 left-[24px] top-[24px] absolute origin-top-left -rotate-180 opacity-0" />
+            </div>
+          </div>
         </div>
       </div>
     </div>
