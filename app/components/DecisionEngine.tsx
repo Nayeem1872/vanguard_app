@@ -4,8 +4,10 @@ import Header from "./DecisionEngineComponent/Header";
 import Breadcrumb from "./DecisionEngineComponent/Breadcrumb";
 import Tabs from "./DecisionEngineComponent/Tabs";
 import MainContent from "./DecisionEngineComponent/MainContent";
+import KipImpactView from "../kip/KipImpactView";
 
 const DecisionEngine = () => {
+  const [activeTab, setActiveTab] = useState("dashboard");
   const [message, setMessage] = useState("");
   const [regionOpen, setRegionOpen] = useState(false);
   const [functionOpen, setFunctionOpen] = useState(false);
@@ -26,25 +28,30 @@ const DecisionEngine = () => {
     <div className="min-h-screen bg-dashboard relative overflow-hidden">
       <Header />
       <Breadcrumb />
-      <Tabs />
-      <MainContent
-        message={message}
-        setMessage={setMessage}
-        regionOpen={regionOpen}
-        setRegionOpen={setRegionOpen}
-        functionOpen={functionOpen}
-        setFunctionOpen={setFunctionOpen}
-        periodOpen={periodOpen}
-        setPeriodOpen={setPeriodOpen}
-        selectedRegion={selectedRegion}
-        setSelectedRegion={setSelectedRegion}
-        selectedFunction={selectedFunction}
-        setSelectedFunction={setSelectedFunction}
-        selectedPeriod={selectedPeriod}
-        setSelectedPeriod={setSelectedPeriod}
-        showRecommendations={showRecommendations}
-        handleGenerateRecommendations={handleGenerateRecommendations}
-      />
+      <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
+
+      {activeTab === "dashboard" ? (
+        <MainContent
+          message={message}
+          setMessage={setMessage}
+          regionOpen={regionOpen}
+          setRegionOpen={setRegionOpen}
+          functionOpen={functionOpen}
+          setFunctionOpen={setFunctionOpen}
+          periodOpen={periodOpen}
+          setPeriodOpen={setPeriodOpen}
+          selectedRegion={selectedRegion}
+          setSelectedRegion={setSelectedRegion}
+          selectedFunction={selectedFunction}
+          setSelectedFunction={setSelectedFunction}
+          selectedPeriod={selectedPeriod}
+          setSelectedPeriod={setSelectedPeriod}
+          showRecommendations={showRecommendations}
+          handleGenerateRecommendations={handleGenerateRecommendations}
+        />
+      ) : (
+        <KipImpactView />
+      )}
     </div>
   );
 };
