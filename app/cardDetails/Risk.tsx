@@ -2,9 +2,9 @@ import React from "react";
 
 const RiskAnalysis = () => {
   return (
-    <div className="p-8 ">
+    <div className="p-8 flex flex-col items-center justify-center">
       {/* Top Section: Risk Level & Contributors */}
-      <div className="inline-flex justify-start items-center gap-5 mx-auto">
+      <div className="inline-flex justify-start items-center gap-5">
         <div className=" inline-flex flex-col justify-start items-start gap-5 overflow-hidden">
           <div className="self-stretch justify-start text-gray-400 text-base font-bold  uppercase leading-normal tracking-widest">
             Execution Risk Level
@@ -135,19 +135,19 @@ const RiskAnalysis = () => {
         </div>
       </div>
 
-      <div className="inline-flex flex-col justify-start items-start gap-5 overflow-hidden mt-10">
-        <div className="self-stretch inline-flex justify-start items-center gap-3">
-          <div className="justify-start text-gray-400 text-base font-bold  uppercase leading-normal tracking-widest">
+      <div className="flex flex-col items-center gap-5 overflow-hidden mt-10 w-full max-w-6xl">
+        <div className="flex justify-center items-center gap-3 w-full">
+          <div className="text-gray-400 text-base font-bold uppercase leading-normal tracking-widest">
             Mitigation Plan Identified
           </div>
           <div className="h-6 px-5 py-2.5 bg-blue-900 rounded-[60px] flex justify-center items-center gap-2.5">
-            <div className="justify-start text-indigo-200 text-[10px] font-bold  uppercase leading-3">
+            <div className="text-indigo-200 text-[10px] font-bold uppercase leading-3">
               Mitigation Active
             </div>
           </div>
         </div>
-        <div className="flex flex-col justify-start items-end gap-5">
-          <div className="w-full inline-flex justify-start items-start gap-5 flex-wrap content-start">
+        <div className="flex flex-col items-center gap-5 w-full">
+          <div className="w-full flex justify-center items-start gap-5 flex-wrap">
             <div className="w-[520px] p-5 bg-neutral-800 rounded-2xl flex justify-start items-center gap-3">
               <div className="w-12 h-12 relative bg-zinc-700 rounded-[60px] overflow-hidden">
                 <div className="w-7 h-7 left-[11px] top-[11px] absolute">
@@ -213,14 +213,15 @@ const RiskAnalysis = () => {
               </div>
             </div>
           </div>
-          <div className="w-80 h-12 px-10 py-5 rounded-[60px] shadow-[0px_40px_120px_0px_rgba(1,68,199,0.30)] outline outline-1 inline-flex justify-center items-center gap-2">
-            <div className="justify-start text-white text-base font-bold  leading-normal">
-              Compare with past performance
-            </div>
-            <div className="w-6 h-6 relative">
-              <div className="w-1.5 h-3 left-[14.43px] top-[5.93px] absolute outline outline-[1.50px] outline-offset-[-0.75px] outline-white" />
-              <div className="w-4 h-0 left-[3.50px] top-[12px] absolute outline outline-[1.50px] outline-offset-[-0.75px] outline-white" />
-              <div className="w-6 h-6 left-[24px] top-[24px] absolute origin-top-left -rotate-180 opacity-0" />
+          <div className="flex justify-center w-full">
+            <div className="w-80 h-12 px-10 py-5 rounded-[60px] shadow-[0px_40px_120px_0px_rgba(1,68,199,0.30)] border border-gray-600 flex justify-center items-center gap-2">
+              <div className="text-white text-base font-bold leading-normal">
+                Compare with past performance
+              </div>
+              <div className="w-6 h-6 relative">
+                <div className="w-1.5 h-3 left-[14.43px] top-[5.93px] absolute border border-white" />
+                <div className="w-4 h-0 left-[3.50px] top-[12px] absolute border-t border-white" />
+              </div>
             </div>
           </div>
         </div>
