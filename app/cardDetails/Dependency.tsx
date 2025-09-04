@@ -1,6 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 
 const DependencyImpact = () => {
+  const [selectedCard, setSelectedCard] = useState<string | null>(null);
+
+  const handleCardClick = (cardName: string) => {
+    setSelectedCard(cardName === selectedCard ? null : cardName);
+  };
   return (
     <div className=" flex flex-col items-center justify-center">
       <div className="w-full max-w-6xl flex flex-col justify-start items-start gap-2 overflow-hidden">
@@ -44,10 +49,10 @@ const DependencyImpact = () => {
               </div>
 
               <div className="flex-1 relative">
-                <select className="w-full h-9 pl-5 pr-10 rounded-[60px] outline outline-1 outline-offset-[-1px] outline-gray-400 text-gray-400 text-xs font-bold leading-none appearance-none bg-transparent">
-                  <option>None</option>
-                  <option>Low Impact</option>
-                  <option>High Impact</option>
+                <select className="w-full h-9 pl-5 pr-10 rounded-[60px] outline outline-1 outline-offset-[-1px] outline-gray-400 text-white text-xs font-bold leading-none appearance-none bg-black">
+                  <option className="bg-black text-white">None</option>
+                  <option className="bg-black text-white">Low Impact</option>
+                  <option className="bg-black text-white">High Impact</option>
                 </select>
                 <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none">
                   <svg
@@ -72,63 +77,86 @@ const DependencyImpact = () => {
             </div>
           </div>
         </div>
-        <div className="self-stretch inline-flex justify-start items-center gap-5 flex-wrap content-center">
-          <div className="w-80 h-36 p-5 bg-neutral-800 rounded-2xl inline-flex flex-col justify-center items-start gap-3">
-            <div className="self-stretch flex flex-col justify-start items-start gap-2">
-              <div className="self-stretch justify-start text-white text-base font-bold  leading-tight">
-                Site B
-              </div>
-              <div className="self-stretch justify-start text-gray-400 text-sm font-normal ">
-                Regional distribution center with 14% excess capacity
-              </div>
-            </div>
-            <div className="inline-flex justify-start items-center gap-2">
-              <div className="h-7 px-5 py-2.5 bg-blue-900 rounded-[60px] flex justify-center items-center gap-1.5">
-                <div className="justify-start text-indigo-200 text-[10px] font-bold  uppercase leading-3">
-                  ERP
+        <div className="flex overflow-x-auto">
+          <div className="self-stretch inline-flex justify-start items-center gap-5 flex-wrap content-center">
+            <div
+              className={`w-80 h-36 p-5 bg-neutral-800 rounded-2xl inline-flex flex-col justify-center items-start gap-3 cursor-pointer transition-all duration-200 ${
+                selectedCard === "Site B"
+                  ? "border-2 border-red-500"
+                  : "border-2 border-transparent"
+              }`}
+              onClick={() => handleCardClick("Site B")}
+            >
+              <div className="self-stretch flex flex-col justify-start items-start gap-2">
+                <div className="self-stretch justify-start text-white text-base font-bold  leading-tight">
+                  Site B
+                </div>
+                <div className="self-stretch justify-start text-gray-400 text-sm font-normal ">
+                  Regional distribution center with 14% excess capacity
                 </div>
               </div>
-              <div className="h-7 px-5 py-2.5 bg-purple-900 rounded-[60px] flex justify-center items-center gap-1.5">
-                <div className="justify-start text-fuchsia-300 text-[10px] font-bold  uppercase leading-3">
-                  WMS
+              <div className="inline-flex justify-start items-center gap-2">
+                <div className="h-7 px-5 py-2.5 bg-blue-900 rounded-[60px] flex justify-center items-center gap-1.5">
+                  <div className="justify-start text-indigo-200 text-[10px] font-bold  uppercase leading-3">
+                    ERP
+                  </div>
                 </div>
-              </div>
-            </div>
-          </div>
-          <img src="/icons/arrowright.svg" />
-          <div className="w-80 h-36 p-5 bg-neutral-800 rounded-2xl inline-flex flex-col justify-center items-start gap-3">
-            <div className="self-stretch flex flex-col justify-start items-start gap-2">
-              <div className="self-stretch justify-start text-white text-base font-bold  leading-tight">
-                Receiving Dock
-              </div>
-              <div className="self-stretch justify-start text-gray-400 text-sm font-normal ">
-                8 bays with 37% bottleneck
-                <br />
-                occurrence
-              </div>
-            </div>
-            <div className="inline-flex justify-start items-center gap-2">
-              <div className="h-7 px-5 py-2.5 bg-blue-900 rounded-[60px] flex justify-center items-center gap-1.5">
-                <div className="justify-start text-indigo-200 text-[10px] font-bold  uppercase leading-3">
-                  ERP
+                <div className="h-7 px-5 py-2.5 bg-purple-900 rounded-[60px] flex justify-center items-center gap-1.5">
+                  <div className="justify-start text-fuchsia-300 text-[10px] font-bold  uppercase leading-3">
+                    WMS
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <img src="/icons/arrowright.svg" />
-          <div className="w-80 h-36 p-5 bg-neutral-800 rounded-2xl inline-flex flex-col justify-center items-start gap-3">
-            <div className="self-stretch flex flex-col justify-start items-start gap-2">
-              <div className="self-stretch justify-start text-white text-base font-bold  leading-tight">
-                Zone 3
+            <img src="/icons/arrowright.svg" />
+            <div
+              className={`w-80 h-36 p-5 bg-neutral-800 rounded-2xl inline-flex flex-col justify-center items-start gap-3 cursor-pointer transition-all duration-200 ${
+                selectedCard === "Receiving Dock"
+                  ? "border-2 border-red-500"
+                  : "border-2 border-transparent"
+              }`}
+              onClick={() => handleCardClick("Receiving Dock")}
+            >
+              <div className="self-stretch flex flex-col justify-start items-start gap-2">
+                <div className="self-stretch justify-start text-white text-base font-bold  leading-tight">
+                  Receiving Dock
+                </div>
+                <div className="self-stretch justify-start text-gray-400 text-sm font-normal ">
+                  8 bays with 37% bottleneck
+                  <br />
+                  occurrence
+                </div>
               </div>
-              <div className="self-stretch justify-start text-gray-400 text-sm font-normal ">
-                23% inefficiency due with excess capacity
+              <div className="inline-flex justify-start items-center gap-2">
+                <div className="h-7 px-5 py-2.5 bg-blue-900 rounded-[60px] flex justify-center items-center gap-1.5">
+                  <div className="justify-start text-indigo-200 text-[10px] font-bold  uppercase leading-3">
+                    ERP
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="inline-flex justify-start items-center gap-2">
-              <div className="h-7 px-5 py-2.5 bg-teal-800 rounded-[60px] flex justify-center items-center gap-1.5">
-                <div className="justify-start text-white text-[10px] font-bold  uppercase leading-3">
-                  HRIS
+            <img src="/icons/arrowright.svg" />
+            <div
+              className={`w-80 h-36 p-5 bg-neutral-800 rounded-2xl inline-flex flex-col justify-center items-start gap-3 cursor-pointer transition-all duration-200 ${
+                selectedCard === "Zone 3"
+                  ? "border-2 border-red-500"
+                  : "border-2 border-transparent"
+              }`}
+              onClick={() => handleCardClick("Zone 3")}
+            >
+              <div className="self-stretch flex flex-col justify-start items-start gap-2">
+                <div className="self-stretch justify-start text-white text-base font-bold  leading-tight">
+                  Zone 3
+                </div>
+                <div className="self-stretch justify-start text-gray-400 text-sm font-normal ">
+                  23% inefficiency due with excess capacity
+                </div>
+              </div>
+              <div className="inline-flex justify-start items-center gap-2">
+                <div className="h-7 px-5 py-2.5 bg-teal-800 rounded-[60px] flex justify-center items-center gap-1.5">
+                  <div className="justify-start text-white text-[10px] font-bold  uppercase leading-3">
+                    HRIS
+                  </div>
                 </div>
               </div>
             </div>
