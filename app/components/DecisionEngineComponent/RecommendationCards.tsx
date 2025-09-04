@@ -124,7 +124,7 @@ const RecommendationCards = ({
                 const baseBackgroundColor = getRiskBackgroundColor(rec.risk);
 
                 const cardHeight =
-                  isHovered || isSelected ? "h-[405px]" : "h-[390px]";
+                  isHovered || isSelected ? "h-[415px]" : "h-[390px]";
 
                 const cardDynamicStyles =
                   isHovered || isSelected

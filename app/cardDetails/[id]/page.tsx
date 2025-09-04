@@ -1,4 +1,6 @@
 "use client";
+"use client";
+
 import React, { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
@@ -19,6 +21,8 @@ const CardDetailsPage = () => {
   const [activeTab, setActiveTab] = useState("Overview");
   const [recommendationData, setRecommendationData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [videoStatus, setVideoStatus] = useState("loading");
+
   const [expandedPhases, setExpandedPhases] = useState<{
     [key: string]: boolean;
   }>({
@@ -74,14 +78,81 @@ const CardDetailsPage = () => {
   ];
 
   return (
-    <div
-      className="min-h-screen bg-cover bg-center bg-no-repeat text-white"
-      style={{ backgroundImage: "url('/images/BG.jpg')" }}
-    >
-      {/* Background image with overlay */}
-      <Header />
+    <div className="min-h-screen text-white relative overflow-hidden">
+      {/* Background Video */}
+      <video
+        ref={(video) => {
+          if (video) {
+            console.log("Video element created:", video);
+            console.log("Video src:", video.src);
+            console.log("Video readyState:", video.readyState);
+          }
+        }}
+        className="fixed inset-0 w-full h-full object-cover"
+        style={{ zIndex: -1 }}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        onError={(e) => {
+          console.error("Video failed to load:", e);
+          const video = e.target as HTMLVideoElement;
+          console.error("Error target:", video);
+          console.error("Error details:", video.error);
+          setVideoStatus(
+            "error - " + (video.error?.message || "Unknown error")
+          );
+        }}
+        onLoadStart={() => {
+          console.log("Video started loading");
+          setVideoStatus("loading");
+        }}
+        onCanPlay={() => {
+          console.log("Video can play");
+          setVideoStatus("ready");
+        }}
+        onLoadedData={() => {
+          console.log("Video data loaded");
+          setVideoStatus("loaded");
+        }}
+        onPlay={() => {
+          console.log("Video is playing");
+          setVideoStatus("playing");
+        }}
+        onLoadedMetadata={() => {
+          console.log("Video metadata loaded");
+        }}
+        onStalled={() => {
+          console.log("Video stalled");
+          setVideoStatus("stalled");
+        }}
+        onSuspend={() => {
+          console.log("Video suspended");
+          setVideoStatus("suspended");
+        }}
+      >
+        <source src="/video/bg.mp4" type="video/mp4" />
+        <source src="/video/bg.webm" type="video/webm" />
+        Your browser does not support the video tag.
+      </video>
 
-      <div className="relative z-10 bg-black/20 backdrop-blur-custom ">
+      {/* Fallback background */}
+      <div
+        className="fixed inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black"
+        style={{ zIndex: -2 }}
+      ></div>
+
+      {/* Dark overlay for better text readability */}
+      <div className="absolute inset-0 bg-black/30" style={{ zIndex: 1 }}></div>
+      <div className="relative" style={{ zIndex: 10 }}>
+        <Header />
+      </div>
+
+      <div
+        className="relative bg-black/20 backdrop-blur-sm"
+        style={{ zIndex: 10 }}
+      >
         <div className="flex justify-between px-24 py-4">
           <div
             className="flex items-center gap-3 text-sm cursor-pointer"
@@ -104,7 +175,10 @@ const CardDetailsPage = () => {
           </div>
         </div>
       </div>
-      <div className="relative z-10 max-w-7xl mx-auto px-4 py-4">
+      <div
+        className="relative max-w-7xl mx-auto px-4 py-4"
+        style={{ zIndex: 10 }}
+      >
         {/* Tabs */}
         <div className="flex justify-center mb-8">
           <div className="inline-flex justify-start items-center">

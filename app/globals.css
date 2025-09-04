@@ -19,12 +19,15 @@ body {
     Roboto, sans-serif;
 }
 
+/* Old image background - now using video background in component */
+/*
 .bg-dashboard {
   background-image: url("/images/BG.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }
+*/
 
 .backdrop-blur-custom {
   backdrop-filter: blur(10px);
