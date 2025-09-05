@@ -304,7 +304,7 @@ const ROI = ({ recommendationData }: ROIProps) => {
   return (
     <div className="w-full flex flex-col gap-8">
       {/* Main Chart Container */}
-      <div className="w-[1040px] h-96 relative bg-zinc-950 rounded-[30px] overflow-hidden mx-auto">
+      <div className="w-[1040px] h-[420px] relative bg-zinc-950 rounded-[30px] overflow-hidden mx-auto">
         <div className="w-[601px] left-[21px] top-[20px] absolute inline-flex justify-between items-center">
           <div className="flex-1 inline-flex flex-col justify-start items-start">
             <div className="self-stretch justify-start text-white text-base font-bold font-helvetica-now">
