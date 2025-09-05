@@ -34,7 +34,7 @@ const DecisionEngine = () => {
         {videoStatus !== "error" && (
           <video
             className="w-full h-full object-cover"
-            style={{ filter: "brightness(0.5) contrast(1.2)" }}
+            style={{ filter: "brightness(0.3) contrast(1.2)" }}
             autoPlay
             muted
             loop

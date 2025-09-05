@@ -1,3 +1,4 @@
+/** @jsxImportSource react */
 "use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
@@ -82,7 +83,8 @@ const getStatus = (status: string) => {
 const PhaseContent = ({ phase }: { phase: any }) => {
   const hasContent = phase.content && phase.content.length > 0;
 
-  // Available icons to cycle through
+  console.log("phase", phase);
+
   const availableIcons = [
     "/icons/p3.svg",
     "/icons/p4.svg",
@@ -285,15 +287,18 @@ const ActionPlan = ({ recommendationData }: ActionPlanProps) => {
   const timelinePhases = timeline?.phases || [];
 
   // Handle root cause analysis - check if it's an object or string
-  const rootCauseText =
+  const rootCauseContent =
     typeof rootCauseAnalysis === "string"
-      ? rootCauseAnalysis
+      ? [rootCauseAnalysis]
       : rootCauseAnalysis?.content
       ? Array.isArray(rootCauseAnalysis.content)
-        ? rootCauseAnalysis.content.join("\n\n")
-        : rootCauseAnalysis.content
-      : rootCauseAnalysis?.text ||
-        "Details from the 5 Whys analysis will be displayed here to provide context on the identified root cause of the issue.";
+        ? rootCauseAnalysis.content
+        : [rootCauseAnalysis.content]
+      : rootCauseAnalysis?.text
+      ? [rootCauseAnalysis.text]
+      : [
+          "Details from the 5 Whys analysis will be displayed here to provide context on the identified root cause of the issue.",
+        ];
 
   const [expandedItems, setExpandedItems] = useState<{
     [key: string]: boolean;
@@ -365,7 +370,25 @@ const ActionPlan = ({ recommendationData }: ActionPlanProps) => {
           {expandedItems.rootCause && (
             <>
               <div className="self-stretch h-px bg-neutral-600" />
-              <div className="self-stretch text-gray-400">{rootCauseText}</div>
+              <div className="self-stretch flex flex-col gap-4">
+                {rootCauseContent.map((item: string, index: number) => (
+                  <div
+                    key={index}
+                    className="p-4 bg-neutral-800 rounded-lg border border-neutral-700"
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="flex-shrink-0 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                        <span className="text-white text-sm font-bold">
+                          {index + 1}
+                        </span>
+                      </div>
+                      <div className="flex-1 text-gray-300 text-sm font-normal font-helvetica-now leading-relaxed">
+                        {item}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </>
           )}
         </div>

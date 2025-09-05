@@ -81,15 +81,9 @@ const CardDetailsPage = () => {
     <div className="min-h-screen text-white relative overflow-hidden">
       {/* Background Video */}
       <video
-        ref={(video) => {
-          if (video) {
-            console.log("Video element created:", video);
-            console.log("Video src:", video.src);
-            console.log("Video readyState:", video.readyState);
-          }
-        }}
+        ref={(video) => {}}
         className="fixed inset-0 w-full h-full object-cover"
-        style={{ zIndex: -1, filter: "brightness(0.5) contrast(1.2)" }}
+        style={{ zIndex: -1, filter: "brightness(0.3) contrast(1.2)" }}
         autoPlay
         muted
         loop
