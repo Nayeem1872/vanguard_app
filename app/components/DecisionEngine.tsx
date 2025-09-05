@@ -29,55 +29,56 @@ const DecisionEngine = () => {
     <div className="min-h-screen relative overflow-hidden">
       {/* Background Video */}
       {/* Background Video */}
-      <video
-        className="fixed inset-0 w-full h-full object-cover"
-        style={{ zIndex: -1 }}
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
-        onError={(e) => {
-          console.error("DecisionEngine video failed to load:", e);
-          setVideoStatus("error");
-        }}
-        onLoadStart={() => {
-          console.log("DecisionEngine video started loading");
-          setVideoStatus("loading");
-        }}
-        onCanPlay={() => {
-          console.log("DecisionEngine video can play");
-          setVideoStatus("ready");
-        }}
-        onLoadedData={() => {
-          console.log("DecisionEngine video data loaded");
-          setVideoStatus("loaded");
-        }}
-        onPlay={() => {
-          console.log("DecisionEngine video is playing");
-          setVideoStatus("playing");
-        }}
-        onEnded={() => {
-          console.log("DecisionEngine video ended, restarting...");
-          const video = document.querySelector("video");
-          if (video) video.play();
-        }}
-      >
-        <source src="/video/bg.webm" type="video/webm" />
-        Your browser does not support the video tag.
-      </video>
+      {/* Video Container with Overlay */}
+      <div className="fixed inset-0" style={{ zIndex: -1 }}>
+        {videoStatus !== "error" && (
+          <video
+            className="w-full h-full object-cover"
+            style={{ filter: "brightness(0.5) contrast(1.2)" }}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            onError={(e) => {
+              console.error("DecisionEngine video failed to load:", e);
+              setVideoStatus("error");
+            }}
+            onLoadStart={() => {
+              console.log("DecisionEngine video started loading");
+              setVideoStatus("loading");
+            }}
+            onCanPlay={() => {
+              console.log("DecisionEngine video can play");
+              setVideoStatus("ready");
+            }}
+            onLoadedData={() => {
+              console.log("DecisionEngine video data loaded");
+              setVideoStatus("loaded");
+            }}
+            onPlay={() => {
+              console.log("DecisionEngine video is playing");
+              setVideoStatus("playing");
+            }}
+            onEnded={() => {
+              console.log("DecisionEngine video ended, restarting...");
+              const video = document.querySelector("video");
+              if (video) video.play();
+            }}
+          >
+            <source src="/video/bg.webm" type="video/webm" />
+            <source src="/video/bg.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        )}
 
-      {/* Fallback background */}
-      <div
-        className="fixed inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black"
-        style={{ zIndex: -20 }}
-      ></div>
+        {/* Fallback background when video fails */}
+        {videoStatus === "error" && (
+          <div className="w-full h-full bg-gradient-to-br from-gray-900 via-black to-gray-800"></div>
+        )}
+      </div>
 
       {/* Dark overlay for better text readability */}
-      <div
-        className="absolute inset-0 bg-black/90"
-        style={{ zIndex: -5 }}
-      ></div>
 
       {/* Content */}
       <div className="relative" style={{ zIndex: 10 }}>

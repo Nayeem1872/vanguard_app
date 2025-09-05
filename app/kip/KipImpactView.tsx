@@ -1,6 +1,66 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 
 const KipImpactView = () => {
+  // State for slider values
+  const [laborEfficiency, setLaborEfficiency] = useState(12); // 12%
+  const [materialCosts, setMaterialCosts] = useState(8.5); // 8.5K
+  const [vendorCount, setVendorCount] = useState(3); // 3 vendors
+  const [overtimeHours, setOvertimeHours] = useState(48); // 48%
+
+  // Calculate position for slider handles (percentage of track width)
+  const getSliderPosition = (
+    value: number,
+    max: number,
+    trackWidth: number
+  ) => {
+    return (value / max) * trackWidth;
+  };
+
+  // Handle slider drag functionality with improved error handling
+  const handleSliderDrag = (
+    e: React.MouseEvent,
+    setValue: (value: number) => void,
+    max: number,
+    trackWidth: number
+  ) => {
+    const target = e.currentTarget as HTMLElement;
+    if (!target) return;
+
+    const rect = target.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const percentage = Math.max(0, Math.min(1, x / trackWidth));
+    const newValue = Math.round(percentage * max * 10) / 10;
+    setValue(newValue);
+  };
+
+  // Improved mouse down handler with better error handling
+  const handleMouseDown = (
+    e: React.MouseEvent,
+    setValue: (value: number) => void,
+    max: number,
+    trackWidth: number
+  ) => {
+    e.preventDefault();
+    const track = e.currentTarget.parentElement?.parentElement as HTMLElement;
+    if (!track) return;
+
+    const handleMouseMove = (moveEvent: MouseEvent) => {
+      const rect = track.getBoundingClientRect();
+      const x = moveEvent.clientX - rect.left;
+      const percentage = Math.max(0, Math.min(1, x / trackWidth));
+      const newValue = Math.round(percentage * max * 10) / 10;
+      setValue(newValue);
+    };
+
+    const handleMouseUp = () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+  };
   return (
     <div className="relative z-10 flex flex-col items-center justify-center px-8 mt-16">
       <div className="max-w-7xl w-full">
@@ -17,12 +77,37 @@ const KipImpactView = () => {
                       Labor Efficiency
                     </div>
                     <div className="text-right justify-start text-green-500 text-sm font-medium ">
-                      +12%
+                      +{laborEfficiency}%
                     </div>
                   </div>
-                  <div className="self-stretch h-2 relative bg-white/10 rounded-[40px]">
-                    <div className="w-36 h-2 left-0 top-0 absolute bg-blue-500 rounded-[60px] shadow-[0px_40px_120px_0px_rgba(1,68,199,0.30)]">
-                      <div className="w-6 h-6 left-[119px] top-[-9px] absolute bg-white rounded-[60px] shadow-[0px_2px_4px_0px_rgba(0,0,0,0.10)] border-8 border-blue-700" />
+                  <div
+                    className="self-stretch h-2 relative bg-white/10 rounded-[40px] cursor-pointer transition-all duration-150 ease-out"
+                    onClick={(e) =>
+                      handleSliderDrag(e, setLaborEfficiency, 25, 256)
+                    }
+                  >
+                    <div
+                      className="h-2 absolute left-0 top-0 bg-blue-500 rounded-[60px] shadow-[0px_40px_120px_0px_rgba(1,68,199,0.30)] transition-all duration-150 ease-out"
+                      style={{
+                        width: `${getSliderPosition(
+                          laborEfficiency,
+                          25,
+                          256
+                        )}px`,
+                      }}
+                    >
+                      <div
+                        className="w-6 h-6 absolute bg-white rounded-[60px] shadow-[0px_2px_4px_0px_rgba(0,0,0,0.10)] border-8 border-blue-700 cursor-grab active:cursor-grabbing transition-all duration-150 ease-out hover:scale-110"
+                        style={{
+                          left: `${
+                            getSliderPosition(laborEfficiency, 25, 256) - 12
+                          }px`,
+                          top: "-9px",
+                        }}
+                        onMouseDown={(e) =>
+                          handleMouseDown(e, setLaborEfficiency, 25, 256)
+                        }
+                      />
                     </div>
                   </div>
                   <div className="self-stretch h-5 inline-flex justify-between items-center">
@@ -40,12 +125,33 @@ const KipImpactView = () => {
                       Material Costs
                     </div>
                     <div className="text-right justify-start text-red-500 text-sm font-medium ">
-                      -$8.5K
+                      -${materialCosts}K
                     </div>
                   </div>
-                  <div className="self-stretch h-2 relative bg-white/10 rounded-[40px]">
-                    <div className="w-20 h-2 left-0 top-0 absolute bg-blue-500 rounded-[60px] shadow-[0px_40px_120px_0px_rgba(1,68,199,0.30)]">
-                      <div className="w-6 h-6 left-[59px] top-[-9px] absolute bg-white rounded-[60px] shadow-[0px_2px_4px_0px_rgba(0,0,0,0.10)] border-8 border-blue-700" />
+                  <div
+                    className="self-stretch h-2 relative bg-white/10 rounded-[40px] cursor-pointer transition-all duration-150 ease-out"
+                    onClick={(e) =>
+                      handleSliderDrag(e, setMaterialCosts, 20, 256)
+                    }
+                  >
+                    <div
+                      className="h-2 absolute left-0 top-0 bg-blue-500 rounded-[60px] shadow-[0px_40px_120px_0px_rgba(1,68,199,0.30)] transition-all duration-150 ease-out"
+                      style={{
+                        width: `${getSliderPosition(materialCosts, 20, 256)}px`,
+                      }}
+                    >
+                      <div
+                        className="w-6 h-6 absolute bg-white rounded-[60px] shadow-[0px_2px_4px_0px_rgba(0,0,0,0.10)] border-8 border-blue-700 cursor-grab active:cursor-grabbing transition-all duration-150 ease-out hover:scale-110"
+                        style={{
+                          left: `${
+                            getSliderPosition(materialCosts, 20, 256) - 12
+                          }px`,
+                          top: "-9px",
+                        }}
+                        onMouseDown={(e) =>
+                          handleMouseDown(e, setMaterialCosts, 20, 256)
+                        }
+                      />
                     </div>
                   </div>
                   <div className="self-stretch h-5 inline-flex justify-between items-center">
@@ -63,12 +169,33 @@ const KipImpactView = () => {
                       Vendor Count
                     </div>
                     <div className="text-right justify-start text-red-500 text-sm font-medium ">
-                      -3
+                      -{vendorCount}
                     </div>
                   </div>
-                  <div className="self-stretch h-2 relative bg-white/10 rounded-[40px]">
-                    <div className="w-12 h-2 left-0 top-0 absolute bg-blue-500 rounded-[60px] shadow-[0px_40px_120px_0px_rgba(1,68,199,0.30)]">
-                      <div className="w-6 h-6 left-[21px] top-[-9px] absolute bg-white rounded-[60px] shadow-[0px_2px_4px_0px_rgba(0,0,0,0.10)] border-8 border-blue-700" />
+                  <div
+                    className="self-stretch h-2 relative bg-white/10 rounded-[40px] cursor-pointer transition-all duration-150 ease-out"
+                    onClick={(e) =>
+                      handleSliderDrag(e, setVendorCount, 10, 256)
+                    }
+                  >
+                    <div
+                      className="h-2 absolute left-0 top-0 bg-blue-500 rounded-[60px] shadow-[0px_40px_120px_0px_rgba(1,68,199,0.30)] transition-all duration-150 ease-out"
+                      style={{
+                        width: `${getSliderPosition(vendorCount, 10, 256)}px`,
+                      }}
+                    >
+                      <div
+                        className="w-6 h-6 absolute bg-white rounded-[60px] shadow-[0px_2px_4px_0px_rgba(0,0,0,0.10)] border-8 border-blue-700 cursor-grab active:cursor-grabbing transition-all duration-150 ease-out hover:scale-110"
+                        style={{
+                          left: `${
+                            getSliderPosition(vendorCount, 10, 256) - 12
+                          }px`,
+                          top: "-9px",
+                        }}
+                        onMouseDown={(e) =>
+                          handleMouseDown(e, setVendorCount, 10, 256)
+                        }
+                      />
                     </div>
                   </div>
                   <div className="self-stretch h-5 inline-flex justify-between items-center">
@@ -86,12 +213,37 @@ const KipImpactView = () => {
                       Overtime Hours
                     </div>
                     <div className="text-right justify-start text-green-500 text-sm font-medium ">
-                      48%
+                      {overtimeHours}%
                     </div>
                   </div>
-                  <div className="self-stretch h-2 relative bg-white/10 rounded-[40px]">
-                    <div className="w-44 h-2 left-0 top-0 absolute bg-blue-500 rounded-[60px] shadow-[0px_40px_120px_0px_rgba(1,68,199,0.30)]">
-                      <div className="w-6 h-6 left-[153px] top-[-9px] absolute bg-white rounded-[60px] shadow-[0px_2px_4px_0px_rgba(0,0,0,0.10)] border-8 border-blue-700" />
+                  <div
+                    className="self-stretch h-2 relative bg-white/10 rounded-[40px] cursor-pointer transition-all duration-150 ease-out"
+                    onClick={(e) =>
+                      handleSliderDrag(e, setOvertimeHours, 100, 256)
+                    }
+                  >
+                    <div
+                      className="h-2 absolute left-0 top-0 bg-blue-500 rounded-[60px] shadow-[0px_40px_120px_0px_rgba(1,68,199,0.30)] transition-all duration-150 ease-out"
+                      style={{
+                        width: `${getSliderPosition(
+                          overtimeHours,
+                          100,
+                          256
+                        )}px`,
+                      }}
+                    >
+                      <div
+                        className="w-6 h-6 absolute bg-white rounded-[60px] shadow-[0px_2px_4px_0px_rgba(0,0,0,0.10)] border-8 border-blue-700 cursor-grab active:cursor-grabbing transition-all duration-150 ease-out hover:scale-110"
+                        style={{
+                          left: `${
+                            getSliderPosition(overtimeHours, 100, 256) - 12
+                          }px`,
+                          top: "-9px",
+                        }}
+                        onMouseDown={(e) =>
+                          handleMouseDown(e, setOvertimeHours, 100, 256)
+                        }
+                      />
                     </div>
                   </div>
                   <div className="self-stretch h-5 inline-flex justify-between items-center">
@@ -99,7 +251,7 @@ const KipImpactView = () => {
                       0%
                     </div>
                     <div className="text-right justify-start text-gray-400 text-xs font-medium ">
-                      30%
+                      100%
                     </div>
                   </div>
                 </div>

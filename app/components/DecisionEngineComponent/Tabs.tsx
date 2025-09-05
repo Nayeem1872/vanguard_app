@@ -36,7 +36,7 @@ const Tabs = ({ activeTab, setActiveTab }: TabsProps) => {
               activeTab === "kip" ? "text-white" : "text-gray-400"
             }`}
           >
-            KIP Impact View
+            KPI Impact View
           </span>
         </div>
       </div>

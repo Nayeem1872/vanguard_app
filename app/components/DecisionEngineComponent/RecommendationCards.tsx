@@ -47,22 +47,36 @@ const RecommendationCards = ({
   const [selectedCards, setSelectedCards] = useState<number[]>([]);
   const [showComparisonDialog, setShowComparisonDialog] = useState(false);
 
-  // Helper function to get background color based on risk level
-  const getRiskBackgroundColor = (risk: string) => {
-    const riskLower = risk.toLowerCase();
-    if (riskLower.includes("low")) {
-      return "rgba(17, 56, 45, 0.40)";
-    } else if (riskLower.includes("medium")) {
-      return "rgba(107, 70, 31, 0.20)";
-    } else if (riskLower.includes("high")) {
-      return "rgba(107, 31, 32, 0.20)";
+  // Helper function to convert Tailwind bg class to CSS color
+  const getBackgroundColorFromTailwind = (bgClass: string) => {
+    // Extract hex color from bg-[#color] format
+    const hexMatch = bgClass.match(/bg-\[#([a-fA-F0-9]{6})\]/);
+    if (hexMatch) {
+      return `#${hexMatch[1]}`;
     }
-    return "rgba(17, 56, 45, 0.40)"; // default to low risk color
+
+    // Handle specific Tailwind color classes from API response
+    const colorMap: { [key: string]: string } = {
+      "bg-[#261718]": "#261718",
+      "bg-[#19120A]": "#19120A",
+      "bg-[#0A1918]": "#0A1918",
+    };
+
+    if (colorMap[bgClass]) {
+      return colorMap[bgClass];
+    }
+
+    // Fallback to predefined colors based on risk level
+    if (bgClass.includes("red")) return "#261718";
+    if (bgClass.includes("yellow")) return "#19120A";
+    if (bgClass.includes("teal")) return "#0A1918";
+
+    return "#0A1918"; // default
   };
 
   // Loader component
   const LoaderCard = () => (
-    <div className="w-[260px] h-[400px] p-4 flex flex-col items-start gap-4 flex-shrink-0 overflow-hidden rounded-[20px] bg-[rgba(17,56,45,0.40)] animate-pulse">
+    <div className="w-[260px] h-[400px] p-4 flex flex-col items-start gap-4 flex-shrink-0 overflow-hidden rounded-[20px] bg-gray-800 animate-pulse">
       <div className="h-7 w-20 bg-gray-600 rounded-[60px]"></div>
       <div className="self-stretch pb-4 border-b border-neutral-600 flex flex-col justify-start items-start gap-2.5">
         <div className="h-8 w-32 bg-gray-600 rounded"></div>
@@ -121,7 +135,9 @@ const RecommendationCards = ({
                 const isAnyCardActive =
                   hoveredCard !== null || selectedCards.length > 0;
 
-                const baseBackgroundColor = getRiskBackgroundColor(rec.risk);
+                const baseBackgroundColor = rec.cardBg
+                  ? getBackgroundColorFromTailwind(rec.cardBg)
+                  : "#0A1918";
 
                 const cardHeight =
                   isHovered || isSelected ? "h-[415px]" : "h-[390px]";

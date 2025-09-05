@@ -89,7 +89,7 @@ const CardDetailsPage = () => {
           }
         }}
         className="fixed inset-0 w-full h-full object-cover"
-        style={{ zIndex: -1 }}
+        style={{ zIndex: -1, filter: "brightness(0.5) contrast(1.2)" }}
         autoPlay
         muted
         loop
@@ -138,13 +138,7 @@ const CardDetailsPage = () => {
       </video>
 
       {/* Fallback background */}
-      <div
-        className="fixed inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black"
-        style={{ zIndex: -2 }}
-      ></div>
 
-      {/* Dark overlay for better text readability */}
-      <div className="absolute inset-0 bg-black/30" style={{ zIndex: 1 }}></div>
       <div className="relative" style={{ zIndex: 10 }}>
         <Header />
       </div>
