@@ -215,7 +215,9 @@ const CardDetailsPage = () => {
               <ROI recommendationData={recommendationData} />
             )}
 
-            {activeTab === "Risk" && <RiskAnalysis />}
+            {activeTab === "Risk" && (
+              <RiskAnalysis recommendationData={recommendationData} />
+            )}
 
             {activeTab === "Dependencies" && <DependencyImpact />}
 

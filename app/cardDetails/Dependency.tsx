@@ -78,12 +78,6 @@ const DependencyImpact = () => {
           </div>
         </div>
         <div className="overflow-x-auto relative w-[1200px]">
-          {/* Scroll indicator */}
-          {/* <div className="absolute bottom-2 right-4 flex items-center gap-1 z-10 bg-black/50 px-2 py-1 rounded-full">
-            <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
-            <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
-            <div className="w-1.5 h-1.5 bg-gray-600 rounded-full"></div>
-          </div> */}
           <div className="inline-flex justify-start items-center gap-5 min-w-max pb-4">
             <div
               className={`w-[400px] h-36 p-5 rounded-2xl inline-flex flex-col justify-center items-start gap-3 cursor-pointer transition-all duration-200 flex-shrink-0 ${
