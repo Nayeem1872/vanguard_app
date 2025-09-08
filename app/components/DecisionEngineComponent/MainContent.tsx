@@ -1,7 +1,9 @@
 "use client";
 import { useState } from "react";
 import axios from "axios";
+import Lottie from "lottie-react";
 import RecommendationCards from "./RecommendationCards";
+import rippleAnimation from "../../../public/Ripple loading animation.json";
 
 // Create axios instance with extended timeout
 const apiClient = axios.create({
@@ -85,13 +87,11 @@ const MainContent = ({
         filters: {
           region: selectedRegion,
           func: selectedFunction,
-          domain: "", // You can add domain selection if needed
+          domain: "",
         },
         period: selectedPeriod,
         org_id: "", // You can add org_id if available
       };
-
-      console.log("Making API request with 2-minute timeout...");
 
       const response = await apiClient.post("/api/ai/ask", requestBody);
       console.log("API Response:", response.data);
@@ -138,6 +138,19 @@ const MainContent = ({
 
   return (
     <div className="relative z-10 flex flex-col items-center justify-center px-8 mt-16">
+      {/* Loading Overlay */}
+      {loading && (
+        <div className="fixed inset-0 bg-black/30 backdrop-blur-md flex items-center justify-center z-50">
+          <div className="flex flex-col items-center">
+            <Lottie
+              animationData={rippleAnimation}
+              style={{ width: 400, height: 400 }}
+              loop={true}
+            />
+            <p className="text-white text-lg mt-4">Agent is thinking...</p>
+          </div>
+        </div>
+      )}
       <div className="max-w-4xl w-full text-center">
         {/* Main Heading */}
         <h2 className="text-4xl font-medium text-white mb-12 leading-tight">
@@ -253,7 +266,7 @@ const MainContent = ({
           {/* Text Area */}
           <div className="relative">
             <textarea
-              value={loading ? "Agent is thinking..." : message}
+              value={message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder="Write your message ..."
               className="w-full h-32 border rounded-2xl px-6 py-5 text-white placeholder-gray-400 resize-none focus:outline-none"

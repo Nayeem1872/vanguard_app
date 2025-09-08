@@ -72,15 +72,11 @@ const DecisionEngine = () => {
           </video>
         )}
 
-        {/* Fallback background when video fails */}
         {videoStatus === "error" && (
           <div className="w-full h-full bg-gradient-to-br from-gray-900 via-black to-gray-800"></div>
         )}
       </div>
 
-      {/* Dark overlay for better text readability */}
-
-      {/* Content */}
       <div className="relative" style={{ zIndex: 10 }}>
         <Header />
         <Breadcrumb />
