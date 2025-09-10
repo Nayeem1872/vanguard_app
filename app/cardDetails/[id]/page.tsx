@@ -219,7 +219,7 @@ const CardDetailsPage = () => {
               <RiskAnalysis recommendationData={recommendationData} />
             )}
 
-            {activeTab === "Dependencies" && <DependencyImpact />}
+            {activeTab === "Dependencies" && <DependencyImpact id={id} />}
 
             {activeTab === "Trace" && <Timeline />}
           </>

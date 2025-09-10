@@ -1,13 +1,62 @@
-import React, { useState } from "react";
+/** @jsxImportSource react */
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-const DependencyImpact = () => {
+interface DependencyImpactProps {
+  id?: string;
+}
+
+const DependencyImpact: React.FC<DependencyImpactProps> = ({ id }) => {
   const [selectedCard, setSelectedCard] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleCardClick = (cardName: string) => {
     setSelectedCard(cardName === selectedCard ? null : cardName);
   };
+
+  const fetchDependencies = async () => {
+    if (!id) {
+      console.log("No ID provided for dependencies API call");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError(null);
+
+      console.log(`Fetching dependencies for ID: ${id}`);
+      const response = await axios.get(
+        `/api/ai/recommendations/dependencies?recId=${id}`
+      );
+
+      console.log("Dependencies API Response:", response.data);
+    } catch (err: any) {
+      console.error("Error fetching dependencies:", err);
+      setError(err.message || "Failed to fetch dependencies");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchDependencies();
+  }, [id]);
   return (
     <div className=" flex flex-col items-center justify-center">
+      {loading && (
+        <div className="w-full max-w-6xl mb-4 p-4 bg-blue-900/20 border border-blue-500/30 rounded-lg">
+          <div className="text-blue-400 text-sm">
+            Loading dependencies data...
+          </div>
+        </div>
+      )}
+
+      {error && (
+        <div className="w-full max-w-6xl mb-4 p-4 bg-red-900/20 border border-red-500/30 rounded-lg">
+          <div className="text-red-400 text-sm">Error: {error}</div>
+        </div>
+      )}
       <div className="w-full max-w-6xl flex flex-col justify-start items-start gap-2 overflow-hidden">
         <div className="self-stretch justify-start text-gray-400 text-base font-bold  uppercase leading-normal tracking-widest">
           System Dependencies
