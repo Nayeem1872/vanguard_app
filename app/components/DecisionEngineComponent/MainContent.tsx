@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import Lottie from "lottie-react";
 import RecommendationCards from "./RecommendationCards";
@@ -79,6 +79,51 @@ const MainContent = ({
 }: MainContentProps) => {
   const [loading, setLoading] = useState(false);
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
+
+  // Loading text rotation state
+  const [currentLoadingTextIndex, setCurrentLoadingTextIndex] = useState(0);
+  const [isTextTransitioning, setIsTextTransitioning] = useState(false);
+
+  const loadingMessages = [
+    "Analyzing material flow across regions…",
+    "Scanning for hidden inefficiencies…",
+    "Cross-checking ERP and CRM signals…",
+    "Tracing dependencies across workflows…",
+    "Evaluating procurement cycle bottlenecks…",
+    "Assessing risk factors and execution barriers…",
+  ];
+
+  // Effect to cycle through loading messages
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+
+    if (loading) {
+      interval = setInterval(() => {
+        setIsTextTransitioning(true);
+
+        setTimeout(() => {
+          setCurrentLoadingTextIndex(
+            (prevIndex) => (prevIndex + 1) % loadingMessages.length
+          );
+          setIsTextTransitioning(false);
+        }, 300); // Half of transition duration for smooth effect
+      }, 7000); // Change every 7 seconds
+    }
+
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [loading, loadingMessages.length]);
+
+  // Reset loading text index when loading starts
+  useEffect(() => {
+    if (loading) {
+      setCurrentLoadingTextIndex(0);
+      setIsTextTransitioning(false);
+    }
+  }, [loading]);
   const handleSubmit = async () => {
     setLoading(true);
     try {
@@ -141,13 +186,25 @@ const MainContent = ({
       {/* Loading Overlay */}
       {loading && (
         <div className="fixed inset-0 bg-black/30 backdrop-blur-md flex items-center justify-center z-50">
-          <div className="flex flex-col items-center">
-            <Lottie
-              animationData={rippleAnimation}
-              style={{ width: 400, height: 400 }}
-              loop={true}
-            />
-            <p className="text-white text-lg mt-4">Agent is thinking...</p>
+          <div className="bg-neutral-800/80 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden w-[600px]">
+            <div className="flex flex-col items-center p-8">
+              <Lottie
+                animationData={rippleAnimation}
+                style={{ width: 400, height: 400 }}
+                loop={true}
+              />
+              <div className="relative h-8 flex items-center justify-center">
+                <p
+                  className={`text-white text-lg transition-all duration-600 ease-out whitespace-nowrap ${
+                    isTextTransitioning
+                      ? "opacity-0 transform -translate-y-2"
+                      : "opacity-100 transform translate-y-0"
+                  }`}
+                >
+                  {loadingMessages[currentLoadingTextIndex]}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       )}

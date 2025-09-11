@@ -49,6 +49,9 @@ const CardDetailsPage = () => {
     if (id) {
       console.log("Recommendation ID:", id);
 
+      // Store ID in localStorage
+      localStorage.setItem("currentRecommendationId", id);
+
       const fetchRecommendationData = async () => {
         try {
           setLoading(true);
@@ -219,7 +222,7 @@ const CardDetailsPage = () => {
 
             {activeTab === "Dependencies" && <DependencyImpact id={id} />}
 
-            {activeTab === "Trace" && <Timeline />}
+            {activeTab === "Trace" && <Timeline id={id} />}
           </>
         )}
       </div>

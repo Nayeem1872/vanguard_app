@@ -1,12 +1,106 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const KipImpactView = () => {
-  // State for slider values
+  // State for API data
+  const [kpiData, setKpiData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // State for slider values - will be updated from API
   const [laborEfficiency, setLaborEfficiency] = useState(12); // 12%
   const [materialCosts, setMaterialCosts] = useState(8.5); // 8.5K
   const [vendorCount, setVendorCount] = useState(3); // 3 vendors
   const [overtimeHours, setOvertimeHours] = useState(48); // 48%
+
+  // Calculate dynamic chart data based on slider values
+  const calculateChartData = () => {
+    const baseValues = {
+      forecast: [140, 250, 75, 200, 140],
+      actual: [90, 170, 50, 130, 65],
+    };
+
+    // Calculate impact factors from sliders
+    const efficiencyImpact =
+      (laborEfficiency / (kpiData?.sliders?.[0]?.max || 250)) * 0.3; // 30% weight
+    const costImpact =
+      (materialCosts / (kpiData?.sliders?.[1]?.max || 300)) * 0.25; // 25% weight
+    const confidenceImpact =
+      (vendorCount / (kpiData?.sliders?.[2]?.max || 100)) * 0.2; // 20% weight
+    const riskImpact =
+      (overtimeHours / (kpiData?.sliders?.[3]?.max || 100)) * 0.25; // 25% weight
+
+    const totalImpact =
+      1 + efficiencyImpact + costImpact - confidenceImpact - riskImpact;
+
+    return {
+      forecast: baseValues.forecast.map((val) =>
+        Math.max(10, Math.round(val * totalImpact))
+      ),
+      actual: baseValues.actual.map((val) =>
+        Math.max(5, Math.round(val * totalImpact * 0.85))
+      ),
+    };
+  };
+
+  const chartData = calculateChartData();
+
+  // Get ID from localStorage and fetch KPI data
+  useEffect(() => {
+    const storedId = localStorage.getItem("currentRecommendationId");
+    console.log("Retrieved ID from localStorage:", storedId);
+
+    if (storedId) {
+      const fetchKPIData = async () => {
+        try {
+          setLoading(true);
+          setError(null);
+          console.log(`Fetching KPI data for ID: ${storedId}`);
+          const response = await axios.get(
+            `/api/ai/recommendations/kpi?recId=${storedId}`
+          );
+          console.log("KPI API Response:", response.data);
+
+          if (response.data.success && response.data.data.kpi) {
+            setKpiData(response.data.data.kpi);
+
+            // Update slider values from API data if available
+            const sliders = response.data.data.kpi.sliders;
+            if (sliders && sliders.length >= 4) {
+              // Map API sliders to component state based on labels
+              sliders.forEach((slider: any) => {
+                switch (slider.label) {
+                  case "Potential Savings":
+                    setLaborEfficiency(slider.value);
+                    break;
+                  case "Risk-Adjusted ROI":
+                    setMaterialCosts(slider.value);
+                    break;
+                  case "Implementation Confidence":
+                    setVendorCount(slider.value);
+                    break;
+                  case "Change Management Risk":
+                    setOvertimeHours(slider.value);
+                    break;
+                }
+              });
+            }
+          }
+        } catch (error) {
+          console.error("Error fetching KPI data:", error);
+          setError("Failed to fetch KPI data");
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchKPIData();
+    } else {
+      console.log("No recommendation ID found in localStorage");
+      setLoading(false);
+    }
+  }, []);
 
   // Calculate position for slider handles (percentage of track width)
   const getSliderPosition = (
@@ -74,16 +168,26 @@ const KipImpactView = () => {
                 <div className="self-stretch flex flex-col justify-start items-start gap-2">
                   <div className="self-stretch h-5 inline-flex justify-between items-center">
                     <div className="justify-start text-white text-sm font-normal ">
-                      Labor Efficiency
+                      {kpiData?.sliders?.[0]?.label || "Labor Efficiency"}
                     </div>
-                    <div className="text-right justify-start text-green-500 text-sm font-medium ">
-                      +{laborEfficiency}%
+                    <div
+                      className={`text-right justify-start text-sm font-medium ${
+                        kpiData?.sliders?.[0]?.textClass || "text-green-500"
+                      }`}
+                    >
+                      +{laborEfficiency}
+                      {kpiData?.sliders?.[0]?.unit || "%"}
                     </div>
                   </div>
                   <div
                     className="self-stretch h-2 relative bg-white/10 rounded-[40px] cursor-pointer transition-all duration-150 ease-out"
                     onClick={(e) =>
-                      handleSliderDrag(e, setLaborEfficiency, 25, 256)
+                      handleSliderDrag(
+                        e,
+                        setLaborEfficiency,
+                        kpiData?.sliders?.[0]?.max || 25,
+                        256
+                      )
                     }
                   >
                     <div
@@ -91,7 +195,7 @@ const KipImpactView = () => {
                       style={{
                         width: `${getSliderPosition(
                           laborEfficiency,
-                          25,
+                          kpiData?.sliders?.[0]?.max || 25,
                           256
                         )}px`,
                       }}
@@ -100,126 +204,194 @@ const KipImpactView = () => {
                         className="w-6 h-6 absolute bg-white rounded-[60px] shadow-[0px_2px_4px_0px_rgba(0,0,0,0.10)] border-8 border-blue-700 cursor-grab active:cursor-grabbing transition-all duration-150 ease-out hover:scale-110"
                         style={{
                           left: `${
-                            getSliderPosition(laborEfficiency, 25, 256) - 12
+                            getSliderPosition(
+                              laborEfficiency,
+                              kpiData?.sliders?.[0]?.max || 25,
+                              256
+                            ) - 12
                           }px`,
                           top: "-9px",
                         }}
                         onMouseDown={(e) =>
-                          handleMouseDown(e, setLaborEfficiency, 25, 256)
+                          handleMouseDown(
+                            e,
+                            setLaborEfficiency,
+                            kpiData?.sliders?.[0]?.max || 25,
+                            256
+                          )
                         }
                       />
                     </div>
                   </div>
                   <div className="self-stretch h-5 inline-flex justify-between items-center">
                     <div className="justify-start text-gray-400 text-xs font-medium ">
-                      0%
+                      0{kpiData?.sliders?.[0]?.unit || "%"}
                     </div>
                     <div className="text-right justify-start text-gray-400 text-xs font-medium ">
-                      25%
+                      {kpiData?.sliders?.[0]?.max || 25}
+                      {kpiData?.sliders?.[0]?.unit || "%"}
                     </div>
                   </div>
                 </div>
                 <div className="self-stretch flex flex-col justify-start items-start gap-2">
                   <div className="self-stretch h-5 inline-flex justify-between items-center">
                     <div className="justify-start text-white text-sm font-normal ">
-                      Material Costs
+                      {kpiData?.sliders?.[1]?.label || "Material Costs"}
                     </div>
-                    <div className="text-right justify-start text-red-500 text-sm font-medium ">
-                      -${materialCosts}K
+                    <div
+                      className={`text-right justify-start text-sm font-medium ${
+                        kpiData?.sliders?.[1]?.textClass || "text-red-500"
+                      }`}
+                    >
+                      ${materialCosts}
+                      {kpiData?.sliders?.[1]?.unit || "K"}
                     </div>
                   </div>
                   <div
                     className="self-stretch h-2 relative bg-white/10 rounded-[40px] cursor-pointer transition-all duration-150 ease-out"
                     onClick={(e) =>
-                      handleSliderDrag(e, setMaterialCosts, 20, 256)
+                      handleSliderDrag(
+                        e,
+                        setMaterialCosts,
+                        kpiData?.sliders?.[1]?.max || 20,
+                        256
+                      )
                     }
                   >
                     <div
                       className="h-2 absolute left-0 top-0 bg-blue-500 rounded-[60px] shadow-[0px_40px_120px_0px_rgba(1,68,199,0.30)] transition-all duration-150 ease-out"
                       style={{
-                        width: `${getSliderPosition(materialCosts, 20, 256)}px`,
+                        width: `${getSliderPosition(
+                          materialCosts,
+                          kpiData?.sliders?.[1]?.max || 20,
+                          256
+                        )}px`,
                       }}
                     >
                       <div
                         className="w-6 h-6 absolute bg-white rounded-[60px] shadow-[0px_2px_4px_0px_rgba(0,0,0,0.10)] border-8 border-blue-700 cursor-grab active:cursor-grabbing transition-all duration-150 ease-out hover:scale-110"
                         style={{
                           left: `${
-                            getSliderPosition(materialCosts, 20, 256) - 12
+                            getSliderPosition(
+                              materialCosts,
+                              kpiData?.sliders?.[1]?.max || 20,
+                              256
+                            ) - 12
                           }px`,
                           top: "-9px",
                         }}
                         onMouseDown={(e) =>
-                          handleMouseDown(e, setMaterialCosts, 20, 256)
+                          handleMouseDown(
+                            e,
+                            setMaterialCosts,
+                            kpiData?.sliders?.[1]?.max || 20,
+                            256
+                          )
                         }
                       />
                     </div>
                   </div>
                   <div className="self-stretch h-5 inline-flex justify-between items-center">
                     <div className="justify-start text-gray-400 text-xs font-medium ">
-                      0%
+                      0{kpiData?.sliders?.[1]?.unit || "%"}
                     </div>
                     <div className="text-right justify-start text-gray-400 text-xs font-medium ">
-                      $20K
+                      {kpiData?.sliders?.[1]?.max || 20}
+                      {kpiData?.sliders?.[1]?.unit || "K"}
                     </div>
                   </div>
                 </div>
                 <div className="self-stretch flex flex-col justify-start items-start gap-2">
                   <div className="self-stretch h-5 inline-flex justify-between items-center">
                     <div className="justify-start text-white text-sm font-normal ">
-                      Vendor Count
+                      {kpiData?.sliders?.[2]?.label || "Vendor Count"}
                     </div>
-                    <div className="text-right justify-start text-red-500 text-sm font-medium ">
-                      -{vendorCount}
+                    <div
+                      className={`text-right justify-start text-sm font-medium ${
+                        kpiData?.sliders?.[2]?.textClass || "text-red-500"
+                      }`}
+                    >
+                      {vendorCount}
+                      {kpiData?.sliders?.[2]?.unit || ""}
                     </div>
                   </div>
                   <div
                     className="self-stretch h-2 relative bg-white/10 rounded-[40px] cursor-pointer transition-all duration-150 ease-out"
                     onClick={(e) =>
-                      handleSliderDrag(e, setVendorCount, 10, 256)
+                      handleSliderDrag(
+                        e,
+                        setVendorCount,
+                        kpiData?.sliders?.[2]?.max || 10,
+                        256
+                      )
                     }
                   >
                     <div
                       className="h-2 absolute left-0 top-0 bg-blue-500 rounded-[60px] shadow-[0px_40px_120px_0px_rgba(1,68,199,0.30)] transition-all duration-150 ease-out"
                       style={{
-                        width: `${getSliderPosition(vendorCount, 10, 256)}px`,
+                        width: `${getSliderPosition(
+                          vendorCount,
+                          kpiData?.sliders?.[2]?.max || 10,
+                          256
+                        )}px`,
                       }}
                     >
                       <div
                         className="w-6 h-6 absolute bg-white rounded-[60px] shadow-[0px_2px_4px_0px_rgba(0,0,0,0.10)] border-8 border-blue-700 cursor-grab active:cursor-grabbing transition-all duration-150 ease-out hover:scale-110"
                         style={{
                           left: `${
-                            getSliderPosition(vendorCount, 10, 256) - 12
+                            getSliderPosition(
+                              vendorCount,
+                              kpiData?.sliders?.[2]?.max || 10,
+                              256
+                            ) - 12
                           }px`,
                           top: "-9px",
                         }}
                         onMouseDown={(e) =>
-                          handleMouseDown(e, setVendorCount, 10, 256)
+                          handleMouseDown(
+                            e,
+                            setVendorCount,
+                            kpiData?.sliders?.[2]?.max || 10,
+                            256
+                          )
                         }
                       />
                     </div>
                   </div>
                   <div className="self-stretch h-5 inline-flex justify-between items-center">
                     <div className="justify-start text-gray-400 text-xs font-medium ">
-                      0%
+                      0{kpiData?.sliders?.[2]?.unit || "%"}
                     </div>
                     <div className="text-right justify-start text-gray-400 text-xs font-medium ">
-                      10
+                      {kpiData?.sliders?.[2]?.max || 10}
+                      {kpiData?.sliders?.[2]?.unit || ""}
                     </div>
                   </div>
                 </div>
                 <div className="self-stretch flex flex-col justify-start items-start gap-2">
                   <div className="self-stretch h-5 inline-flex justify-between items-center">
                     <div className="justify-start text-white text-sm font-normal ">
-                      Overtime Hours
+                      {kpiData?.sliders?.[3]?.label || "Overtime Hours"}
                     </div>
-                    <div className="text-right justify-start text-green-500 text-sm font-medium ">
-                      {overtimeHours}%
+                    <div
+                      className={`text-right justify-start text-sm font-medium ${
+                        kpiData?.sliders?.[3]?.textClass || "text-green-500"
+                      }`}
+                    >
+                      {overtimeHours}
+                      {kpiData?.sliders?.[3]?.unit || "%"}
                     </div>
                   </div>
                   <div
                     className="self-stretch h-2 relative bg-white/10 rounded-[40px] cursor-pointer transition-all duration-150 ease-out"
                     onClick={(e) =>
-                      handleSliderDrag(e, setOvertimeHours, 100, 256)
+                      handleSliderDrag(
+                        e,
+                        setOvertimeHours,
+                        kpiData?.sliders?.[3]?.max || 100,
+                        256
+                      )
                     }
                   >
                     <div
@@ -227,7 +399,7 @@ const KipImpactView = () => {
                       style={{
                         width: `${getSliderPosition(
                           overtimeHours,
-                          100,
+                          kpiData?.sliders?.[3]?.max || 100,
                           256
                         )}px`,
                       }}
@@ -236,22 +408,32 @@ const KipImpactView = () => {
                         className="w-6 h-6 absolute bg-white rounded-[60px] shadow-[0px_2px_4px_0px_rgba(0,0,0,0.10)] border-8 border-blue-700 cursor-grab active:cursor-grabbing transition-all duration-150 ease-out hover:scale-110"
                         style={{
                           left: `${
-                            getSliderPosition(overtimeHours, 100, 256) - 12
+                            getSliderPosition(
+                              overtimeHours,
+                              kpiData?.sliders?.[3]?.max || 100,
+                              256
+                            ) - 12
                           }px`,
                           top: "-9px",
                         }}
                         onMouseDown={(e) =>
-                          handleMouseDown(e, setOvertimeHours, 100, 256)
+                          handleMouseDown(
+                            e,
+                            setOvertimeHours,
+                            kpiData?.sliders?.[3]?.max || 100,
+                            256
+                          )
                         }
                       />
                     </div>
                   </div>
                   <div className="self-stretch h-5 inline-flex justify-between items-center">
                     <div className="justify-start text-gray-400 text-xs font-medium ">
-                      0%
+                      0{kpiData?.sliders?.[3]?.unit || "%"}
                     </div>
                     <div className="text-right justify-start text-gray-400 text-xs font-medium ">
-                      100%
+                      {kpiData?.sliders?.[3]?.max || 100}
+                      {kpiData?.sliders?.[3]?.unit || "%"}
                     </div>
                   </div>
                 </div>
@@ -356,46 +538,151 @@ const KipImpactView = () => {
                 <div className="w-[538px] h-0 left-[4px] top-[267px] absolute opacity-20 outline outline-1 outline-offset-[-0.50px] outline-Color-neutral-06/60"></div>
               </div>
               <div className="w-[503px] h-56 left-[93px] top-[89px] absolute inline-flex justify-center items-end gap-9">
+                {/* January */}
                 <div className="flex-1 self-stretch relative">
-                  <div className="w-7 h-28 left-[6.73px] top-[110.07px] absolute inline-flex justify-center items-end">
-                    <div className="flex-1 self-stretch bg-gradient-to-b from-blue-500 to-blue-500/0" />
-                  </div>
-                  <div className="w-7 h-20 left-[38.14px] top-[147.41px] absolute inline-flex justify-center items-end">
-                    <div className="flex-1 self-stretch bg-gradient-to-b from-yellow-100 to-yellow-100/0" />
-                  </div>
-                </div>
-                <div className="flex-1 self-stretch relative">
-                  <div className="w-7 h-48 left-[6.73px] top-[39.31px] absolute inline-flex justify-center items-end">
-                    <div className="flex-1 self-stretch bg-gradient-to-b from-blue-500 to-blue-500/0" />
-                  </div>
-                  <div className="w-7 h-32 left-[38.14px] top-[98.28px] absolute inline-flex justify-center items-end">
-                    <div className="flex-1 self-stretch bg-gradient-to-b from-yellow-100 to-yellow-100/0" />
-                  </div>
-                </div>
-                <div className="flex-1 self-stretch relative">
-                  <div className="w-7 h-20 left-[6.73px] top-[155.28px] absolute inline-flex justify-center items-end">
-                    <div className="flex-1 self-stretch bg-gradient-to-b from-blue-500 to-blue-500/0" />
-                  </div>
-                  <div className="w-7 h-14 left-[38.14px] top-[172.97px] absolute inline-flex justify-center items-end">
-                    <div className="flex-1 self-stretch bg-gradient-to-b from-yellow-100 to-yellow-100/0" />
-                  </div>
-                </div>
-                <div className="flex-1 self-stretch relative">
-                  <div className="w-7 h-40 left-[6.73px] top-[70.76px] absolute inline-flex justify-center items-end">
-                    <div className="flex-1 self-stretch bg-gradient-to-b from-blue-500 to-blue-500/0" />
-                  </div>
-                  <div className="w-7 h-28 left-[38.14px] top-[114px] absolute inline-flex justify-center items-end">
-                    <div className="flex-1 self-stretch bg-gradient-to-b from-yellow-100 to-yellow-100/0" />
-                  </div>
-                </div>
-                <div className="flex-1 self-stretch relative">
-                  <div className="w-7 h-28 left-[6.73px] top-[108.10px] absolute inline-flex justify-center items-end">
+                  <div
+                    className="w-7 absolute left-[6.73px] inline-flex justify-center items-end"
+                    style={{
+                      height: `${Math.min(chartData.forecast[0] * 0.8, 224)}px`,
+                      top: `${
+                        224 - Math.min(chartData.forecast[0] * 0.8, 224)
+                      }px`,
+                    }}
+                  >
                     <div className="flex-1 self-stretch bg-gradient-to-b from-blue-500 to-blue-500/0" />
                   </div>
                   <div
-                    data-cleavage="False"
-                    data-orientation="Vertical"
-                    className="w-7 h-16 left-[38.14px] top-[165.10px] absolute inline-flex justify-center items-end"
+                    className="w-7 absolute left-[38.14px] inline-flex justify-center items-end"
+                    style={{
+                      height: `${Math.min(chartData.actual[0] * 0.8, 224)}px`,
+                      top: `${
+                        224 - Math.min(chartData.actual[0] * 0.8, 224)
+                      }px`,
+                    }}
+                  >
+                    <div className="flex-1 self-stretch bg-gradient-to-b from-yellow-100 to-yellow-100/0" />
+                  </div>
+                </div>
+                {/* February */}
+                <div className="flex-1 self-stretch relative">
+                  <div
+                    className="w-7 absolute left-[6.73px] inline-flex justify-center items-end"
+                    style={{
+                      height: `${Math.min(
+                        224,
+                        (chartData.forecast[1] / 300) * 224
+                      )}px`,
+                      top: `${
+                        224 - Math.min(224, (chartData.forecast[1] / 300) * 224)
+                      }px`,
+                    }}
+                  >
+                    <div className="flex-1 self-stretch bg-gradient-to-b from-blue-500 to-blue-500/0" />
+                  </div>
+                  <div
+                    className="w-7 absolute left-[38.14px] inline-flex justify-center items-end"
+                    style={{
+                      height: `${Math.min(
+                        224,
+                        (chartData.actual[1] / 300) * 224
+                      )}px`,
+                      top: `${
+                        224 - Math.min(224, (chartData.actual[1] / 300) * 224)
+                      }px`,
+                    }}
+                  >
+                    <div className="flex-1 self-stretch bg-gradient-to-b from-yellow-100 to-yellow-100/0" />
+                  </div>
+                </div>
+                {/* March */}
+                <div className="flex-1 self-stretch relative">
+                  <div
+                    className="w-7 absolute left-[6.73px] inline-flex justify-center items-end"
+                    style={{
+                      height: `${Math.min(
+                        224,
+                        (chartData.forecast[2] / 300) * 224
+                      )}px`,
+                      top: `${
+                        224 - Math.min(224, (chartData.forecast[2] / 300) * 224)
+                      }px`,
+                    }}
+                  >
+                    <div className="flex-1 self-stretch bg-gradient-to-b from-blue-500 to-blue-500/0" />
+                  </div>
+                  <div
+                    className="w-7 absolute left-[38.14px] inline-flex justify-center items-end"
+                    style={{
+                      height: `${Math.min(
+                        224,
+                        (chartData.actual[2] / 300) * 224
+                      )}px`,
+                      top: `${
+                        224 - Math.min(224, (chartData.actual[2] / 300) * 224)
+                      }px`,
+                    }}
+                  >
+                    <div className="flex-1 self-stretch bg-gradient-to-b from-yellow-100 to-yellow-100/0" />
+                  </div>
+                </div>
+                {/* April */}
+                <div className="flex-1 self-stretch relative">
+                  <div
+                    className="w-7 absolute left-[6.73px] inline-flex justify-center items-end"
+                    style={{
+                      height: `${Math.min(
+                        224,
+                        (chartData.forecast[3] / 300) * 224
+                      )}px`,
+                      top: `${
+                        224 - Math.min(224, (chartData.forecast[3] / 300) * 224)
+                      }px`,
+                    }}
+                  >
+                    <div className="flex-1 self-stretch bg-gradient-to-b from-blue-500 to-blue-500/0" />
+                  </div>
+                  <div
+                    className="w-7 absolute left-[38.14px] inline-flex justify-center items-end"
+                    style={{
+                      height: `${Math.min(
+                        224,
+                        (chartData.actual[3] / 300) * 224
+                      )}px`,
+                      top: `${
+                        224 - Math.min(224, (chartData.actual[3] / 300) * 224)
+                      }px`,
+                    }}
+                  >
+                    <div className="flex-1 self-stretch bg-gradient-to-b from-yellow-100 to-yellow-100/0" />
+                  </div>
+                </div>
+                {/* May */}
+                <div className="flex-1 self-stretch relative">
+                  <div
+                    className="w-7 absolute left-[6.73px] inline-flex justify-center items-end"
+                    style={{
+                      height: `${Math.min(
+                        224,
+                        (chartData.forecast[4] / 300) * 224
+                      )}px`,
+                      top: `${
+                        224 - Math.min(224, (chartData.forecast[4] / 300) * 224)
+                      }px`,
+                    }}
+                  >
+                    <div className="flex-1 self-stretch bg-gradient-to-b from-blue-500 to-blue-500/0" />
+                  </div>
+                  <div
+                    className="w-7 absolute left-[38.14px] inline-flex justify-center items-end"
+                    style={{
+                      height: `${Math.min(
+                        224,
+                        (chartData.actual[4] / 300) * 224
+                      )}px`,
+                      top: `${
+                        224 - Math.min(224, (chartData.actual[4] / 300) * 224)
+                      }px`,
+                    }}
                   >
                     <div className="flex-1 self-stretch bg-gradient-to-b from-yellow-100 to-yellow-100/0" />
                   </div>
@@ -595,71 +882,101 @@ const KipImpactView = () => {
                 Event Log
               </div>
               <div className="w-56 left-[20px] top-[84px] absolute inline-flex flex-col justify-start items-start gap-4">
-                <div className="self-stretch pb-4 border-b-[0.50px] border-neutral-500 flex flex-col justify-start items-start gap-2">
-                  <div className="self-stretch justify-start text-gray-400 text-sm font-normal  leading-tight">
-                    14:32:18
-                  </div>
-                  <div className="self-stretch justify-start text-gray-400 text-sm font-bold ">
-                    Switched to KPI Impact View
-                  </div>
-                  <div className="w-14 h-5 bg-blue-900 rounded-[60px] inline-flex justify-center items-center gap-2.5">
-                    <div className="justify-start text-white text-[10px] font-normal  uppercase">
-                      System
+                {kpiData?.eventLog && kpiData.eventLog.length > 0 ? (
+                  kpiData.eventLog.map((event: any, index: number) => (
+                    <div
+                      key={index}
+                      className="self-stretch pb-4 border-b-[0.50px] border-neutral-500 flex flex-col justify-start items-start gap-2"
+                    >
+                      <div className="self-stretch justify-start text-gray-400 text-sm font-normal leading-tight">
+                        {event.time}
+                      </div>
+                      <div className="self-stretch justify-start text-gray-400 text-sm font-bold">
+                        {event.message}
+                      </div>
+                      <div
+                        className={`w-14 h-5 ${
+                          event.user === "system"
+                            ? "bg-blue-900"
+                            : "bg-zinc-900"
+                        } rounded-[60px] inline-flex justify-center items-center gap-2.5`}
+                      >
+                        <div className="justify-start text-white text-[10px] font-normal uppercase">
+                          {event.user}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <div className="self-stretch pb-4 border-b-[0.50px] border-neutral-500 flex flex-col justify-start items-start gap-2">
-                  <div className="self-stretch justify-start text-neutral-500 text-sm font-normal  leading-tight">
-                    14:31:45
-                  </div>
-                  <div className="self-stretch justify-start text-neutral-500 text-sm font-bold ">
-                    Scenario Initialized: Base Case
-                  </div>
-                  <div className="w-14 h-5 bg-zinc-900 rounded-[60px] inline-flex justify-center items-center gap-2.5">
-                    <div className="justify-start text-white text-[10px] font-normal  uppercase">
-                      User
+                  ))
+                ) : (
+                  // Fallback to static data if no API data
+                  <>
+                    <div className="self-stretch pb-4 border-b-[0.50px] border-neutral-500 flex flex-col justify-start items-start gap-2">
+                      <div className="self-stretch justify-start text-gray-400 text-sm font-normal  leading-tight">
+                        14:32:18
+                      </div>
+                      <div className="self-stretch justify-start text-gray-400 text-sm font-bold ">
+                        Switched to KPI Impact View
+                      </div>
+                      <div className="w-14 h-5 bg-blue-900 rounded-[60px] inline-flex justify-center items-center gap-2.5">
+                        <div className="justify-start text-white text-[10px] font-normal  uppercase">
+                          System
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <div className="self-stretch pb-4 border-b-[0.50px] border-neutral-500 flex flex-col justify-start items-start gap-2">
-                  <div className="self-stretch justify-start text-neutral-500 text-sm font-normal  leading-tight">
-                    14:31:22
-                  </div>
-                  <div className="self-stretch justify-start text-neutral-500 text-sm font-bold ">
-                    Labor Efficiency adjusted to 12%
-                  </div>
-                  <div className="w-14 h-5 bg-blue-900 rounded-[60px] inline-flex justify-center items-center gap-2.5">
-                    <div className="justify-start text-white text-[10px] font-normal  uppercase">
-                      System
+                    <div className="self-stretch pb-4 border-b-[0.50px] border-neutral-500 flex flex-col justify-start items-start gap-2">
+                      <div className="self-stretch justify-start text-neutral-500 text-sm font-normal  leading-tight">
+                        14:31:45
+                      </div>
+                      <div className="self-stretch justify-start text-neutral-500 text-sm font-bold ">
+                        Scenario Initialized: Base Case
+                      </div>
+                      <div className="w-14 h-5 bg-zinc-900 rounded-[60px] inline-flex justify-center items-center gap-2.5">
+                        <div className="justify-start text-white text-[10px] font-normal  uppercase">
+                          User
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <div className="self-stretch pb-4 border-b-[0.50px] border-neutral-500 flex flex-col justify-start items-start gap-2">
-                  <div className="self-stretch justify-start text-neutral-500 text-sm font-normal  leading-tight">
-                    14:30:58
-                  </div>
-                  <div className="self-stretch justify-start text-neutral-500 text-sm font-bold ">
-                    Material Costs reduced by $8.5K
-                  </div>
-                  <div className="w-14 h-5 bg-zinc-900 rounded-[60px] inline-flex justify-center items-center gap-2.5">
-                    <div className="justify-start text-white text-[10px] font-normal  uppercase">
-                      User
+                    <div className="self-stretch pb-4 border-b-[0.50px] border-neutral-500 flex flex-col justify-start items-start gap-2">
+                      <div className="self-stretch justify-start text-neutral-500 text-sm font-normal  leading-tight">
+                        14:31:22
+                      </div>
+                      <div className="self-stretch justify-start text-neutral-500 text-sm font-bold ">
+                        Labor Efficiency adjusted to 12%
+                      </div>
+                      <div className="w-14 h-5 bg-blue-900 rounded-[60px] inline-flex justify-center items-center gap-2.5">
+                        <div className="justify-start text-white text-[10px] font-normal  uppercase">
+                          System
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <div className="self-stretch pb-4 border-b-[0.50px] border-neutral-500 flex flex-col justify-start items-start gap-2">
-                  <div className="self-stretch justify-start text-neutral-500 text-sm font-normal  leading-tight">
-                    14:29:47
-                  </div>
-                  <div className="self-stretch justify-start text-neutral-500 text-sm font-bold ">
-                    Vendor consolidation: -3 vendors
-                  </div>
-                  <div className="w-14 h-5 bg-zinc-900 rounded-[60px] inline-flex justify-center items-center gap-2.5">
-                    <div className="justify-start text-white text-[10px] font-normal  uppercase">
-                      User
+                    <div className="self-stretch pb-4 border-b-[0.50px] border-neutral-500 flex flex-col justify-start items-start gap-2">
+                      <div className="self-stretch justify-start text-neutral-500 text-sm font-normal  leading-tight">
+                        14:30:58
+                      </div>
+                      <div className="self-stretch justify-start text-neutral-500 text-sm font-bold ">
+                        Material Costs reduced by $8.5K
+                      </div>
+                      <div className="w-14 h-5 bg-zinc-900 rounded-[60px] inline-flex justify-center items-center gap-2.5">
+                        <div className="justify-start text-white text-[10px] font-normal  uppercase">
+                          User
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
+                    <div className="self-stretch pb-4 border-b-[0.50px] border-neutral-500 flex flex-col justify-start items-start gap-2">
+                      <div className="self-stretch justify-start text-neutral-500 text-sm font-normal  leading-tight">
+                        14:29:47
+                      </div>
+                      <div className="self-stretch justify-start text-neutral-500 text-sm font-bold ">
+                        Vendor consolidation: -3 vendors
+                      </div>
+                      <div className="w-14 h-5 bg-zinc-900 rounded-[60px] inline-flex justify-center items-center gap-2.5">
+                        <div className="justify-start text-white text-[10px] font-normal  uppercase">
+                          User
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
