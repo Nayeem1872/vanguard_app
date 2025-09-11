@@ -90,10 +90,8 @@ const CardDetailsPage = () => {
         playsInline
         preload="auto"
         onError={(e) => {
-          console.error("Video failed to load:", e);
           const video = e.target as HTMLVideoElement;
-          console.error("Error target:", video);
-          console.error("Error details:", video.error);
+
           setVideoStatus(
             "error - " + (video.error?.message || "Unknown error")
           );
