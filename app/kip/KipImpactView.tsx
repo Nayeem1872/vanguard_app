@@ -10,6 +10,9 @@ const KipImpactView = () => {
 
   // State for event log
   const [eventLog, setEventLog] = useState<any[]>([]);
+  const [selectedEventIndex, setSelectedEventIndex] = useState<number | null>(
+    null
+  );
 
   // State for slider values - will be updated from API
   const [laborEfficiency, setLaborEfficiency] = useState(12); // 12%
@@ -283,23 +286,57 @@ const KipImpactView = () => {
   // Save scenario function
   const saveScenario = () => {
     const timestamp = getCurrentTimestamp();
-    const newEventLogEntry = {
-      time: timestamp,
-      message: `Scenario saved - Labor: +${laborEfficiency}%, Materials: $${materialCosts}K, Vendors: ${vendorCount}, Overtime: ${overtimeHours}%`,
-      user: "user",
-    };
-
-    // Add to event log
-    setEventLog((prev) => [newEventLogEntry, ...prev]);
-
-    console.log("Scenario saved:", {
+    const scenarioData = {
       laborEfficiency,
       materialCosts,
       vendorCount,
       overtimeHours,
       roiForecast: chartData.forecast,
       timestamp,
-    });
+    };
+
+    const newEventLogEntry = {
+      time: timestamp,
+      message: `Scenario saved - Labor: +${laborEfficiency}%, Materials: $${materialCosts}K, Vendors: ${vendorCount}, Overtime: ${overtimeHours}%`,
+      user: "user",
+      scenarioData, // Store the scenario data for loading later
+    };
+
+    // Add to event log
+    setEventLog((prev) => [newEventLogEntry, ...prev]);
+
+    console.log("Scenario saved:", scenarioData);
+  };
+
+  // Load scenario function
+  const loadScenario = () => {
+    if (
+      selectedEventIndex !== null &&
+      eventLog[selectedEventIndex]?.scenarioData
+    ) {
+      const scenario = eventLog[selectedEventIndex].scenarioData;
+
+      // Load slider values
+      setLaborEfficiency(scenario.laborEfficiency);
+      setMaterialCosts(scenario.materialCosts);
+      setVendorCount(scenario.vendorCount);
+      setOvertimeHours(scenario.overtimeHours);
+
+      // Clear selection
+      setSelectedEventIndex(null);
+
+      console.log("Scenario loaded:", scenario);
+    } else {
+      console.log("No valid scenario selected to load");
+    }
+  };
+
+  // Handle event log item selection
+  const handleEventSelection = (index: number) => {
+    // Only allow selection of events that have scenario data
+    if (eventLog[index]?.scenarioData) {
+      setSelectedEventIndex(selectedEventIndex === index ? null : index);
+    }
   };
 
   // Calculate position for slider handles (percentage of track width)
@@ -645,8 +682,11 @@ const KipImpactView = () => {
                 >
                   <img src="/images/save.png" alt="Save" />
                 </div>
-                <div className="self-stretch h-12 px-10 py-5 bg-zinc-950 rounded-[60px] shadow-[0px_40px_120px_0px_rgba(1,68,199,0.30)] outline outline-1 outline-white inline-flex justify-center items-center gap-2">
-                  <div className="justify-start text-white cursor-pointer text-base font-bold  leading-normal">
+                <div
+                  className="self-stretch h-12 px-10 py-5 bg-zinc-950 rounded-[60px] shadow-[0px_40px_120px_0px_rgba(1,68,199,0.30)] outline outline-1 outline-white inline-flex justify-center items-center gap-2 cursor-pointer transition-all duration-150 ease-out hover:scale-105 hover:shadow-[0px_40px_120px_0px_rgba(1,68,199,0.50)]"
+                  onClick={loadScenario}
+                >
+                  <div className="justify-start text-white text-base font-bold leading-normal">
                     Load Scenario
                   </div>
                 </div>
@@ -1167,7 +1207,21 @@ const KipImpactView = () => {
                   eventLog.map((event: any, index: number) => (
                     <div
                       key={index}
-                      className="self-stretch pb-4 border-b-[0.50px] border-neutral-500 flex flex-col justify-start items-start gap-2"
+                      className={`self-stretch pb-4 border-b-[0.50px] border-neutral-500 flex flex-col justify-start items-start gap-2 cursor-pointer transition-all duration-150 ease-out hover:bg-neutral-800/50 rounded-lg p-2 ${
+                        selectedEventIndex === index
+                          ? "bg-blue-900/30 ring-2 ring-blue-500"
+                          : ""
+                      } ${
+                        event.scenarioData
+                          ? "hover:ring-1 hover:ring-blue-400"
+                          : "opacity-75"
+                      }`}
+                      onClick={() => handleEventSelection(index)}
+                      title={
+                        event.scenarioData
+                          ? "Click to select this scenario for loading"
+                          : "This event cannot be loaded"
+                      }
                     >
                       <div className="self-stretch justify-start text-gray-400 text-sm font-normal leading-tight">
                         {event.time}
@@ -1175,16 +1229,28 @@ const KipImpactView = () => {
                       <div className="self-stretch justify-start text-gray-400 text-sm font-bold">
                         {event.message}
                       </div>
-                      <div
-                        className={`w-14 h-5 ${
-                          event.user === "system"
-                            ? "bg-blue-900"
-                            : "bg-zinc-900"
-                        } rounded-[60px] inline-flex justify-center items-center gap-2.5`}
-                      >
-                        <div className="justify-start text-white text-[10px] font-normal uppercase">
-                          {event.user}
+                      <div className="flex items-center gap-2">
+                        <div
+                          className={`w-14 h-5 ${
+                            event.user === "system"
+                              ? "bg-blue-900"
+                              : "bg-zinc-900"
+                          } rounded-[60px] inline-flex justify-center items-center gap-2.5`}
+                        >
+                          <div className="justify-start text-white text-[10px] font-normal uppercase">
+                            {event.user}
+                          </div>
                         </div>
+                        {/* {event.scenarioData && (
+                          <div className="text-xs text-blue-400 font-medium">
+                            📊 Loadable
+                          </div>
+                        )}
+                        {selectedEventIndex === index && (
+                          <div className="text-xs text-blue-300 font-medium">
+                            ✓ Selected
+                          </div>
+                        )} */}
                       </div>
                     </div>
                   ))
