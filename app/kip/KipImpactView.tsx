@@ -8,6 +8,9 @@ const KipImpactView = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // State for event log
+  const [eventLog, setEventLog] = useState<any[]>([]);
+
   // State for slider values - will be updated from API
   const [laborEfficiency, setLaborEfficiency] = useState(12); // 12%
   const [materialCosts, setMaterialCosts] = useState(8.5); // 8.5K
@@ -45,6 +48,141 @@ const KipImpactView = () => {
   };
 
   const chartData = calculateChartData();
+
+  // Calculate dynamic KPI Impact Matrix data based on slider values
+  const calculateKPIMatrix = () => {
+    // Base impact percentages
+    const baseImpacts = {
+      operatingCosts: { manufacturing: -8.2, logistics: -5.1, operations: 2.3 },
+      efficiencyRate: { manufacturing: 2.3, logistics: -8.2, operations: -5.1 },
+      serviceLevelCosts: {
+        manufacturing: -5.1,
+        logistics: -5.1,
+        operations: 2.3,
+      },
+      serviceLevel: { manufacturing: 0.5, logistics: -8.2, operations: -5.1 },
+      resourceUtilization: {
+        manufacturing: -5.1,
+        logistics: -5.1,
+        operations: 2.3,
+      },
+    };
+
+    // Calculate impact factors from sliders (normalized to 0-1 range)
+    const efficiencyFactor =
+      laborEfficiency / (kpiData?.sliders?.[0]?.max || 25);
+    const costFactor = materialCosts / (kpiData?.sliders?.[1]?.max || 20);
+    const vendorFactor = vendorCount / (kpiData?.sliders?.[2]?.max || 10);
+    const overtimeFactor = overtimeHours / (kpiData?.sliders?.[3]?.max || 100);
+
+    // Apply weighted adjustments to base impacts
+    const adjustmentMultiplier =
+      1 +
+      efficiencyFactor * 0.3 +
+      costFactor * 0.25 -
+      vendorFactor * 0.2 -
+      overtimeFactor * 0.25;
+
+    // Calculate adjusted KPI values
+    const adjustedKPIs = {
+      operatingCosts: {
+        manufacturing:
+          Math.round(
+            baseImpacts.operatingCosts.manufacturing * adjustmentMultiplier * 10
+          ) / 10,
+        logistics:
+          Math.round(
+            baseImpacts.operatingCosts.logistics * adjustmentMultiplier * 10
+          ) / 10,
+        operations:
+          Math.round(
+            baseImpacts.operatingCosts.operations * adjustmentMultiplier * 10
+          ) / 10,
+      },
+      efficiencyRate: {
+        manufacturing:
+          Math.round(
+            baseImpacts.efficiencyRate.manufacturing * adjustmentMultiplier * 10
+          ) / 10,
+        logistics:
+          Math.round(
+            baseImpacts.efficiencyRate.logistics * adjustmentMultiplier * 10
+          ) / 10,
+        operations:
+          Math.round(
+            baseImpacts.efficiencyRate.operations * adjustmentMultiplier * 10
+          ) / 10,
+      },
+      serviceLevelCosts: {
+        manufacturing:
+          Math.round(
+            baseImpacts.serviceLevelCosts.manufacturing *
+              adjustmentMultiplier *
+              10
+          ) / 10,
+        logistics:
+          Math.round(
+            baseImpacts.serviceLevelCosts.logistics * adjustmentMultiplier * 10
+          ) / 10,
+        operations:
+          Math.round(
+            baseImpacts.serviceLevelCosts.operations * adjustmentMultiplier * 10
+          ) / 10,
+      },
+      serviceLevel: {
+        manufacturing:
+          Math.round(
+            baseImpacts.serviceLevel.manufacturing * adjustmentMultiplier * 10
+          ) / 10,
+        logistics:
+          Math.round(
+            baseImpacts.serviceLevel.logistics * adjustmentMultiplier * 10
+          ) / 10,
+        operations:
+          Math.round(
+            baseImpacts.serviceLevel.operations * adjustmentMultiplier * 10
+          ) / 10,
+      },
+      resourceUtilization: {
+        manufacturing:
+          Math.round(
+            baseImpacts.resourceUtilization.manufacturing *
+              adjustmentMultiplier *
+              10
+          ) / 10,
+        logistics:
+          Math.round(
+            baseImpacts.resourceUtilization.logistics *
+              adjustmentMultiplier *
+              10
+          ) / 10,
+        operations:
+          Math.round(
+            baseImpacts.resourceUtilization.operations *
+              adjustmentMultiplier *
+              10
+          ) / 10,
+      },
+    };
+
+    return adjustedKPIs;
+  };
+
+  const kpiMatrix = calculateKPIMatrix();
+
+  // Helper function to get background color based on impact value
+  const getImpactColor = (value: number) => {
+    if (value > 1) return "bg-emerald-900"; // Strong positive
+    if (value > 0) return "bg-neutral-600"; // Weak positive
+    if (value > -3) return "bg-red-900"; // Weak negative
+    return "bg-red-900"; // Strong negative
+  };
+
+  // Helper function to format impact value
+  const formatImpactValue = (value: number) => {
+    const sign = value >= 0 ? "+" : "";
+    return `${sign}${value}%`;
+  };
 
   // Get ID from localStorage and fetch KPI data
   useEffect(() => {
@@ -86,6 +224,40 @@ const KipImpactView = () => {
                 }
               });
             }
+
+            // Initialize event log from API or use default
+            if (response.data.data.kpi.eventLog) {
+              setEventLog(response.data.data.kpi.eventLog);
+            } else {
+              // Set default event log
+              setEventLog([
+                {
+                  time: "14:32:18",
+                  message: "Switched to KIP Impact View",
+                  user: "system",
+                },
+                {
+                  time: "14:31:45",
+                  message: "Scenario Initialized: Base Case",
+                  user: "user",
+                },
+                {
+                  time: "14:31:22",
+                  message: "Labor Efficiency adjusted to 12%",
+                  user: "system",
+                },
+                {
+                  time: "14:30:58",
+                  message: "Material Costs reduced by $8.5K",
+                  user: "user",
+                },
+                {
+                  time: "14:29:47",
+                  message: "Vendor consolidation: -3 vendors",
+                  user: "user",
+                },
+              ]);
+            }
           }
         } catch (error) {
           console.error("Error fetching KPI data:", error);
@@ -101,6 +273,34 @@ const KipImpactView = () => {
       setLoading(false);
     }
   }, []);
+
+  // Generate current timestamp
+  const getCurrentTimestamp = () => {
+    const now = new Date();
+    return now.toTimeString().slice(0, 8);
+  };
+
+  // Save scenario function
+  const saveScenario = () => {
+    const timestamp = getCurrentTimestamp();
+    const newEventLogEntry = {
+      time: timestamp,
+      message: `Scenario saved - Labor: +${laborEfficiency}%, Materials: $${materialCosts}K, Vendors: ${vendorCount}, Overtime: ${overtimeHours}%`,
+      user: "user",
+    };
+
+    // Add to event log
+    setEventLog((prev) => [newEventLogEntry, ...prev]);
+
+    console.log("Scenario saved:", {
+      laborEfficiency,
+      materialCosts,
+      vendorCount,
+      overtimeHours,
+      roiForecast: chartData.forecast,
+      timestamp,
+    });
+  };
 
   // Calculate position for slider handles (percentage of track width)
   const getSliderPosition = (
@@ -439,8 +639,11 @@ const KipImpactView = () => {
                 </div>
               </div>
               <div className="w-64 left-[20px] top-[400px] absolute inline-flex flex-col justify-start items-start gap-4">
-                <div className="self-stretch h-12 py-5 rounded-[60px] cursor-pointer shadow-[0px_40px_120px_0px_rgba(1,68,199,0.30)] outline outline-2 outline-white/0 inline-flex justify-center items-center gap-2">
-                  <img src="/images/save.png" />
+                <div
+                  className="self-stretch h-12 py-5 rounded-[60px] cursor-pointer shadow-[0px_40px_120px_0px_rgba(1,68,199,0.30)] outline outline-2 outline-white/0 inline-flex justify-center items-center gap-2 transition-all duration-150 ease-out hover:scale-105 hover:shadow-[0px_40px_120px_0px_rgba(1,68,199,0.50)]"
+                  onClick={saveScenario}
+                >
+                  <img src="/images/save.png" alt="Save" />
                 </div>
                 <div className="self-stretch h-12 px-10 py-5 bg-zinc-950 rounded-[60px] shadow-[0px_40px_120px_0px_rgba(1,68,199,0.30)] outline outline-1 outline-white inline-flex justify-center items-center gap-2">
                   <div className="justify-start text-white cursor-pointer text-base font-bold  leading-normal">
@@ -754,37 +957,67 @@ const KipImpactView = () => {
                     </div>
                   </div>
                   <div className="self-stretch h-14 px-5 py-2 bg-neutral-800 border-l-[0.50px] border-b-[0.50px] border-neutral-600 inline-flex justify-start items-center gap-80">
-                    <div className="w-14 h-7 bg-emerald-900 rounded-[60px] flex justify-center items-center gap-2.5">
-                      <div className="justify-start text-white text-sm font-bold  uppercase">
-                        -8.2%
+                    <div
+                      className={`w-14 h-7 ${getImpactColor(
+                        kpiMatrix.operatingCosts.manufacturing
+                      )} rounded-[60px] flex justify-center items-center gap-2.5`}
+                    >
+                      <div className="justify-start text-white text-sm font-bold uppercase">
+                        {formatImpactValue(
+                          kpiMatrix.operatingCosts.manufacturing
+                        )}
                       </div>
                     </div>
                   </div>
                   <div className="self-stretch h-14 px-5 py-2 bg-neutral-800 border-l-[0.50px] border-b-[0.50px] border-neutral-600 inline-flex justify-start items-center gap-80">
-                    <div className="w-14 h-7 bg-emerald-900 rounded-[60px] flex justify-center items-center gap-2.5">
-                      <div className="justify-start text-white text-sm font-bold  uppercase">
-                        +2.3%
+                    <div
+                      className={`w-14 h-7 ${getImpactColor(
+                        kpiMatrix.efficiencyRate.manufacturing
+                      )} rounded-[60px] flex justify-center items-center gap-2.5`}
+                    >
+                      <div className="justify-start text-white text-sm font-bold uppercase">
+                        {formatImpactValue(
+                          kpiMatrix.efficiencyRate.manufacturing
+                        )}
                       </div>
                     </div>
                   </div>
                   <div className="self-stretch h-14 px-5 py-2 bg-neutral-800 border-l-[0.50px] border-b-[0.50px] border-neutral-600 inline-flex justify-start items-center gap-80">
-                    <div className="w-14 h-7 bg-red-900 rounded-[60px] flex justify-center items-center gap-2.5">
-                      <div className="justify-start text-white text-sm font-bold  uppercase">
-                        -5.1%
+                    <div
+                      className={`w-14 h-7 ${getImpactColor(
+                        kpiMatrix.serviceLevelCosts.manufacturing
+                      )} rounded-[60px] flex justify-center items-center gap-2.5`}
+                    >
+                      <div className="justify-start text-white text-sm font-bold uppercase">
+                        {formatImpactValue(
+                          kpiMatrix.serviceLevelCosts.manufacturing
+                        )}
                       </div>
                     </div>
                   </div>
                   <div className="self-stretch h-14 px-5 py-2 bg-neutral-800 border-l-[0.50px] border-b-[0.50px] border-neutral-600 inline-flex justify-start items-center gap-80">
-                    <div className="w-14 h-7 bg-neutral-600 rounded-[60px] flex justify-center items-center gap-2.5">
-                      <div className="justify-start text-white text-sm font-bold  uppercase">
-                        +0.5%
+                    <div
+                      className={`w-14 h-7 ${getImpactColor(
+                        kpiMatrix.serviceLevel.manufacturing
+                      )} rounded-[60px] flex justify-center items-center gap-2.5`}
+                    >
+                      <div className="justify-start text-white text-sm font-bold uppercase">
+                        {formatImpactValue(
+                          kpiMatrix.serviceLevel.manufacturing
+                        )}
                       </div>
                     </div>
                   </div>
                   <div className="self-stretch h-14 px-5 py-2 bg-neutral-800 border-l-[0.50px] border-b-[0.50px] border-neutral-600 inline-flex justify-start items-center gap-80">
-                    <div className="w-14 h-7 bg-red-900 rounded-[60px] flex justify-center items-center gap-2.5">
-                      <div className="justify-start text-white text-sm font-bold  uppercase">
-                        -5.1%
+                    <div
+                      className={`w-14 h-7 ${getImpactColor(
+                        kpiMatrix.resourceUtilization.manufacturing
+                      )} rounded-[60px] flex justify-center items-center gap-2.5`}
+                    >
+                      <div className="justify-start text-white text-sm font-bold uppercase">
+                        {formatImpactValue(
+                          kpiMatrix.resourceUtilization.manufacturing
+                        )}
                       </div>
                     </div>
                   </div>
@@ -796,37 +1029,61 @@ const KipImpactView = () => {
                     </div>
                   </div>
                   <div className="self-stretch h-14 px-5 py-2 bg-neutral-800 border-l-[0.50px] border-b-[0.50px] border-neutral-600 inline-flex justify-start items-center gap-80">
-                    <div className="w-14 h-7 bg-red-900 rounded-[60px] flex justify-center items-center gap-2.5">
-                      <div className="justify-start text-white text-sm font-bold  uppercase">
-                        -5.1%
+                    <div
+                      className={`w-14 h-7 ${getImpactColor(
+                        kpiMatrix.operatingCosts.logistics
+                      )} rounded-[60px] flex justify-center items-center gap-2.5`}
+                    >
+                      <div className="justify-start text-white text-sm font-bold uppercase">
+                        {formatImpactValue(kpiMatrix.operatingCosts.logistics)}
                       </div>
                     </div>
                   </div>
                   <div className="self-stretch h-14 px-5 py-2 bg-neutral-800 border-l-[0.50px] border-b-[0.50px] border-neutral-600 inline-flex justify-start items-center gap-80">
-                    <div className="w-14 h-7 bg-emerald-900 rounded-[60px] flex justify-center items-center gap-2.5">
-                      <div className="justify-start text-white text-sm font-bold  uppercase">
-                        -8.2%
+                    <div
+                      className={`w-14 h-7 ${getImpactColor(
+                        kpiMatrix.efficiencyRate.logistics
+                      )} rounded-[60px] flex justify-center items-center gap-2.5`}
+                    >
+                      <div className="justify-start text-white text-sm font-bold uppercase">
+                        {formatImpactValue(kpiMatrix.efficiencyRate.logistics)}
                       </div>
                     </div>
                   </div>
                   <div className="self-stretch h-14 px-5 py-2 bg-neutral-800 border-l-[0.50px] border-b-[0.50px] border-neutral-600 inline-flex justify-start items-center gap-80">
-                    <div className="w-14 h-7 bg-red-900 rounded-[60px] flex justify-center items-center gap-2.5">
-                      <div className="justify-start text-white text-sm font-bold  uppercase">
-                        -5.1%
+                    <div
+                      className={`w-14 h-7 ${getImpactColor(
+                        kpiMatrix.serviceLevelCosts.logistics
+                      )} rounded-[60px] flex justify-center items-center gap-2.5`}
+                    >
+                      <div className="justify-start text-white text-sm font-bold uppercase">
+                        {formatImpactValue(
+                          kpiMatrix.serviceLevelCosts.logistics
+                        )}
                       </div>
                     </div>
                   </div>
                   <div className="self-stretch h-14 px-5 py-2 bg-neutral-800 border-l-[0.50px] border-b-[0.50px] border-neutral-600 inline-flex justify-start items-center gap-80">
-                    <div className="w-14 h-7 bg-emerald-900 rounded-[60px] flex justify-center items-center gap-2.5">
-                      <div className="justify-start text-white text-sm font-bold  uppercase">
-                        -8.2%
+                    <div
+                      className={`w-14 h-7 ${getImpactColor(
+                        kpiMatrix.serviceLevel.logistics
+                      )} rounded-[60px] flex justify-center items-center gap-2.5`}
+                    >
+                      <div className="justify-start text-white text-sm font-bold uppercase">
+                        {formatImpactValue(kpiMatrix.serviceLevel.logistics)}
                       </div>
                     </div>
                   </div>
                   <div className="self-stretch h-14 px-5 py-2 bg-neutral-800 border-l-[0.50px] border-b-[0.50px] border-neutral-600 inline-flex justify-start items-center gap-80">
-                    <div className="w-14 h-7 bg-red-900 rounded-[60px] flex justify-center items-center gap-2.5">
-                      <div className="justify-start text-white text-sm font-bold  uppercase">
-                        -5.1%
+                    <div
+                      className={`w-14 h-7 ${getImpactColor(
+                        kpiMatrix.resourceUtilization.logistics
+                      )} rounded-[60px] flex justify-center items-center gap-2.5`}
+                    >
+                      <div className="justify-start text-white text-sm font-bold uppercase">
+                        {formatImpactValue(
+                          kpiMatrix.resourceUtilization.logistics
+                        )}
                       </div>
                     </div>
                   </div>
@@ -838,37 +1095,61 @@ const KipImpactView = () => {
                     </div>
                   </div>
                   <div className="self-stretch h-14 px-5 py-2 bg-neutral-800 border-l-[0.50px] border-b-[0.50px] border-neutral-600 inline-flex justify-start items-center gap-80">
-                    <div className="w-14 h-7 bg-emerald-900 rounded-[60px] flex justify-center items-center gap-2.5">
-                      <div className="justify-start text-white text-sm font-bold  uppercase">
-                        +2.3%
+                    <div
+                      className={`w-14 h-7 ${getImpactColor(
+                        kpiMatrix.operatingCosts.operations
+                      )} rounded-[60px] flex justify-center items-center gap-2.5`}
+                    >
+                      <div className="justify-start text-white text-sm font-bold uppercase">
+                        {formatImpactValue(kpiMatrix.operatingCosts.operations)}
                       </div>
                     </div>
                   </div>
                   <div className="self-stretch h-14 px-5 py-2 bg-neutral-800 border-l-[0.50px] border-b-[0.50px] border-neutral-600 inline-flex justify-start items-center gap-80">
-                    <div className="w-14 h-7 bg-red-900 rounded-[60px] flex justify-center items-center gap-2.5">
-                      <div className="justify-start text-white text-sm font-bold  uppercase">
-                        -5.1%
+                    <div
+                      className={`w-14 h-7 ${getImpactColor(
+                        kpiMatrix.efficiencyRate.operations
+                      )} rounded-[60px] flex justify-center items-center gap-2.5`}
+                    >
+                      <div className="justify-start text-white text-sm font-bold uppercase">
+                        {formatImpactValue(kpiMatrix.efficiencyRate.operations)}
                       </div>
                     </div>
                   </div>
                   <div className="self-stretch h-14 px-5 py-2 bg-neutral-800 border-l-[0.50px] border-b-[0.50px] border-neutral-600 inline-flex justify-start items-center gap-80">
-                    <div className="w-14 h-7 bg-emerald-900 rounded-[60px] flex justify-center items-center gap-2.5">
-                      <div className="justify-start text-white text-sm font-bold  uppercase">
-                        +2.3%
+                    <div
+                      className={`w-14 h-7 ${getImpactColor(
+                        kpiMatrix.serviceLevelCosts.operations
+                      )} rounded-[60px] flex justify-center items-center gap-2.5`}
+                    >
+                      <div className="justify-start text-white text-sm font-bold uppercase">
+                        {formatImpactValue(
+                          kpiMatrix.serviceLevelCosts.operations
+                        )}
                       </div>
                     </div>
                   </div>
                   <div className="self-stretch h-14 px-5 py-2 bg-neutral-800 border-l-[0.50px] border-b-[0.50px] border-neutral-600 inline-flex justify-start items-center gap-80">
-                    <div className="w-14 h-7 bg-red-900 rounded-[60px] flex justify-center items-center gap-2.5">
-                      <div className="justify-start text-white text-sm font-bold  uppercase">
-                        -5.1%
+                    <div
+                      className={`w-14 h-7 ${getImpactColor(
+                        kpiMatrix.serviceLevel.operations
+                      )} rounded-[60px] flex justify-center items-center gap-2.5`}
+                    >
+                      <div className="justify-start text-white text-sm font-bold uppercase">
+                        {formatImpactValue(kpiMatrix.serviceLevel.operations)}
                       </div>
                     </div>
                   </div>
                   <div className="self-stretch h-14 px-5 py-2 bg-neutral-800 border-l-[0.50px] border-b-[0.50px] border-neutral-600 inline-flex justify-start items-center gap-80">
-                    <div className="w-14 h-7 bg-emerald-900 rounded-[60px] flex justify-center items-center gap-2.5">
-                      <div className="justify-start text-white text-sm font-bold  uppercase">
-                        +2.3%
+                    <div
+                      className={`w-14 h-7 ${getImpactColor(
+                        kpiMatrix.resourceUtilization.operations
+                      )} rounded-[60px] flex justify-center items-center gap-2.5`}
+                    >
+                      <div className="justify-start text-white text-sm font-bold uppercase">
+                        {formatImpactValue(
+                          kpiMatrix.resourceUtilization.operations
+                        )}
                       </div>
                     </div>
                   </div>
@@ -882,8 +1163,8 @@ const KipImpactView = () => {
                 Event Log
               </div>
               <div className="w-56 left-[20px] top-[84px] absolute inline-flex flex-col justify-start items-start gap-4">
-                {kpiData?.eventLog && kpiData.eventLog.length > 0 ? (
-                  kpiData.eventLog.map((event: any, index: number) => (
+                {eventLog && eventLog.length > 0 ? (
+                  eventLog.map((event: any, index: number) => (
                     <div
                       key={index}
                       className="self-stretch pb-4 border-b-[0.50px] border-neutral-500 flex flex-col justify-start items-start gap-2"
@@ -908,74 +1189,12 @@ const KipImpactView = () => {
                     </div>
                   ))
                 ) : (
-                  // Fallback to static data if no API data
-                  <>
-                    <div className="self-stretch pb-4 border-b-[0.50px] border-neutral-500 flex flex-col justify-start items-start gap-2">
-                      <div className="self-stretch justify-start text-gray-400 text-sm font-normal  leading-tight">
-                        14:32:18
-                      </div>
-                      <div className="self-stretch justify-start text-gray-400 text-sm font-bold ">
-                        Switched to KPI Impact View
-                      </div>
-                      <div className="w-14 h-5 bg-blue-900 rounded-[60px] inline-flex justify-center items-center gap-2.5">
-                        <div className="justify-start text-white text-[10px] font-normal  uppercase">
-                          System
-                        </div>
-                      </div>
+                  // Fallback if no event log data
+                  <div className="self-stretch pb-4 border-b-[0.50px] border-neutral-500 flex flex-col justify-start items-start gap-2">
+                    <div className="self-stretch justify-start text-gray-400 text-sm font-normal leading-tight">
+                      No events logged
                     </div>
-                    <div className="self-stretch pb-4 border-b-[0.50px] border-neutral-500 flex flex-col justify-start items-start gap-2">
-                      <div className="self-stretch justify-start text-neutral-500 text-sm font-normal  leading-tight">
-                        14:31:45
-                      </div>
-                      <div className="self-stretch justify-start text-neutral-500 text-sm font-bold ">
-                        Scenario Initialized: Base Case
-                      </div>
-                      <div className="w-14 h-5 bg-zinc-900 rounded-[60px] inline-flex justify-center items-center gap-2.5">
-                        <div className="justify-start text-white text-[10px] font-normal  uppercase">
-                          User
-                        </div>
-                      </div>
-                    </div>
-                    <div className="self-stretch pb-4 border-b-[0.50px] border-neutral-500 flex flex-col justify-start items-start gap-2">
-                      <div className="self-stretch justify-start text-neutral-500 text-sm font-normal  leading-tight">
-                        14:31:22
-                      </div>
-                      <div className="self-stretch justify-start text-neutral-500 text-sm font-bold ">
-                        Labor Efficiency adjusted to 12%
-                      </div>
-                      <div className="w-14 h-5 bg-blue-900 rounded-[60px] inline-flex justify-center items-center gap-2.5">
-                        <div className="justify-start text-white text-[10px] font-normal  uppercase">
-                          System
-                        </div>
-                      </div>
-                    </div>
-                    <div className="self-stretch pb-4 border-b-[0.50px] border-neutral-500 flex flex-col justify-start items-start gap-2">
-                      <div className="self-stretch justify-start text-neutral-500 text-sm font-normal  leading-tight">
-                        14:30:58
-                      </div>
-                      <div className="self-stretch justify-start text-neutral-500 text-sm font-bold ">
-                        Material Costs reduced by $8.5K
-                      </div>
-                      <div className="w-14 h-5 bg-zinc-900 rounded-[60px] inline-flex justify-center items-center gap-2.5">
-                        <div className="justify-start text-white text-[10px] font-normal  uppercase">
-                          User
-                        </div>
-                      </div>
-                    </div>
-                    <div className="self-stretch pb-4 border-b-[0.50px] border-neutral-500 flex flex-col justify-start items-start gap-2">
-                      <div className="self-stretch justify-start text-neutral-500 text-sm font-normal  leading-tight">
-                        14:29:47
-                      </div>
-                      <div className="self-stretch justify-start text-neutral-500 text-sm font-bold ">
-                        Vendor consolidation: -3 vendors
-                      </div>
-                      <div className="w-14 h-5 bg-zinc-900 rounded-[60px] inline-flex justify-center items-center gap-2.5">
-                        <div className="justify-start text-white text-[10px] font-normal  uppercase">
-                          User
-                        </div>
-                      </div>
-                    </div>
-                  </>
+                  </div>
                 )}
               </div>
             </div>
