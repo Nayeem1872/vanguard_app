@@ -188,94 +188,94 @@ const KipImpactView = () => {
   };
 
   // Get ID from localStorage and fetch KPI data
-  useEffect(() => {
-    const storedId = localStorage.getItem("currentRecommendationId");
-    console.log("Retrieved ID from localStorage:", storedId);
+  // useEffect(() => {
+  //   const storedId = localStorage.getItem("currentRecommendationId");
+  //   console.log("Retrieved ID from localStorage:", storedId);
 
-    if (storedId) {
-      const fetchKPIData = async () => {
-        try {
-          setLoading(true);
-          setError(null);
-          console.log(`Fetching KPI data for ID: ${storedId}`);
-          const response = await axios.get(
-            `/api/ai/recommendations/kpi?recId=${storedId}`
-          );
-          console.log("KPI API Response:", response.data);
+  //   if (storedId) {
+  //     const fetchKPIData = async () => {
+  //       try {
+  //         setLoading(true);
+  //         setError(null);
+  //         console.log(`Fetching KPI data for ID: ${storedId}`);
+  //         const response = await axios.get(
+  //           `/api/ai/recommendations/kpi?recId=${storedId}`
+  //         );
+  //         console.log("KPI API Response:", response.data);
 
-          if (response.data.success && response.data.data.kpi) {
-            setKpiData(response.data.data.kpi);
+  //         if (response.data.success && response.data.data.kpi) {
+  //           setKpiData(response.data.data.kpi);
 
-            // Update slider values from API data if available
-            const sliders = response.data.data.kpi.sliders;
-            if (sliders && sliders.length >= 4) {
-              // Map API sliders to component state based on labels
-              sliders.forEach((slider: any) => {
-                switch (slider.label) {
-                  case "Potential Savings":
-                    setLaborEfficiency(slider.value);
-                    break;
-                  case "Risk-Adjusted ROI":
-                    setMaterialCosts(slider.value);
-                    break;
-                  case "Implementation Confidence":
-                    setVendorCount(slider.value);
-                    break;
-                  case "Change Management Risk":
-                    setOvertimeHours(slider.value);
-                    break;
-                }
-              });
-            }
+  //           // Update slider values from API data if available
+  //           const sliders = response.data.data.kpi.sliders;
+  //           if (sliders && sliders.length >= 4) {
+  //             // Map API sliders to component state based on labels
+  //             sliders.forEach((slider: any) => {
+  //               switch (slider.label) {
+  //                 case "Potential Savings":
+  //                   setLaborEfficiency(slider.value);
+  //                   break;
+  //                 case "Risk-Adjusted ROI":
+  //                   setMaterialCosts(slider.value);
+  //                   break;
+  //                 case "Implementation Confidence":
+  //                   setVendorCount(slider.value);
+  //                   break;
+  //                 case "Change Management Risk":
+  //                   setOvertimeHours(slider.value);
+  //                   break;
+  //               }
+  //             });
+  //           }
 
-            // Initialize event log from API or use default
-            if (response.data.data.kpi.eventLog) {
-              setEventLog(response.data.data.kpi.eventLog);
-            } else {
-              // Set default event log
-              setEventLog([
-                {
-                  time: "14:32:18",
-                  message: "Switched to KIP Impact View",
-                  user: "system",
-                },
-                {
-                  time: "14:31:45",
-                  message: "Scenario Initialized: Base Case",
-                  user: "user",
-                },
-                {
-                  time: "14:31:22",
-                  message: "Labor Efficiency adjusted to 12%",
-                  user: "system",
-                },
-                {
-                  time: "14:30:58",
-                  message: "Material Costs reduced by $8.5K",
-                  user: "user",
-                },
-                {
-                  time: "14:29:47",
-                  message: "Vendor consolidation: -3 vendors",
-                  user: "user",
-                },
-              ]);
-            }
-          }
-        } catch (error) {
-          console.error("Error fetching KPI data:", error);
-          setError("Failed to fetch KPI data");
-        } finally {
-          setLoading(false);
-        }
-      };
+  //           // Initialize event log from API or use default
+  //           if (response.data.data.kpi.eventLog) {
+  //             setEventLog(response.data.data.kpi.eventLog);
+  //           } else {
+  //             // Set default event log
+  //             setEventLog([
+  //               {
+  //                 time: "14:32:18",
+  //                 message: "Switched to KIP Impact View",
+  //                 user: "system",
+  //               },
+  //               {
+  //                 time: "14:31:45",
+  //                 message: "Scenario Initialized: Base Case",
+  //                 user: "user",
+  //               },
+  //               {
+  //                 time: "14:31:22",
+  //                 message: "Labor Efficiency adjusted to 12%",
+  //                 user: "system",
+  //               },
+  //               {
+  //                 time: "14:30:58",
+  //                 message: "Material Costs reduced by $8.5K",
+  //                 user: "user",
+  //               },
+  //               {
+  //                 time: "14:29:47",
+  //                 message: "Vendor consolidation: -3 vendors",
+  //                 user: "user",
+  //               },
+  //             ]);
+  //           }
+  //         }
+  //       } catch (error) {
+  //         console.error("Error fetching KPI data:", error);
+  //         setError("Failed to fetch KPI data");
+  //       } finally {
+  //         setLoading(false);
+  //       }
+  //     };
 
-      fetchKPIData();
-    } else {
-      console.log("No recommendation ID found in localStorage");
-      setLoading(false);
-    }
-  }, []);
+  //     fetchKPIData();
+  //   } else {
+  //     console.log("No recommendation ID found in localStorage");
+  //     setLoading(false);
+  //   }
+  // }, []);
 
   // Generate current timestamp
   const getCurrentTimestamp = () => {

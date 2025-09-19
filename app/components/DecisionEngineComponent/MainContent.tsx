@@ -13,6 +13,28 @@ const apiClient = axios.create({
   },
 });
 
+// Function to get auth token from localStorage
+const getAuthToken = () => {
+  if (typeof window !== "undefined") {
+    return localStorage.getItem("authToken");
+  }
+  return null;
+};
+
+// Function to create headers with auth token
+const createAuthHeaders = () => {
+  const token = getAuthToken();
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  return headers;
+};
+
 interface RiskFactor {
   label: string;
   level: string;
@@ -138,7 +160,14 @@ const MainContent = ({
         org_id: "", // You can add org_id if available
       };
 
-      const response = await apiClient.post("/api/ai/ask", requestBody);
+      // Get the auth token and create headers
+      const authHeaders = createAuthHeaders();
+
+      console.log("Making API request with headers:", authHeaders);
+
+      const response = await apiClient.post("/api/ai/ask", requestBody, {
+        headers: authHeaders,
+      });
       console.log("API Response:", response.data);
 
       // Extract recommendations from API response

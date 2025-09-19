@@ -260,7 +260,20 @@ const ActionPlan = ({ recommendationData }: ActionPlanProps) => {
         const apiUrl = `/api/ai/recommendations/action-plans?recommendationId=${recommendationId}&org_id=default-org`;
         console.log("ActionPlan: Making GET request to:", apiUrl);
 
-        const response = await axios.get(apiUrl);
+        // Get auth token from localStorage
+        const authToken =
+          typeof window !== "undefined"
+            ? localStorage.getItem("authToken")
+            : null;
+        console.log("ActionPlan: Auth token retrieved:", authToken);
+
+        // Create headers object with authorization
+        const headers: any = {};
+        if (authToken) {
+          headers.Authorization = `Bearer ${authToken}`;
+        }
+
+        const response = await axios.get(apiUrl, { headers });
         console.log("ActionPlan: API Response:", response.data);
 
         setActionPlanData(response.data);

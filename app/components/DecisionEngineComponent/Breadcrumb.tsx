@@ -17,7 +17,7 @@ const Breadcrumb = () => {
           <span className="text-white font-semibold">Decision Engine</span>
         </div>
         <div className="flex items-center gap-2">
-          <Image
+          {/* <Image
             src="/icons/info.svg"
             alt="Help"
             width={16}
@@ -26,7 +26,7 @@ const Breadcrumb = () => {
           />
           <span className="text-gray-rgba(255, 255, 255, 1) text-sm cursor-pointer">
             About this page
-          </span>
+          </span> */}
         </div>
       </div>
     </div>

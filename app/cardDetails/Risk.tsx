@@ -95,7 +95,20 @@ const RiskAnalysis = ({ recommendationData }: RiskAnalysisProps) => {
         const apiUrl = `/api/ai/recommendations/risk?recId=${recommendationId}`;
         console.log("RiskAnalysis: Making GET request to:", apiUrl);
 
-        const response = await axios.get<ApiResponse>(apiUrl);
+        // Get auth token from localStorage
+        const authToken =
+          typeof window !== "undefined"
+            ? localStorage.getItem("authToken")
+            : null;
+        console.log("RiskAnalysis: Auth token retrieved:", authToken);
+
+        // Create headers object with authorization
+        const headers: any = {};
+        if (authToken) {
+          headers.Authorization = `Bearer ${authToken}`;
+        }
+
+        const response = await axios.get<ApiResponse>(apiUrl, { headers });
         console.log("RiskAnalysis: API Response:", response.data);
 
         if (response.data.success && response.data.data.stored_risk) {

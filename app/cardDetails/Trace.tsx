@@ -472,8 +472,22 @@ const Timeline = ({ id }: { id: any }) => {
       setError(null);
 
       console.log(`Fetching trace for ID: ${id}`);
+      // Get auth token from localStorage
+      const authToken =
+        typeof window !== "undefined"
+          ? localStorage.getItem("authToken")
+          : null;
+      console.log("Timeline: Auth token retrieved:", authToken);
+
+      // Create headers object with authorization
+      const headers: any = {};
+      if (authToken) {
+        headers.Authorization = `Bearer ${authToken}`;
+      }
+
       const response = await axios.get(
-        `/api/ai/recommendations/trace?recId=${id}`
+        `/api/ai/recommendations/trace?recId=${id}`,
+        { headers }
       );
 
       console.log("Trace API Response:", response.data);

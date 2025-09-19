@@ -60,8 +60,22 @@ const DependencyImpact: React.FC<DependencyImpactProps> = ({ id }) => {
       setError(null);
 
       console.log(`Fetching dependencies for ID: ${id}`);
+      // Get auth token from localStorage
+      const authToken =
+        typeof window !== "undefined"
+          ? localStorage.getItem("authToken")
+          : null;
+      console.log("DependencyImpact: Auth token retrieved:", authToken);
+
+      // Create headers object with authorization
+      const headers: any = {};
+      if (authToken) {
+        headers.Authorization = `Bearer ${authToken}`;
+      }
+
       const response = await axios.get(
-        `/api/ai/recommendations/dependencies?recId=${id}`
+        `/api/ai/recommendations/dependencies?recId=${id}`,
+        { headers }
       );
 
       console.log("Dependencies API Response:", response.data);

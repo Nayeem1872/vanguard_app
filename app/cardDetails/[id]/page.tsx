@@ -56,8 +56,23 @@ const CardDetailsPage = () => {
       const fetchRecommendationData = async () => {
         try {
           setLoading(true);
+
+          // Get auth token from localStorage
+          const authToken =
+            typeof window !== "undefined"
+              ? localStorage.getItem("authToken")
+              : null;
+          console.log("Auth token retrieved:", authToken);
+
+          // Create headers object with authorization
+          const headers: any = {};
+          if (authToken) {
+            headers.Authorization = `Bearer ${authToken}`;
+          }
+
           const response = await axios.get(
-            `/api/ai/recommendations/overview?recId=${id}`
+            `/api/ai/recommendations/overview?recId=${id}`,
+            { headers }
           );
           console.log("Recommendation data:", response.data);
           setRecommendationData(response.data);
